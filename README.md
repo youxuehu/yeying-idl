@@ -1,2 +1,11 @@
 # yeying-idl
-manage all dsl files and shared documents for yeying community.
+
+# include
+The share header files for compiling such as googleapis.
+
+# canal
+
+# odsn
+
+# chatgpt
+

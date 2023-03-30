@@ -1,0 +1,71 @@
+syntax = "proto3";
+option go_package = "./pkg/pb";
+
+import "google/api/annotations.proto";
+
+service StoreService {
+  rpc Put(stream PutRequest) returns (PutResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/store"
+      body: "*"
+    };
+  }
+
+  rpc Get(GetRequest) returns (stream GetResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/store"
+    };
+  }
+
+  rpc Del(DelRequest) returns (DelResponse) {
+    option (google.api.http) = {
+      delete: "/api/v1/store"
+    };
+  }
+}
+
+message Identity {
+  string did = 1;
+}
+
+message Asset {
+  Identity owner = 1;
+  string id = 2;
+  string name = 3;
+}
+
+message Result {
+  uint32 code = 1;
+  string message = 2;
+}
+
+message PutRequest {
+  oneof data {
+    Asset asset = 1;
+    bytes chunk = 2;
+  }
+}
+
+message PutResponse {
+  Result result = 1;
+  Asset asset = 2;
+}
+
+message GetRequest {
+  Asset asset = 1;
+}
+
+message GetResponse {
+  oneof data {
+    Result result = 1;
+    bytes chunk = 2;
+  }
+}
+
+message DelRequest {
+  Asset asset = 1;
+}
+
+message DelResponse {
+  Result result = 1;
+}
