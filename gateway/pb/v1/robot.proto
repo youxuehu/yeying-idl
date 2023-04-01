@@ -1,15 +1,7 @@
 syntax = "proto3";
-option go_package = "./pkg/pb";
-
-import "google/api/annotations.proto";
 
 service Robot {
-  rpc completion(ChatRequest) returns (ChatResponse) {
-    option (google.api.http) = {
-      post : "/api/v1/completion"
-      body : "*"
-    };
-  }
+  rpc completion(ChatRequest) returns (ChatResponse){}
 }
 
 message ChatRequest {
