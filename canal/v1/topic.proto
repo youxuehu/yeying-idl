@@ -1,0 +1,22 @@
+syntax = "proto3";
+option go_package = "./pkg/pb";
+
+import "google/api/annotations.proto";
+
+service TopicService {
+  rpc subscribe(SubscribeRequest) returns (SubscribeResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/topic/subscribe"
+      body : "*"
+    };
+  }
+}
+
+message SubscribeRequest {
+  string topic = 1;
+  string endpoint = 2;
+}
+
+message SubscribeResponse {
+  string token = 1;
+}
