@@ -55,16 +55,23 @@ if [ "$1" == "odsn" ]; then
     "${proto_dir}"/*.proto
 elif [ "$1" == "gateway" ]; then
   rm -rf "${target_dir}"
+  module_check_and_install protobuf-init
   module_check_and_install grpcio
   module_check_and_install grpcio-tools
+
   include_dir="${runtime_directory}/include/googleapis"
-  proto_dir="${runtime_directory}/$1/v1"
+  proto_dir="${runtime_directory}"
   python_dir="${target_dir}/python"
+
   mkdir -p "${python_dir}"
   echo "proto directory=${proto_dir}"
   # use the command for help, python -m grpc.tools.protoc -h
   python3 -m grpc_tools.protoc --proto_path="${include_dir}" --proto_path="${proto_dir}" \
     --python_out="${python_dir}" \
     --grpc_python_out="${python_dir}" \
-    "${proto_dir}"/*.proto
+    --init_python_out="${python_dir}" \
+    --init_python_opt=imports=protobuf+grpcio+grpclib \
+    "${proto_dir}/$1"/pb/v1/*.proto "${include_dir}"/google/api/annotations.proto "${include_dir}"/google/api/http.proto \
+    "${include_dir}"/google/rpc/status.proto "${include_dir}"/google/rpc/http.proto \
+    "${include_dir}"/google/rpc/error_details.proto
 fi
