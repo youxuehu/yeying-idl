@@ -71,6 +71,6 @@ elif [ "$1" == "gateway" ]; then
     --pyi_out="${python_dir}" \
     --grpc_python_out="${python_dir}" \
     --init_python_out="${python_dir}" \
-    --init_python_opt=imports=protobuf+grpcio+grpclib \
+    --init_python_opt=imports=protobuf+grpcio \
     "${proto_dir}/$1"/pb/v1/*.proto
 fi
