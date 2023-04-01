@@ -66,8 +66,9 @@ elif [ "$1" == "gateway" ]; then
   echo "proto directory=${proto_dir}"
 
   # use the command for help, python -m grpc.tools.protoc -h
-  python3 -m grpc_tools.protoc --proto_path="${proto_dir}" \
+  python3 -m grpc_tools.protoc -I"${proto_dir}" \
     --python_out="${python_dir}" \
+    --pyi_out="${python_dir}" \
     --grpc_python_out="${python_dir}" \
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio+grpclib \
