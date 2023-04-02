@@ -99,5 +99,6 @@ elif [ "${app_name}" == "gateway" ] && [ "${language}" == "javascript" ]; then
 
   protoc -I third_party/googleapis --proto_path="${proto_dir}" \
     --js_out=import_style=commonjs,binary:"${js_dir}" \
+    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${js_dir}" \
     "${proto_dir}"/*.proto
 fi
