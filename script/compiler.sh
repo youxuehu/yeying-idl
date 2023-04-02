@@ -8,13 +8,34 @@ current_directory=$(
 )
 
 usage() {
-  printf "Please specify the app name, such canal, odsn, and so on\n"
+  printf "Usage: ${base_name}\n \
+    -a <Specify the app name, default: such canal, odsn, gateway and so on\n \
+    -l <Specify language to generate code>\n \
+    "
   exit 1
 }
 
 if [ $# -eq 0 ]; then
   usage
 fi
+
+# For macos`s getopt, reference: https://formulae.brew.sh/formula/gnu-getopt
+while getopts ":hl:a:" o; do
+  case "${o}" in
+  a)
+    app_name=${OPTARG}
+    ;;
+  l)
+    language=${OPTARG}
+    ;;
+  *)
+    usage
+    ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+echo "generate for ${app_name} with language ${language}"
 
 module_check_and_install() {
   #/dev/null 是一个特殊的文件，写入到它的内容都会被丢弃
@@ -31,19 +52,17 @@ runtime_directory=$(pwd)
 
 target_dir="${runtime_directory}"/target
 mkdir -p "${target_dir}"
-if [ "$1" == "odsn" ]; then
+if [ "${app_name}" == "odsn" ]; then
   rm -rf "${target_dir}"
 
-  proto_dir="${runtime_directory}/$1/v1"
+  proto_dir="${runtime_directory}/${app_name}/v1"
   js_dir="${target_dir}/js"
   openapi_dir="${target_dir}/openapi"
   go_dir="${target_dir}/go"
-  python_dir="${target_dir}/python"
 
   mkdir -p "${go_dir}"
   mkdir -p "${js_dir}"
   mkdir -p "${openapi_dir}"
-  mkdir -p "${python_dir}"
 
   protoc -I include/googleapis --proto_path="${proto_dir}" \
     --go_out="${go_dir}" \
@@ -51,9 +70,8 @@ if [ "$1" == "odsn" ]; then
     --grpc-gateway_out="${go_dir}" --grpc-gateway_opt logtostderr=true --grpc-gateway_opt generate_unbound_methods=true \
     --openapiv2_out=:"${openapi_dir}" --openapiv2_opt logtostderr=true \
     --js_out=import_style=commonjs,binary:"${js_dir}" \
-    --python_out=pyi_out:"${python_dir}" \
     "${proto_dir}"/*.proto
-elif [ "$1" == "gateway" ]; then
+elif [ "${app_name}" == "gateway" ] && [ "${language}" == "python" ]; then
   rm -rf "${target_dir}"
   module_check_and_install protobuf-init
   module_check_and_install grpcio
@@ -72,5 +90,14 @@ elif [ "$1" == "gateway" ]; then
     --grpc_python_out="${python_dir}" \
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
-    "${proto_dir}/$1"/pb/v1/*.proto
+    "${proto_dir}/${app_name}"/pb/v1/*.proto
+elif [ "${app_name}" == "gateway" ] && [ "${language}" == "javascript" ]; then
+  rm -rf "${target_dir}"
+  proto_dir="${runtime_directory}/${app_name}/pb/v1"
+  js_dir="${target_dir}/js"
+  mkdir -p "${js_dir}"
+
+  protoc -I third_party/googleapis --proto_path="${proto_dir}" \
+    --js_out=import_style=commonjs,binary:"${js_dir}" \
+    "${proto_dir}"/*.proto
 fi
