@@ -65,11 +65,11 @@ message ChatResponse {
   string id = 1;
   string object = 2;
   int64 created = 3;
-  repeated Choice choices = 5;
+  repeated Choice choices = 4;
 }
 
 message Choice {
   int32 index = 1;
-  repeated Message message = 2;
+  Message message = 2;
   string finishReason = 3;
 }
