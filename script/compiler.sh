@@ -97,8 +97,17 @@ elif [ "${app_name}" == "gateway" ] && [ "${language}" == "javascript" ]; then
   js_dir="${target_dir}/js"
   mkdir -p "${js_dir}"
 
-  protoc -I third_party/googleapis --proto_path="${proto_dir}" \
+  #  this method is not working currently, or you must deploy envoy proxy firstly.
+  #  protoc -I third_party/googleapis --proto_path="${proto_dir}" \
+  #    --js_out=import_style=commonjs,binary:"${js_dir}" \
+  #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${js_dir}" \
+  #    "${proto_dir}"/*.proto
+
+  npm install -g grpc-tools
+
+  grpc_tools_node_protoc -I third_party/googleapis --proto_path="${proto_dir}" \
     --js_out=import_style=commonjs,binary:"${js_dir}" \
-    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${js_dir}" \
+    --grpc_out=grpc_js:"${js_dir}" \
+    --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
     "${proto_dir}"/*.proto
 fi
