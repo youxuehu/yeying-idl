@@ -9,7 +9,7 @@ current_directory=$(
 
 usage() {
   printf "Usage: ${base_name}\n \
-    -a <Specify the app name, default: such canal, odsn, gateway and so on\n \
+    -a <Specify the app name, default: such canal, odsn, slot and so on\n \
     -l <Specify language to generate code>\n \
     "
   exit 1
@@ -71,7 +71,7 @@ if [ "${app_name}" == "odsn" ]; then
     --openapiv2_out=:"${openapi_dir}" --openapiv2_opt logtostderr=true \
     --js_out=import_style=commonjs,binary:"${js_dir}" \
     "${proto_dir}"/*.proto
-elif [ "${app_name}" == "gateway" ] && [ "${language}" == "python" ]; then
+elif [ "${app_name}" == "slot" ] && [ "${language}" == "python" ]; then
   rm -rf "${target_dir}"
   module_check_and_install protobuf-init
   module_check_and_install grpcio
@@ -91,7 +91,7 @@ elif [ "${app_name}" == "gateway" ] && [ "${language}" == "python" ]; then
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
     "${proto_dir}/${app_name}"/pb/v1/*.proto
-elif [ "${app_name}" == "gateway" ] && [ "${language}" == "javascript" ]; then
+elif [ "${app_name}" == "slot" ] && [ "${language}" == "javascript" ]; then
   rm -rf "${target_dir}"
   proto_dir="${runtime_directory}/${app_name}/pb/v1"
   js_dir="${target_dir}/js"
@@ -110,4 +110,6 @@ elif [ "${app_name}" == "gateway" ] && [ "${language}" == "javascript" ]; then
     --grpc_out=grpc_js:"${js_dir}" \
     --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
     "${proto_dir}"/*.proto
+else
+  echo "not supported, app name=${app_name}, language=${language}"
 fi
