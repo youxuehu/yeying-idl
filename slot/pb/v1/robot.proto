@@ -7,8 +7,12 @@ service Robot {
   rpc profile(ProfileRequest) returns (ProfileResponse){}
 }
 
+enum RobotType {
+  CHATGPT = 0;
+}
+
 message ProfileRequest {
-  string field = 1;
+  RobotType robotType = 1;
 }
 
 message ProfileResponse {
@@ -54,6 +58,7 @@ message ChatRequest {
   string model = 1;
   string did = 2;
   repeated Message messages = 3;
+  RobotType robotType=4;
 }
 
 message Message {
