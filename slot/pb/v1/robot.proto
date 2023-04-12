@@ -40,12 +40,12 @@ message Model {
 }
 
 message Permission {
-  bool allow_create_engine = 1;
-  bool allow_fine_tuning = 2;
-  bool allow_logprobs = 3;
-  bool allow_sampling = 4;
-  bool allow_search_indices = 5;
-  bool allow_view = 6;
+  bool allowCreateEngine = 1;
+  bool allowFineTuning = 2;
+  bool allowLogprobs = 3;
+  bool allowSampling = 4;
+  bool allowSearchIndices = 5;
+  bool allowView = 6;
   int64 created = 7;
   string group = 8;
   string id = 9;
