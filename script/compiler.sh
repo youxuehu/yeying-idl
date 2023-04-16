@@ -8,10 +8,10 @@ current_directory=$(
 )
 
 usage() {
-  printf "Usage: ${base_name}\n \
+  printf "Usage: %s\n \
     -a <Specify the app name, default: such canal, odsn, slot and so on\n \
     -l <Specify language to generate code>\n \
-    "
+    " "${base_name}"
   exit 1
 }
 

@@ -5,10 +5,34 @@ option go_package = "./pkg/pb/v1";
 service Robot {
   rpc completion(ChatRequest) returns (ChatResponse){}
   rpc profile(ProfileRequest) returns (ProfileResponse){}
+  rpc generation(GenerationRequest) returns (GenerationResponse){}
 }
 
 enum RobotType {
   CHATGPT = 0;
+}
+
+enum GenerationType {
+  IMAGE = 0;
+}
+
+enum ResponseFormatType {
+  URL = 0;
+  BASE64 = 1;
+}
+
+message GenerationRequest {
+  GenerationType generationType = 1;
+  string prompt = 2;
+  int32 count = 3;
+  string size = 4;
+  ResponseFormatType responseFormat = 5;
+  string user = 6;
+}
+
+message GenerationResponse {
+  int64 created = 1;
+  repeated string images = 2;
 }
 
 message ProfileRequest {
