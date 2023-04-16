@@ -22,12 +22,12 @@ enum ResponseFormatType {
 }
 
 message GenerationRequest {
-  GenerationType generationType = 1;
-  string prompt = 2;
-  int32 count = 3;
-  string size = 4;
-  ResponseFormatType responseFormat = 5;
-  string user = 6;
+  string did = 1;
+  GenerationType generationType = 2;
+  string prompt = 3;
+  int32 count = 4;
+  string size = 5;
+  ResponseFormatType responseFormat = 6;
 }
 
 message GenerationResponse {
