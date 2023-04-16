@@ -28,6 +28,7 @@ message GenerationRequest {
   int32 count = 4;
   string size = 5;
   ResponseFormatType responseFormat = 6;
+  RobotType robotType = 7;
 }
 
 message GenerationResponse {
