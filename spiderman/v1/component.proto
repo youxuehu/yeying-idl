@@ -1,28 +1,10 @@
 syntax = "proto3";
 option go_package = "./pkg/pb";
 
-import "google/api/annotations.proto";
-
 service ComponentService {
-  rpc listContract(EmptyRequest) returns (ListContractResponse) {
-    option (google.api.http) = {
-      get : "/api/v1/component/contracts"
-    };
-  }
-
-  rpc register(RegisterRequest) returns (RegisterResponse) {
-    option (google.api.http) = {
-      post : "/api/v1/component/register"
-      body : "*"
-    };
-  }
-
-  rpc unregister(UnregisterRequest) returns (UnregisterResponse) {
-    option (google.api.http) = {
-      post : "/api/v1/component/unregister"
-      body : "*"
-    };
-  }
+  rpc listContract(EmptyRequest) returns (ListContractResponse) {}
+  rpc register(RegisterRequest) returns (RegisterResponse) {}
+  rpc unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
 
 message EmptyRequest {}

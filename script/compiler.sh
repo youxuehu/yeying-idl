@@ -9,7 +9,7 @@ current_directory=$(
 
 usage() {
   printf "Usage: %s\n \
-    -a <Specify the app name, default: such canal, odsn, slot and so on\n \
+    -a <Specify the app name, default: such canal, odsn, aigc, spiderman and so on\n \
     -l <Specify language to generate code>\n \
     " "${base_name}"
   exit 1
@@ -47,6 +47,12 @@ module_check_and_install() {
   fi
 }
 
+check_python_dependency() {
+  module_check_and_install protobuf-init
+  module_check_and_install grpcio
+  module_check_and_install grpcio-tools
+}
+
 cd "${current_directory}"/.. || exit 1
 runtime_directory=$(pwd)
 
@@ -71,15 +77,12 @@ if [ "${app_name}" == "odsn" ]; then
     --openapiv2_out=:"${openapi_dir}" --openapiv2_opt logtostderr=true \
     --js_out=import_style=commonjs,binary:"${js_dir}" \
     "${proto_dir}"/*.proto
-elif [ "${app_name}" == "slot" ] && [ "${language}" == "python" ]; then
-  rm -rf "${target_dir}"
-  module_check_and_install protobuf-init
-  module_check_and_install grpcio
-  module_check_and_install grpcio-tools
+elif [ "${app_name}" == "spiderman" ] && [ "${language}" == "python" ]; then
+  check_python_dependency
 
+  rm -rf "${target_dir}"
   proto_dir="${runtime_directory}"
   python_dir="${target_dir}/python"
-
   mkdir -p "${python_dir}"
   echo "proto directory=${proto_dir}"
 
@@ -90,10 +93,27 @@ elif [ "${app_name}" == "slot" ] && [ "${language}" == "python" ]; then
     --grpc_python_out="${python_dir}" \
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
-    "${proto_dir}/${app_name}"/pb/v1/*.proto
-elif [ "${app_name}" == "slot" ] && [ "${language}" == "javascript" ]; then
+    "${proto_dir}/${app_name}"/v1/*.proto
+elif [ "${app_name}" == "aigc" ] && [ "${language}" == "python" ]; then
+  check_python_dependency
+
   rm -rf "${target_dir}"
-  proto_dir="${runtime_directory}/${app_name}/pb/v1"
+  proto_dir="${runtime_directory}"
+  python_dir="${target_dir}/python"
+  mkdir -p "${python_dir}"
+  echo "proto directory=${proto_dir}"
+
+  # use the command for help, python -m grpc.tools.protoc -h
+  python3 -m grpc_tools.protoc -I"${proto_dir}" \
+    --python_out="${python_dir}" \
+    --pyi_out="${python_dir}" \
+    --grpc_python_out="${python_dir}" \
+    --init_python_out="${python_dir}" \
+    --init_python_opt=imports=protobuf+grpcio \
+    "${proto_dir}/${app_name}"/v1/*.proto
+elif [ "${app_name}" == "aigc" ] && [ "${language}" == "javascript" ]; then
+  rm -rf "${target_dir}"
+  proto_dir="${runtime_directory}/${app_name}/v1"
   js_dir="${target_dir}/js"
   mkdir -p "${js_dir}"
 

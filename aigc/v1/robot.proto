@@ -1,6 +1,5 @@
 syntax = "proto3";
-
-option go_package = "./pkg/pb/v1";
+option go_package = "./pkg/pb";
 
 service Robot {
   rpc completion(ChatRequest) returns (ChatResponse){}

@@ -1,28 +1,10 @@
 syntax = "proto3";
 option go_package = "./pkg/pb";
 
-import "google/api/annotations.proto";
-
 service TopicService {
-  rpc listSubscribe(ListSubscribeRequest) returns (ListSubscribeResponse) {
-    option (google.api.http) = {
-      get : "/api/v1/topics"
-    };
-  }
-
-  rpc subscribe(SubscribeRequest) returns (SubscribeResponse) {
-    option (google.api.http) = {
-      post : "/api/v1/topic/subscribe"
-      body : "*"
-    };
-  }
-
-  rpc unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {
-    option (google.api.http) = {
-      post : "/api/v1/topic/unsubscribe"
-      body : "*"
-    };
-  }
+  rpc listSubscribe(ListSubscribeRequest) returns (ListSubscribeResponse) {}
+  rpc subscribe(SubscribeRequest) returns (SubscribeResponse) {}
+  rpc unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {}
 }
 
 message ListSubscribeRequest {
