@@ -1,0 +1,66 @@
+syntax = "proto3";
+option go_package = "./pkg/pb";
+
+import "google/api/annotations.proto";
+
+service ComponentService {
+  rpc listContract(EmptyRequest) returns (ListContractResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/component/contracts"
+    };
+  }
+
+  rpc register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/component/register"
+      body : "*"
+    };
+  }
+
+  rpc unregister(UnregisterRequest) returns (UnregisterResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/component/unregister"
+      body : "*"
+    };
+  }
+}
+
+message EmptyRequest {}
+
+message ListContractResponse {
+  repeated Contract contract = 1;
+}
+
+message UnregisterRequest {
+  string did = 1;
+  Peer peer = 2;
+  Contract contract = 3;
+}
+
+message Peer {
+  string id = 1;
+}
+
+message UnregisterResponse {
+  string status = 1;
+}
+
+message RegisterRequest {
+  string did = 1;
+  Peer peer = 2;
+  Contract contract = 3;
+}
+
+message RegisterResponse {
+  RegisterStatus status = 1;
+  Contract contract = 2;
+}
+
+enum RegisterStatus {
+  SUCCESS = 0;
+  REGISTERED = 1;
+}
+
+message Contract {
+  string address = 1;
+}
