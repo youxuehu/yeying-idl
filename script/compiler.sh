@@ -9,9 +9,9 @@ current_directory=$(
 
 usage() {
   printf "Usage: %s\n \
-    -a <Specify the app name, such as slot, yeying, canal, odsn, spiderman and so on\n \
-    -m <Specify the mode name, such as aigc, handshake or empty\n \
-    -v <Specify the mode version, default v1 \n \
+    -a <Specify the application name, such as slot, yeying, canal, odsn, spiderman and so on\n \
+    -m <Specify the model name, such as robot, user, component, or multiple model with comma separated\n \
+    -v <Specify the model version, default v1 \n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
     " "${base_name}"
   exit 1
@@ -26,10 +26,10 @@ version=v1
 while getopts ":ha:m:v:l:" o; do
   case "${o}" in
   a)
-    app_name=${OPTARG}
+    application=${OPTARG}
     ;;
   m)
-    model_name=${OPTARG}
+    model=${OPTARG}
     ;;
   v)
     version=${OPTARG}
@@ -44,9 +44,9 @@ while getopts ":ha:m:v:l:" o; do
 done
 shift $((OPTIND - 1))
 
-echo "generate code for app=${app_name} with language=${language}, version=${version}, model=${model_name}"
+echo "generate code for app=${application} with language=${language}, version=${version}, model=${model}"
 
-if [ -z "${app_name}" ]; then
+if [ -z "${application}" ]; then
   echo "Please specify the app name to generate!"
   usage
 fi
@@ -55,8 +55,6 @@ if [ -z "${language}" ]; then
   echo "Please specify the language to generate!"
   usage
 fi
-
-
 
 module_check_and_install() {
   #/dev/null 是一个特殊的文件，写入到它的内容都会被丢弃
@@ -84,24 +82,24 @@ mkdir -p "${output_dir}"
 protoc_dir="${target_dir}/protoc"
 mkdir -p "${protoc_dir}"
 
-if [ "${app_name}" == "odsn" ]; then
-  protoc_dir="${runtime_directory}/${app_name}/v1"
-  output_dir="${target_dir}/js"
-  openapi_dir="${target_dir}/openapi"
-  go_dir="${target_dir}/go"
+if [ "${application}" == "odsn" ] && [ "${language}" == "go" ]; then
+  mkdir -p "${protoc_dir}/${application}/pb"
+  mkdir -p "${protoc_dir}/include"
 
-  mkdir -p "${go_dir}"
-  mkdir -p "${output_dir}"
-  mkdir -p "${openapi_dir}"
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/include/google"
 
-  protoc -I include/googleapis --proto_path="${protoc_dir}" \
-    --go_out="${go_dir}" \
-    --go-grpc_out="${go_dir}" \
-    --grpc-gateway_out="${go_dir}" --grpc-gateway_opt logtostderr=true --grpc-gateway_opt generate_unbound_methods=true \
-    --openapiv2_out=:"${openapi_dir}" --openapiv2_opt logtostderr=true \
-    --js_out=import_style=commonjs,binary:"${output_dir}" \
-    "${protoc_dir}"/*.proto
-elif [ "${app_name}" == "spiderman" ] && [ "${language}" == "python" ]; then
+  IFS=',' read -ra arr <<<"${model}"
+  for name in "${arr[@]}"; do
+    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
+     protoc -I"${protoc_dir}"/include --proto_path="${protoc_dir}" \
+       --go_out="${output_dir}" \
+       --go-grpc_out="${output_dir}" \
+       --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
+       --grpc-gateway_opt generate_unbound_methods=true \
+       "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+  done
+
+elif [ "${application}" == "spiderman" ] && [ "${language}" == "python" ]; then
   check_python_dependency
 
   python_dir="${target_dir}/python"
@@ -115,14 +113,14 @@ elif [ "${app_name}" == "spiderman" ] && [ "${language}" == "python" ]; then
     --grpc_python_out="${python_dir}" \
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
-    "${protoc_dir}/${app_name}"/v1/*.proto
-elif [ "${app_name}" == "slot" ] && [ "${language}" == "python" ]; then
+    "${protoc_dir}/${application}"/v1/*.proto
+elif [ "${application}" == "slot" ] && [ "${language}" == "python" ]; then
   check_python_dependency
-  mkdir -p "${protoc_dir}/${app_name}/pb"
+  mkdir -p "${protoc_dir}/${application}/pb"
 
-  IFS=',' read -ra arr <<< "${model_name}"
+  IFS=',' read -ra arr <<<"${model}"
   for name in "${arr[@]}"; do
-    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${app_name}/pb/${name}"
+    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
     # use the command for help, python -m grpc.tools.protoc -h
     python3 -m grpc_tools.protoc -I"${protoc_dir}" \
       --python_out="${output_dir}" \
@@ -130,34 +128,34 @@ elif [ "${app_name}" == "slot" ] && [ "${language}" == "python" ]; then
       --grpc_python_out="${output_dir}" \
       --init_python_out="${output_dir}" \
       --init_python_opt=imports=protobuf+grpcio \
-      "${protoc_dir}/${app_name}/pb/${name}/${version}"/*.proto
+      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
   done
-elif [ "${app_name}" == "yeying" ] && [ "${language}" == "javascript" ]; then
+elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
   installed=$(npm -g ls | grep grpc-tools)
   if [ -z "${installed}" ]; then
     npm install -g grpc-tools
   fi
-  mkdir -p "${protoc_dir}/${app_name}/pb"
+  mkdir -p "${protoc_dir}/${application}/pb"
   mkdir -p "${protoc_dir}/include"
 
   ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/include/google"
 
-  IFS=',' read -ra arr <<< "${model_name}"
+  IFS=',' read -ra arr <<<"${model}"
   for name in "${arr[@]}"; do
-    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${app_name}/pb/${name}"
+    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
 
-  #  this method is not working currently, or you must deploy envoy proxy firstly.
-  #  protoc -I third_party/googleapis --proto_path="${protoc_dir}" \
-  #    --js_out=import_style=commonjs,binary:"${output_dir}" \
-  #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${output_dir}" \
-  #    "${protoc_dir}"/*.proto
+    #  this method is not working currently, or you must deploy envoy proxy firstly.
+    #  protoc -I third_party/googleapis --proto_path="${protoc_dir}" \
+    #    --js_out=import_style=commonjs,binary:"${output_dir}" \
+    #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${output_dir}" \
+    #    "${protoc_dir}"/*.proto
 
-  grpc_tools_node_protoc -I"${protoc_dir}/include" --proto_path="${protoc_dir}/${app_name}" \
-    --js_out=import_style=commonjs,binary:"${output_dir}" \
-    --grpc_out=grpc_js:"${output_dir}" \
-    --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-    "${protoc_dir}/${app_name}/pb/${name}/${version}"/*.proto
+    grpc_tools_node_protoc -I"${protoc_dir}/include" --proto_path="${protoc_dir}/${application}" \
+      --js_out=import_style=commonjs,binary:"${output_dir}" \
+      --grpc_out=grpc_js:"${output_dir}" \
+      --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
+      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
   done
 else
-  echo "not supported, app name=${app_name}, language=${language}"
+  echo "not supported, app name=${application}, language=${language}"
 fi

@@ -1,13 +1,12 @@
 syntax = "proto3";
-option go_package = "./pkg/pb";
+option go_package = "component/v1";
+import "google/protobuf/empty.proto";
 
-service ComponentService {
-  rpc listContract(EmptyRequest) returns (ListContractResponse) {}
+service HandshakeService {
+  rpc listContract(google.protobuf.Empty) returns (ListContractResponse) {}
   rpc register(RegisterRequest) returns (RegisterResponse) {}
   rpc unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
-
-message EmptyRequest {}
 
 message ListContractResponse {
   repeated Contract contract = 1;

@@ -1,0 +1,38 @@
+syntax = "proto3";
+option go_package = "user/v1";
+
+import "google/api/annotations.proto";
+
+service AuthService {
+  rpc logon(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/user/logon"
+      body : "*"
+    };
+  }
+
+  rpc logoff(LogoffRequest) returns (LogoffResponse) {
+    option (google.api.http) = {
+      post : "/api/v1/user/login"
+      body : "*"
+    };
+  }
+}
+
+message LogoffRequest {
+  string did = 1;
+  string signature = 2;
+}
+
+message LogoffResponse {
+  string token = 1;
+}
+
+message LoginRequest {
+  string did = 1;
+  string signature = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}

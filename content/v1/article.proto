@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = "./pkg/pb";
+option go_package = "article/v1";
 
 import "google/api/annotations.proto";
 
