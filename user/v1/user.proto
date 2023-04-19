@@ -4,7 +4,7 @@ option go_package = "user/v1";
 import "google/api/annotations.proto";
 
 service AuthService {
-  rpc logon(LoginRequest) returns (LoginResponse) {
+  rpc logon(LogonRequest) returns (LogonResponse) {
     option (google.api.http) = {
       post : "/api/v1/user/logon"
       body : "*"
@@ -13,7 +13,7 @@ service AuthService {
 
   rpc logoff(LogoffRequest) returns (LogoffResponse) {
     option (google.api.http) = {
-      post : "/api/v1/user/login"
+      post : "/api/v1/user/logoff"
       body : "*"
     };
   }
@@ -28,11 +28,11 @@ message LogoffResponse {
   string token = 1;
 }
 
-message LoginRequest {
+message LogonRequest {
   string did = 1;
   string signature = 2;
 }
 
-message LoginResponse {
+message LogonResponse {
   string token = 1;
 }
