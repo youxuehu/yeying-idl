@@ -3,7 +3,7 @@ option go_package = "user/v1";
 
 import "google/api/annotations.proto";
 
-service AuthService {
+service Auth {
   rpc logon(LogonRequest) returns (LogonResponse) {
     option (google.api.http) = {
       post : "/api/v1/user/logon"
