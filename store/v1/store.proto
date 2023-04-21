@@ -4,20 +4,20 @@ option go_package = "store/v1";
 import "google/api/annotations.proto";
 
 service Store {
-  rpc Put(stream PutRequest) returns (PutResponse) {
+  rpc put(stream PutRequest) returns (PutResponse) {
     option (google.api.http) = {
       post: "/api/v1/store"
       body: "*"
     };
   }
 
-  rpc Get(GetRequest) returns (stream GetResponse) {
+  rpc get(GetRequest) returns (stream GetResponse) {
     option (google.api.http) = {
       get: "/api/v1/store"
     };
   }
 
-  rpc Del(DelRequest) returns (DelResponse) {
+  rpc del(DelRequest) returns (DelResponse) {
     option (google.api.http) = {
       delete: "/api/v1/store"
     };
