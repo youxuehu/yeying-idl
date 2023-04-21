@@ -4,7 +4,7 @@ option go_package = "article/v1";
 import "google/api/annotations.proto";
 
 service ArticleService {
-  rpc push(PushRequest) returns (PushResponse) {
+  rpc Push(PushRequest) returns (PushResponse) {
     option (google.api.http) = {
       post : "/api/v1/article/push"
       body : "*"

@@ -3,9 +3,9 @@ option go_package = "component/v1";
 import "google/protobuf/empty.proto";
 
 service HandshakeService {
-  rpc listContract(google.protobuf.Empty) returns (ListContractResponse) {}
-  rpc register(RegisterRequest) returns (RegisterResponse) {}
-  rpc unregister(UnregisterRequest) returns (UnregisterResponse) {}
+  rpc ListContract(google.protobuf.Empty) returns (ListContractResponse) {}
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
 
 message ListContractResponse {
