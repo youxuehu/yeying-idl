@@ -155,8 +155,9 @@ elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto \
-      "${protoc_dir}/${application}/pb/google/api/annotations.proto"
+      "${protoc_dir}/${application}/pb/google/api/annotations.proto" \
+      "${protoc_dir}/${application}/pb/google/api/http.proto" \
+      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
   done
 else
   echo "not supported, app name=${application}, language=${language}"
