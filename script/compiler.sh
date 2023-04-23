@@ -84,19 +84,17 @@ mkdir -p "${protoc_dir}"
 
 if [ "${application}" == "odsn" ] && [ "${language}" == "go" ]; then
   mkdir -p "${protoc_dir}/${application}/pb"
-  mkdir -p "${protoc_dir}/include"
-
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/include/google"
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
 
   IFS=',' read -ra arr <<<"${model}"
   for name in "${arr[@]}"; do
     ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
-     protoc -I"${protoc_dir}"/include --proto_path="${protoc_dir}" \
-       --go_out="${output_dir}" \
-       --go-grpc_out="${output_dir}" \
-       --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
-       --grpc-gateway_opt generate_unbound_methods=true \
-       "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+    protoc -I"${protoc_dir}/${application}/pb" --proto_path="${protoc_dir}" \
+      --go_out="${output_dir}" \
+      --go-grpc_out="${output_dir}" \
+      --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
+      --grpc-gateway_opt generate_unbound_methods=true \
+      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
   done
 
 elif [ "${application}" == "spiderman" ] && [ "${language}" == "python" ]; then
@@ -135,15 +133,14 @@ elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
   if [ -z "${installed}" ]; then
     npm install -g grpc-tools
   fi
+
   mkdir -p "${protoc_dir}/${application}/pb"
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
 
   IFS=',' read -ra arr <<<"${model}"
   for name in "${arr[@]}"; do
     echo "generate for module=${name}"
     ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
-    if [ ! -d "${protoc_dir}/${application}/pb/google" ]; then
-      ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
-    fi
 
     #  this method is not working currently, or you must deploy envoy proxy firstly.
     #  protoc -I third_party/googleapis --proto_path="${protoc_dir}" \
