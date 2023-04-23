@@ -136,13 +136,14 @@ elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
     npm install -g grpc-tools
   fi
   mkdir -p "${protoc_dir}/${application}/pb"
-  mkdir -p "${protoc_dir}/include"
-
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/include/google"
 
   IFS=',' read -ra arr <<<"${model}"
   for name in "${arr[@]}"; do
+    echo "generate for module=${name}"
     ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
+    if [ ! -d "${protoc_dir}/${application}/pb/google" ]; then
+      ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
+    fi
 
     #  this method is not working currently, or you must deploy envoy proxy firstly.
     #  protoc -I third_party/googleapis --proto_path="${protoc_dir}" \
@@ -150,11 +151,12 @@ elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
     #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${output_dir}" \
     #    "${protoc_dir}"/*.proto
 
-    grpc_tools_node_protoc -I"${protoc_dir}/include" --proto_path="${protoc_dir}/${application}" \
+    grpc_tools_node_protoc -I"${protoc_dir}/${application}/pb" --proto_path="${protoc_dir}/${application}" \
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto \
+      "${protoc_dir}/${application}/pb/google/api/annotations.proto"
   done
 else
   echo "not supported, app name=${application}, language=${language}"
