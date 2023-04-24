@@ -34,6 +34,11 @@ message Asset {
   string name = 3;
 }
 
+message Metadata {
+  string hash = 1;
+  uint64 size = 2;
+}
+
 message Result {
   uint32 code = 1;
   string message = 2;
@@ -43,6 +48,7 @@ message PutRequest {
   oneof data {
     Asset asset = 1;
     bytes chunk = 2;
+    Metadata metadata = 3;
   }
 }
 
