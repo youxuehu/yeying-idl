@@ -29,13 +29,18 @@ message Identity {
 }
 
 message Asset {
-  Identity owner = 1;
+  Namespace namespace = 1;
   string name = 2;
   string hash = 3;
   string type = 4;
   uint64 size = 5;
   uint64 created = 6;
   uint64 timestamp = 7;
+}
+
+message Namespace {
+  Identity owner = 1;
+  string path = 2;
 }
 
 message Result {
@@ -56,7 +61,7 @@ message PutResponse {
 }
 
 message GetRequest {
-  Identity owner = 1;
+  Namespace namespace = 1;
   string hash = 2;
 }
 
@@ -68,7 +73,8 @@ message GetResponse {
 }
 
 message DelRequest {
-  Asset asset = 1;
+  Namespace namespace = 1;
+  string hash = 2;
 }
 
 message DelResponse {
