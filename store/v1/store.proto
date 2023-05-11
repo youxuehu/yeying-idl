@@ -4,6 +4,12 @@ option go_package = "store/v1";
 import "google/api/annotations.proto";
 
 service Store {
+  rpc Metadata(MetadataRequest) returns (MetadataResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/store/metadata"
+    };
+  }
+
   rpc Put(stream PutRequest) returns (PutResponse) {
     option (google.api.http) = {
       post: "/api/v1/store"
@@ -46,6 +52,26 @@ message Namespace {
 message Result {
   uint32 code = 1;
   string message = 2;
+}
+
+message MetadataRequest {
+  Namespace namespace = 1;
+  bool recursive = 2;
+}
+
+message MetadataResponse {
+  Namespace namespace = 1;
+  repeated FileMetadata files = 2;
+}
+
+message FileMetadata {
+  string isDirectory = 1;
+  string name = 2;
+  string hash = 3;
+  string type = 4;
+  bool encrypted = 5;
+  int64 timestamp = 6;
+  repeated FileMetadata files = 7;
 }
 
 message PutRequest {
