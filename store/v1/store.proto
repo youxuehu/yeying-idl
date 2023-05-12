@@ -4,7 +4,7 @@ option go_package = "store/v1";
 import "google/api/annotations.proto";
 
 service Store {
-  rpc Metadata(MetadataRequest) returns (MetadataResponse) {
+  rpc Display(DisplayRequest) returns (DisplayResponse) {
     option (google.api.http) = {
       get: "/api/v1/store/metadata"
     };
@@ -42,6 +42,7 @@ message Asset {
   uint64 size = 5;
   uint64 created = 6;
   uint64 timestamp = 7;
+  bool encrypted = 8;
 }
 
 message Namespace {
@@ -54,18 +55,17 @@ message Result {
   string message = 2;
 }
 
-message MetadataRequest {
+message DisplayRequest {
   Namespace namespace = 1;
   bool recursive = 2;
 }
 
-message MetadataResponse {
+message DisplayResponse {
   Namespace namespace = 1;
   repeated FileMetadata files = 2;
 }
 
 message FileMetadata {
-  string did = 1;
   bool isDirectory = 2;
   string name = 3;
   string hash = 4;
