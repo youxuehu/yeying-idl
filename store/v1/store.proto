@@ -70,9 +70,9 @@ message FileMetadata {
   string name = 3;
   string hash = 4;
   string type = 5;
-  int64 size = 6;
+  uint64 size = 6;
   bool encrypted = 7;
-  int64 timestamp = 8;
+  uint64 timestamp = 8;
   repeated FileMetadata files = 9;
 }
 
