@@ -2,7 +2,7 @@ syntax = "proto3";
 option go_package = "./pkg/pb";
 
 service Robot {
-  rpc Completion(ChatRequest) returns (ChatResponse){}
+  rpc Completion(ChatRequest) returns (stream ChatResponse){}
   rpc Profile(ProfileRequest) returns (ProfileResponse){}
   rpc Generation(GenerationRequest) returns (stream GenerationResponse){}
 }
