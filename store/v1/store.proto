@@ -45,25 +45,26 @@ message Identity {
 }
 
 message Asset {
-  AssetType assetType = 2;
-  string name = 3;
-  string pHash = 4;
-  string cHash = 5;
-  string type = 6;
-  uint64 size = 7;
-  uint64 created = 8;
-  uint64 timestamp = 9;
-  uint32 index = 10;
-  uint32 total = 11;
-  string pSibling = 12;
-  string cSibling = 13;
-  bool encrypted = 14;
-  CipherOption cipherOption = 15;
+  AssetType assetType = 1;
+  string name = 2;
+  string hash = 3;
+  string type = 4;
+  uint64 size = 5;
+  uint64 created = 6;
+  uint64 timestamp = 7;
+  uint32 index = 8;
+  uint32 total = 9;
+  string sibling = 10;
+  bool encrypted = 11;
+  Cipher cipher = 12;
 }
 
-message CipherOption {
+message Cipher {
   CipherType cipherType = 1;
   string iv = 2;
+  string hash = 3;
+  string sibling = 4;
+  uint64 size = 5;
 }
 
 message Namespace {
