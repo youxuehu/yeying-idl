@@ -9,7 +9,7 @@ current_directory=$(
 
 usage() {
   printf "Usage: %s\n \
-    -a <Specify the application name, such as slot, yeying, canal, odsn, spiderman and so on\n \
+    -a <Specify the application name, such as robot, yeying, canal, odsn, spiderman and so on\n \
     -m <Specify the model name, such as robot, user, component, or multiple model with comma separated\n \
     -v <Specify the model version, default v1 \n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
@@ -112,7 +112,7 @@ elif [ "${application}" == "spiderman" ] && [ "${language}" == "python" ]; then
     --init_python_out="${python_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
     "${protoc_dir}/${application}"/v1/*.proto
-elif [ "${application}" == "slot" ] && [ "${language}" == "python" ]; then
+elif [ "${application}" == "robot" ] && [ "${language}" == "python" ]; then
   check_python_dependency
   mkdir -p "${protoc_dir}/${application}/pb"
 
