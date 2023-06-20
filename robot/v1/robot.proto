@@ -5,6 +5,7 @@ service Robot {
   rpc Completion(ChatRequest) returns (stream ChatResponse){}
   rpc Profile(ProfileRequest) returns (ProfileResponse){}
   rpc Generation(GenerationRequest) returns (stream GenerationResponse){}
+  rpc Naming(NamingRequest) returns (NamingResponse){}
 }
 
 enum RobotType {
@@ -18,6 +19,28 @@ enum GenerationType {
 enum ResponseFormatType {
   URL = 0;
   BASE64 = 1;
+}
+
+enum LanguageType {
+  ZH_CN = 0;
+  EN_US = 1;
+}
+
+enum GenderType {
+  MALE = 0;
+  FEMALE = 1;
+  ANY = 2;
+}
+
+message NamingResponse {
+  repeated string nameList = 1;
+}
+
+message NamingRequest {
+  LanguageType languageType = 1;
+  int32 count = 2;
+  int32 length = 3;
+  GenderType genderType = 4;
 }
 
 message GenerationRequest {
@@ -81,7 +104,7 @@ message ChatRequest {
   string model = 1;
   string did = 2;
   repeated Message messages = 3;
-  RobotType robotType=4;
+  RobotType robotType = 4;
 }
 
 message Message {
