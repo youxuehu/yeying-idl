@@ -37,10 +37,11 @@ message NamingResponse {
 }
 
 message NamingRequest {
-  LanguageType languageType = 1;
-  int32 count = 2;
-  int32 length = 3;
-  GenderType genderType = 4;
+  string did = 1;
+  LanguageType languageType = 2;
+  int32 count = 3;
+  int32 length = 4;
+  GenderType genderType = 5;
 }
 
 message GenerationRequest {
