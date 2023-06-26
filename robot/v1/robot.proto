@@ -32,16 +32,22 @@ enum GenderType {
   ANY = 2;
 }
 
+enum NameType {
+  PERSON = 0;
+  SERVICE = 1;
+}
+
 message NamingResponse {
   repeated string nameList = 1;
 }
 
 message NamingRequest {
   string did = 1;
-  LanguageType languageType = 2;
-  int32 count = 3;
-  int32 length = 4;
-  GenderType genderType = 5;
+  NameType nameType = 2;
+  LanguageType languageType = 3;
+  int32 count = 4;
+  int32 length = 5;
+  GenderType genderType = 6;
 }
 
 message GenerationRequest {
