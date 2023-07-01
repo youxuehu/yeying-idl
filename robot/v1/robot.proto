@@ -58,6 +58,8 @@ message GenerationRequest {
   string size = 5;
   ResponseFormatType responseFormat = 6;
   RobotType robotType = 7;
+  bytes image = 8;
+  bytes mask = 9;
 }
 
 message GenerationResponse {
