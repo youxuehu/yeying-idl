@@ -9,10 +9,3 @@
 
 # robot
 定义了AI机器人相关的接口
-
-# yeying
-script/compiler.sh -a yeying -m robot,store,user -l javascript
-
-
-
-
