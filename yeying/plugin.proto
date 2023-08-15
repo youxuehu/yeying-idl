@@ -1,0 +1,50 @@
+syntax = "proto3";
+option go_package = "yeying/plugin";
+package yeying.plugin;
+
+import "yeying/common/error_code.proto";
+
+service Plugin {
+  rpc Install(InstallRequest) returns (InstallResponse) {};
+  rpc Uninstall(UninstallRequest) returns (UninstallResponse) {};
+  rpc Search(SearchRequest) returns (SearchResponse) {};
+}
+
+message SearchRequest {
+  repeated Condition conditionList = 1;
+}
+
+message Condition {
+
+}
+
+message SearchResponse {
+  repeated PluginMetadata pluginMetadataList = 1;
+}
+
+message PluginMetadata {
+  string name = 1;
+  string version = 2;
+  string description = 3;
+  string author = 4;
+}
+
+message InstallRequest {
+  string name = 1;
+  string did = 2;
+  string version = 3;
+  string url = 4;
+}
+
+message UninstallRequest {
+  string name = 1;
+  string did = 2;
+}
+
+message UninstallResponse {
+  yeying.share.ErrorCode errCode = 1;
+}
+
+message InstallResponse {
+  yeying.share.ErrorCode errCode = 1;
+}

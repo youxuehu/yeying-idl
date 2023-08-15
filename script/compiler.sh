@@ -7,11 +7,16 @@ current_directory=$(
   pwd
 )
 
+# idl的编译工作不再感知上层应用，只需要告诉上层应用类型即可，在编译的时候，还需要考虑不同的语言、不同文件和包路径的处理。整个编译工作分两步：
+# 1、创建proto编译环境，生成结构化的proto文件目录；
+# 2、执行proto编译命令，由上层的应用来处理编译后的文件存放的位置；
+# TODO: 未来演进的方向，针对不同语言生成独立的包，提供开箱即用的使用体验，目前还需要应用层对具体的模块做独立适配。
+
+# 参数说明，-m参数中如果指定的多个模块之间存在依赖关系，请把被依赖模块写到前面，否则可能提示找不到模块
 usage() {
   printf "Usage: %s\n \
-    -a <Specify the application name, such as robot, yeying, canal, odsn, spiderman and so on\n \
-    -m <Specify the model name, such as robot, user, component, or multiple model with comma separated\n \
-    -v <Specify the model version, default v1 \n \
+    -t <Specify the application type for the interface: server or client>\n \
+    -m <Specify the module name, such as robot, user, store, or multiple module with comma separated>\n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
     " "${base_name}"
   exit 1
@@ -21,18 +26,14 @@ if [ $# -eq 0 ]; then
   usage
 fi
 
-version=v1
 # For macos`s getopt, reference: https://formulae.brew.sh/formula/gnu-getopt
-while getopts ":ha:m:v:l:" o; do
+while getopts ":ht:m:l:" o; do
   case "${o}" in
-  a)
-    application=${OPTARG}
+  t)
+    app_type=${OPTARG}
     ;;
   m)
-    model=${OPTARG}
-    ;;
-  v)
-    version=${OPTARG}
+    module=${OPTARG}
     ;;
   l)
     language=${OPTARG}
@@ -44,10 +45,10 @@ while getopts ":ha:m:v:l:" o; do
 done
 shift $((OPTIND - 1))
 
-echo "generate code for app=${application} with language=${language}, version=${version}, model=${model}"
+echo "Generate code for app_type=${app_type} with language=${language}, module=${module}"
 
-if [ -z "${application}" ]; then
-  echo "Please specify the app name to generate!"
+if [ -z "${app_type}" ]; then
+  echo "Please specify the app type to generate!"
   usage
 fi
 
@@ -75,87 +76,109 @@ check_python_dependency() {
 cd "${current_directory}"/.. || exit 1
 runtime_directory=$(pwd)
 
+# 编译前清空历史
 target_dir="${runtime_directory}"/target
-rm -rf "${target_dir}"
-output_dir="${target_dir}/${language}"
+if [ -d "${target_dir}" ]; then
+  rm -rf "${target_dir}"
+fi
+mkdir -p "${target_dir}"
+
+# 编译结构输出目录
+output_dir="${target_dir}/${app_type}/${language}"
 mkdir -p "${output_dir}"
-protoc_dir="${target_dir}/protoc"
-mkdir -p "${protoc_dir}"
 
-if [ "${application}" == "odsn" ] && [ "${language}" == "go" ]; then
-  mkdir -p "${protoc_dir}/${application}/pb"
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
+# 需要编译的proto文件所在位置
+compile_dir="${target_dir}/proto"
+mkdir -p "${compile_dir}"
 
-  IFS=',' read -ra arr <<<"${model}"
+# 源proto文件所在位置
+api_source_dir="${runtime_directory}/yeying/api"
+api_target_dir="${compile_dir}/yeying/api"
+mkdir -p "${api_target_dir}"
+
+if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
+  # 先编译个google依赖
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
+
+  # 从module参数中获得需要编译的模块，编译模块以逗号隔开, 参数里面的模块顺序也代表了编译的顺序
+  IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
-    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
-    protoc -I"${protoc_dir}/${application}/pb" --proto_path="${protoc_dir}" \
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+    echo "Compile module=${name}"
+
+    # 在哪个路径下搜索.proto文件, 可以用-I<path>，也可以使用--proto_path=<path>
+    if ! protoc --proto_path="${compile_dir}" \
       --go_out="${output_dir}" \
       --go-grpc_out="${output_dir}" \
       --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
       --grpc-gateway_opt generate_unbound_methods=true \
-      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+      "${api_target_dir}/${name}"/*.proto; then
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
+    fi
   done
-
-elif [ "${application}" == "spiderman" ] && [ "${language}" == "python" ]; then
+elif [ "${app_type}" == "spider" ] && [ "${language}" == "python" ]; then
   check_python_dependency
 
   python_dir="${target_dir}/python"
   mkdir -p "${python_dir}"
-  echo "proto directory=${protoc_dir}"
+  echo "proto directory=${compile_dir}"
 
   # use the command for help, python -m grpc.tools.protoc -h
-  python3 -m grpc_tools.protoc -I"${protoc_dir}" \
-    --python_out="${python_dir}" \
-    --pyi_out="${python_dir}" \
-    --grpc_python_out="${python_dir}" \
-    --init_python_out="${python_dir}" \
+  python3 -m grpc_tools.protoc -I"${compile_dir}" \
+    --python_out="${output_dir}" \
+    --pyi_out="${output_dir}" \
+    --grpc_python_out="${output_dir}" \
+    --init_python_out="${output_dir}" \
     --init_python_opt=imports=protobuf+grpcio \
-    "${protoc_dir}/${application}"/v1/*.proto
-elif [ "${application}" == "robot" ] && [ "${language}" == "python" ]; then
+    "${api_target_dir}/${name}"/*.proto
+elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
   check_python_dependency
-  mkdir -p "${protoc_dir}/${application}/pb"
+  mkdir -p "${compile_dir}/${app_type}/pb"
 
-  IFS=',' read -ra arr <<<"${model}"
+  IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
-    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
     # use the command for help, python -m grpc.tools.protoc -h
-    python3 -m grpc_tools.protoc -I"${protoc_dir}" \
+    python3 -m grpc_tools.protoc -I"${compile_dir}" \
       --python_out="${output_dir}" \
       --pyi_out="${output_dir}" \
       --grpc_python_out="${output_dir}" \
       --init_python_out="${output_dir}" \
       --init_python_opt=imports=protobuf+grpcio \
-      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+      "${api_target_dir}/${name}"/*.proto
   done
-elif [ "${application}" == "yeying" ] && [ "${language}" == "javascript" ]; then
+elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
   installed=$(npm -g ls | grep grpc-tools)
   if [ -z "${installed}" ]; then
     npm install -g grpc-tools
   fi
 
-  mkdir -p "${protoc_dir}/${application}/pb"
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${protoc_dir}/${application}/pb/google"
-
-  IFS=',' read -ra arr <<<"${model}"
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
+  IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
-    echo "generate for module=${name}"
-    ln -s "${runtime_directory}/${name}" "${protoc_dir}/${application}/pb/${name}"
+    echo "Compile module=${name}"
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
 
     #  this method is not working currently, or you must deploy envoy proxy firstly.
-    #  protoc -I third_party/googleapis --proto_path="${protoc_dir}" \
+    #  protoc -I third_party/googleapis --proto_path="${compile_dir}" \
     #    --js_out=import_style=commonjs,binary:"${output_dir}" \
     #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${output_dir}" \
-    #    "${protoc_dir}"/*.proto
+    #    "${compile_dir}"/*.proto
 
-    grpc_tools_node_protoc -I"${protoc_dir}/${application}/pb" --proto_path="${protoc_dir}/${application}" \
+    if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${protoc_dir}/${application}/pb/google/api/annotations.proto" \
-      "${protoc_dir}/${application}/pb/google/api/http.proto" \
-      "${protoc_dir}/${application}/pb/${name}/${version}"/*.proto
+      "${compile_dir}/google/api/annotations.proto" \
+      "${compile_dir}/google/api/http.proto" \
+      "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+    fi
   done
 else
-  echo "not supported, app name=${application}, language=${language}"
+  echo "not supported, app type=${app_type}, language=${language}"
+  exit 1
 fi
+echo "Compile protoc successfully."

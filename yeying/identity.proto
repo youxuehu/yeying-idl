@@ -1,26 +1,28 @@
 syntax = "proto3";
 
-option go_package = "identity/v1";
+option go_package = "yeying/identity";
+package yeying.identity;
 
+import "yeying/common/error_code.proto";
 import "google/api/annotations.proto";
 
 service Identity {
   rpc Put( PutRequest) returns (PutResponse) {
     option (google.api.http) = {
-      post: "/api/v1/store"
+      post: "/api/yeying/store"
       body: "*"
     };
   }
 
   rpc Get(GetRequest) returns (stream GetResponse) {
     option (google.api.http) = {
-      get: "/api/v1/store"
+      get: "/api/yeying/store"
     };
   }
 
   rpc Del(DelRequest) returns (DelResponse) {
     option (google.api.http) = {
-      delete: "/api/v1/store"
+      delete: "/api/yeying/store"
     };
   }
 }

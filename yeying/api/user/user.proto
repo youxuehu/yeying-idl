@@ -1,5 +1,6 @@
 syntax = "proto3";
-option go_package = "user/v1";
+option go_package = "yeying/api/user";
+package yeying.api.user;
 
 import "google/api/annotations.proto";
 

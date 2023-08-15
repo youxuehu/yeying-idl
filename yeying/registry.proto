@@ -1,8 +1,11 @@
 syntax = "proto3";
-option go_package = "component/v1";
+option go_package = "yeying/registry";
+package yeying.registry;
+
+import "yeying/common/error_code.proto";
 import "google/protobuf/empty.proto";
 
-service HandshakeService {
+service Registry {
   rpc ListContract(google.protobuf.Empty) returns (ListContractResponse) {}
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}

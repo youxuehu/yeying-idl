@@ -1,12 +1,14 @@
 syntax = "proto3";
-option go_package = "article/v1";
+option go_package = "yeying/article";
+package yeying.article;
 
+import "yeying/api/error_code.proto";
 import "google/api/annotations.proto";
 
 service ArticleService {
   rpc Push(PushRequest) returns (PushResponse) {
     option (google.api.http) = {
-      post : "/api/v1/article/push"
+      post : "/api/yeying/article/push"
       body : "*"
     };
   }

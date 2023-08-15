@@ -1,16 +1,14 @@
 # yeying-idl
-The document used to define the rpc service with the [style guide](https://protobuf.dev/programming-guides/style/)
+管理夜莺社区所有的protoc文件，protoc是一个用于定义和生成数据结构的工具，主要用于序列化和反序列化数据，参考[规范](https://protobuf.dev/programming-guides/style/)
 
-# include
-The share header files for compiling such as googleapis.
+# plugin
+定义了插件相关的接口
 
-# canal
+# store
+定义了仓库相关的接口
 
-# odsn
-script/compiler.sh -a odsn -m store,user -l go
-
-# slot 
-script/compiler.sh -a slot -m robot -l python
+# robot
+定义了AI机器人相关的接口
 
 # yeying
 script/compiler.sh -a yeying -m robot,store,user -l javascript
