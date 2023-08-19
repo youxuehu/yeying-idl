@@ -1,0 +1,33 @@
+/**
+ * 定义基础的结构
+ */
+syntax = "proto3";
+package yeying.api.common;
+option go_package = "yeying/api/common";
+
+import "yeying/api/common/code.proto";
+
+message ResponseStatus {
+  // 响应状态码
+  ResponseStatusCode code = 1;
+  // 可读的消息
+  string message = 2;
+}
+
+message ResponsePageMetadata {
+  // 总记录数
+  int32 totalCount = 1;
+  // 总页数
+  int32 pageCount = 2;
+  // 当前页数
+  int32 currentPage = 3;
+  // 每页记录数
+  int32 pageSize = 4;
+}
+
+message RequestPageMetadata {
+  // 请求第几页，从1开始
+  int32 pageIndex = 1;
+  // 每页记录数
+  int32 pageSize = 2;
+}

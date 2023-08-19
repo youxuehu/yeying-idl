@@ -1,0 +1,76 @@
+syntax = "proto3";
+option go_package = "yeying/api/topic";
+package yeying.api.topic;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+import "google/api/annotations.proto";
+
+service Topic {
+  // 我的订阅
+  rpc MySubscribe(MySubscribeRequest) returns (MySubscribeResponse) {
+    option (google.api.http) = {
+      get : "/api/yeying/topic/mySubscribe"
+    };
+  }
+
+  // 订阅
+  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse) {
+    option (google.api.http) = {
+      post : "/api/yeying/topic/subscribe"
+      body : "*"
+    };
+  }
+
+  // 取消订阅
+  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {
+    option (google.api.http) = {
+      post : "/api/yeying/topic/unsubscribe"
+      body : "*"
+    };
+  }
+}
+
+message MySubscribeRequest {
+  string did = 1;
+}
+
+message MySubscribeResponse {
+  common.ResponseStatus status = 1;
+  repeated TopicMetadata topicMetadata = 2;
+}
+
+message UnsubscribeRequest {
+  string did = 1;
+  repeated string name = 2;
+}
+
+message UnsubscribeResponse {
+  common.ResponseStatus status = 1;
+}
+
+message TopicMetadata {
+  string name = 1;
+  string description = 2;
+  SubscribeFrequency subscribeFrequency = 3;
+  int64 begin = 4;
+  int32 end = 5;
+  common.ContractStatusCode code = 6;
+}
+
+enum SubscribeFrequency {
+  QUARTER = 0;
+  HOUR = 1;
+  DAILY = 2;
+  WEEK = 3;
+  MONTH = 4;
+}
+
+message SubscribeRequest {
+  string did = 1;
+  repeated TopicMetadata topic = 2;
+}
+
+message SubscribeResponse {
+  common.ResponseStatus status = 1;
+}

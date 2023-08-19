@@ -68,6 +68,7 @@ module_check_and_install() {
 }
 
 check_python_dependency() {
+  module_check_and_install googleapis-common-protos
   module_check_and_install protobuf-init
   module_check_and_install grpcio
   module_check_and_install grpcio-tools
@@ -97,7 +98,8 @@ api_target_dir="${compile_dir}/yeying/api"
 mkdir -p "${api_target_dir}"
 
 if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
-  # 先编译个google依赖
+  # 指定编译依赖的proto，grpc使用的http2协议，浏览器使用http1.x协议，尽可能的兼容http1.x，使用google提供protoc生成http1.x的代码，但是
+  # 在实际项目中需要依赖对应的库，go的库是google.golang.org/genproto
   ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
 
   # 从module参数中获得需要编译的模块，编译模块以逗号隔开, 参数里面的模块顺序也代表了编译的顺序
@@ -117,36 +119,26 @@ if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
       exit 1
     fi
   done
-elif [ "${app_type}" == "spider" ] && [ "${language}" == "python" ]; then
-  check_python_dependency
-
-  python_dir="${target_dir}/python"
-  mkdir -p "${python_dir}"
-  echo "proto directory=${compile_dir}"
-
-  # use the command for help, python -m grpc.tools.protoc -h
-  python3 -m grpc_tools.protoc -I"${compile_dir}" \
-    --python_out="${output_dir}" \
-    --pyi_out="${output_dir}" \
-    --grpc_python_out="${output_dir}" \
-    --init_python_out="${output_dir}" \
-    --init_python_opt=imports=protobuf+grpcio \
-    "${api_target_dir}/${name}"/*.proto
 elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
   check_python_dependency
-  mkdir -p "${compile_dir}/${app_type}/pb"
-
+  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
     # use the command for help, python -m grpc.tools.protoc -h
-    python3 -m grpc_tools.protoc -I"${compile_dir}" \
+    # 1、使用protoc编译protobuf文件只会生成相应编程语言的protobuf文件，而使用grpc_tools.protoc编译protobuf文件会生成相应编程语言的
+    # protobuf文件和与gRPC相关的服务端和客户端代码
+    # 2、如果需要在生成的代码里面自动带上__init__.py文件需要带上参数init_python_out
+    if ! python3 -m grpc_tools.protoc -I"${compile_dir}" \
       --python_out="${output_dir}" \
       --pyi_out="${output_dir}" \
       --grpc_python_out="${output_dir}" \
       --init_python_out="${output_dir}" \
       --init_python_opt=imports=protobuf+grpcio \
-      "${api_target_dir}/${name}"/*.proto
+      "${api_target_dir}/${name}"/*.proto; then
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
+    fi
   done
 elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
   installed=$(npm -g ls | grep grpc-tools)
@@ -170,8 +162,8 @@ elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${compile_dir}/google/api/annotations.proto" \
-      "${compile_dir}/google/api/http.proto" \
+      #"${compile_dir}/google/api/annotations.proto" \
+      #"${compile_dir}/google/api/http.proto" \
       "${api_target_dir}/${name}"/*.proto; then
         echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
         exit 1

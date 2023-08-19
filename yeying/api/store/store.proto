@@ -18,7 +18,7 @@ import "yeying/api/common/code.proto";
  * odsn的使用场景：
  * 1、创作场景，知识产权证明
  * 2、代码包分发场景，比如软件包，模型包等
- * 3、数字资产
+ * 3、数字资产，类似nft等
  *
  */
 service Store {
@@ -26,6 +26,7 @@ service Store {
    * 检索数字内容，基于数字内容的元信息检索，比如时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
   rpc Search(SearchRequest) returns (SearchResponse) {
+    // 生成http1.x协议代码
     option (google.api.http) = {
       get: "/api/yeying/store/search"
     };

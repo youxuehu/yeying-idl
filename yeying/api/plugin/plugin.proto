@@ -1,8 +1,8 @@
 syntax = "proto3";
-option go_package = "yeying/plugin";
-package yeying.plugin;
+option go_package = "yeying/api/plugin";
+package yeying.api.plugin;
 
-import "yeying/common/error_code.proto";
+import "yeying/api/common/message.proto";
 
 service Plugin {
   rpc Install(InstallRequest) returns (InstallResponse) {};
@@ -15,7 +15,7 @@ message SearchRequest {
 }
 
 message Condition {
-
+  string sql = 1;
 }
 
 message SearchResponse {
@@ -42,9 +42,9 @@ message UninstallRequest {
 }
 
 message UninstallResponse {
-  yeying.share.ErrorCode errCode = 1;
+  common.ResponseStatus responseStatus = 1;
 }
 
 message InstallResponse {
-  yeying.share.ErrorCode errCode = 1;
+  common.ResponseStatus responseStatus = 1;
 }
