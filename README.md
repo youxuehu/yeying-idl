@@ -21,8 +21,10 @@
 定义了文章相关的接口
 
 # 支持的协议
-使用`proto3`选项会生成支持HTTP/2的代码，而使用`http`选项会生成支持HTTP/1.x的代码。
-在`http`选项中，还可以添加更多的配置信息，如`http.get`、`http.post`、`http.put`等指令，来定义接口的HTTP方法和路径
+使用`proto3`选项会生成支持HTTP/2的代码，而使用`http`选项会生成支持HTTP/1.x的代码。 在`http`选项中，还可以添加更多的配置信息，如`http.get`、
+`http.post`、`http.put`等指令，来定义接口的HTTP方法和路径。
+
+如果要提供http服务，需要开发gateway提供服务，当前只提供grpc服务。
 
 # 定义消息和RPC的规范：
 ## 使用package

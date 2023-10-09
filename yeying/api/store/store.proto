@@ -3,7 +3,7 @@ option go_package = "yeying/api/store";
 package yeying.api.store;
 
 import "google/api/annotations.proto";
-import "yeying/api/common/code.proto";
+import "yeying/api/common/message.proto";
 
 /**
  * 开放的分散式仓库网络（简称，odsn）的接口设计，参考了现实世界中的仓库，逻辑如下：
@@ -103,11 +103,6 @@ message Namespace {
   string path = 2;
 }
 
-message Result {
-  yeying.api.common.Code code = 1;
-  string message = 2;
-}
-
 message SearchRequest {
   Namespace namespace = 1;
   bool recursive = 2;
@@ -115,7 +110,7 @@ message SearchRequest {
 }
 
 message SearchResponse {
-  Result result = 1;
+  common.ResponseStatus status = 1;
   Namespace namespace = 2;
   repeated AssetBundle assetBundles = 3;
 }
@@ -138,7 +133,7 @@ message Metadata {
 }
 
 message PutResponse {
-  Result result = 1;
+  common.ResponseStatus status = 1;
   Namespace namespace = 2;
   Asset asset = 3;
 }
@@ -150,7 +145,7 @@ message GetRequest {
 
 message GetResponse {
   oneof data {
-    Result result = 1;
+    common.ResponseStatus status = 1;
     bytes chunk = 2;
   }
 }
@@ -161,5 +156,5 @@ message DelRequest {
 }
 
 message DelResponse {
-  Result result = 1;
+  common.ResponseStatus status = 1;
 }

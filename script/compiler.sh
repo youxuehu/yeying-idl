@@ -162,8 +162,8 @@ elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      #"${compile_dir}/google/api/annotations.proto" \
-      #"${compile_dir}/google/api/http.proto" \
+      "${compile_dir}/google/api/annotations.proto" \
+      "${compile_dir}/google/api/http.proto" \
       "${api_target_dir}/${name}"/*.proto; then
         echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
         exit 1

@@ -11,8 +11,8 @@ service Robot {
   rpc Naming(NamingRequest) returns (NamingResponse){}
 }
 
-enum RobotType {
-  CHATGPT = 0;
+enum ProviderName {
+  OPENAI = 0;
 }
 
 enum GenerationType {
@@ -54,15 +54,16 @@ message NamingRequest {
 }
 
 message GenerationRequest {
-  string did = 1;
-  GenerationType generationType = 2;
-  string prompt = 3;
-  int32 count = 4;
-  string size = 5;
-  ResponseFormatType responseFormat = 6;
-  RobotType robotType = 7;
-  bytes image = 8;
-  bytes mask = 9;
+  ProviderName providerName = 1;
+  string model = 2;
+  string did = 3;
+  GenerationType generationType = 4;
+  string prompt = 5;
+  int32 count = 6;
+  string size = 7;
+  ResponseFormatType responseFormat = 8;
+  bytes image = 9;
+  bytes mask = 10;
 }
 
 message GenerationResponse {
@@ -70,7 +71,7 @@ message GenerationResponse {
 }
 
 message ProfileRequest {
-  RobotType robotType = 1;
+  ProviderName providerName = 1;
 }
 
 message ProfileResponse {
@@ -113,10 +114,10 @@ message Permission {
 }
 
 message ChatRequest {
-  string model = 1;
-  string did = 2;
-  repeated Message messages = 3;
-  RobotType robotType = 4;
+  ProviderName providerName = 1;
+  string model = 2;
+  string did = 3;
+  repeated Message messages = 4;
 }
 
 message Message {
