@@ -2,21 +2,25 @@ syntax = "proto3";
 option go_package = "yeying/api/robot";
 package yeying.api.robot;
 
-import "yeying/api/common/code.proto";
+import "yeying/api/common/message.proto";
 
 service Robot {
   rpc Completion(ChatRequest) returns (stream ChatResponse){}
   rpc Profile(ProfileRequest) returns (ProfileResponse){}
   rpc Generation(GenerationRequest) returns (stream GenerationResponse){}
-  rpc Naming(NamingRequest) returns (NamingResponse){}
+  rpc Identity(IdentityRequest) returns (IdentityResponse){}
+}
+
+enum ActionType {
+  REGISTER = 0;
 }
 
 enum ProviderName {
   OPENAI = 0;
 }
 
-enum GenerationType {
-  IMAGE = 0;
+enum ContentType {
+  PNG = 0;
 }
 
 enum ResponseFormatType {
@@ -24,40 +28,25 @@ enum ResponseFormatType {
   BASE64 = 1;
 }
 
-enum LanguageType {
-  ZH_CN = 0;
-  EN_US = 1;
+enum RoleType {
+  USER = 0;
 }
 
-enum GenderType {
-  MALE = 0;
-  FEMALE = 1;
-  ANY = 2;
+message IdentityResponse {
+  common.ResponseStatus status = 1;
 }
 
-enum NameType {
-  PERSON = 0;
-  SERVICE = 1;
-}
-
-message NamingResponse {
-  repeated string nameList = 1;
-}
-
-message NamingRequest {
+message IdentityRequest {
   string did = 1;
-  NameType nameType = 2;
-  LanguageType languageType = 3;
-  int32 count = 4;
-  int32 length = 5;
-  GenderType genderType = 6;
+  ActionType action = 2;
+  RoleType role = 3;
 }
 
 message GenerationRequest {
   ProviderName providerName = 1;
   string model = 2;
   string did = 3;
-  GenerationType generationType = 4;
+  ContentType contentType = 4;
   string prompt = 5;
   int32 count = 6;
   string size = 7;
@@ -71,7 +60,8 @@ message GenerationResponse {
 }
 
 message ProfileRequest {
-  ProviderName providerName = 1;
+  string did = 1;
+  ProviderName providerName = 2;
 }
 
 message ProfileResponse {
