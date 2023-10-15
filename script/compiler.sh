@@ -16,7 +16,7 @@ current_directory=$(
 usage() {
   printf "Usage: %s\n \
     -t <Specify the application type for the interface: server or client>\n \
-    -m <Specify the module name, such as robot, user, store, or multiple module with comma separated>\n \
+    -m <Specify the module name, such as robot, identity, store, or multiple module with comma separated>\n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
     " "${base_name}"
   exit 1

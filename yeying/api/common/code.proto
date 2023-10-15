@@ -106,3 +106,18 @@ enum ContractStatusCode {
    */
   CANCELED = 3;
 }
+
+enum Language {
+  // 简体中文
+  ZH_CH = 0;
+
+  // 美国英语
+  EN_US = 1;
+}
+
+enum MediaType {
+  TEXT = 0;
+  IMAGE = 1;
+  VIDEO = 2;
+  AUDIO = 3;
+}

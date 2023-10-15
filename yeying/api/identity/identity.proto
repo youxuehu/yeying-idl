@@ -1,0 +1,33 @@
+syntax = "proto3";
+option go_package = "yeying/api/identity";
+package yeying.api.identity;
+
+import "google/api/annotations.proto";
+import "yeying/api/common/message.proto";
+
+service Identity {
+  rpc Action(IdentityRequest) returns (IdentityResponse) {
+    option (google.api.http) = {
+      post : "/api/yeying/identity"
+      body : "*"
+    };
+  }
+}
+
+enum RoleType {
+  USER = 0;
+}
+
+enum ActionType {
+  REGISTER = 0;
+}
+
+message IdentityRequest {
+  string did = 1;
+  ActionType action = 2;
+  RoleType role = 3;
+}
+
+message IdentityResponse {
+  common.ResponseStatus status = 1;
+}
