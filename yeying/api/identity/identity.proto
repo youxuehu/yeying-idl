@@ -2,16 +2,10 @@ syntax = "proto3";
 option go_package = "yeying/api/identity";
 package yeying.api.identity;
 
-import "google/api/annotations.proto";
 import "yeying/api/common/message.proto";
 
 service Identity {
-  rpc Action(IdentityRequest) returns (IdentityResponse) {
-    option (google.api.http) = {
-      post : "/api/yeying/identity"
-      body : "*"
-    };
-  }
+  rpc Action(IdentityRequest) returns (IdentityResponse) {}
 }
 
 enum RoleType {
