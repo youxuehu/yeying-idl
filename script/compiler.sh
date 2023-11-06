@@ -68,7 +68,6 @@ module_check_and_install() {
 }
 
 check_python_dependency() {
-  module_check_and_install googleapis-common-protos
   module_check_and_install protobuf-init
   module_check_and_install grpcio
   module_check_and_install grpcio-tools
@@ -100,8 +99,6 @@ mkdir -p "${api_target_dir}"
 if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
   # 指定编译依赖的proto，grpc使用的http2协议，浏览器使用http1.x协议，尽可能的兼容http1.x，使用google提供protoc生成http1.x的代码，但是
   # 在实际项目中需要依赖对应的库，go的库是google.golang.org/genproto
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
-
   # 从module参数中获得需要编译的模块，编译模块以逗号隔开, 参数里面的模块顺序也代表了编译的顺序
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
@@ -121,7 +118,6 @@ if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
   done
 elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
   check_python_dependency
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
@@ -146,27 +142,17 @@ elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
     npm install -g grpc-tools
   fi
 
-  ln -s "${runtime_directory}/third_party/googleapis/google" "${compile_dir}/google"
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     echo "Compile module=${name}"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
-
-    #  this method is not working currently, or you must deploy envoy proxy firstly.
-    #  protoc -I third_party/googleapis --proto_path="${compile_dir}" \
-    #    --js_out=import_style=commonjs,binary:"${output_dir}" \
-    #    --grpc-web_out=import_style=commonjs,mode=grpcwebtext:"${output_dir}" \
-    #    "${compile_dir}"/*.proto
-
     if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
       --js_out=import_style=commonjs,binary:"${output_dir}" \
       --grpc_out=grpc_js:"${output_dir}" \
       --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${compile_dir}/google/api/annotations.proto" \
-      "${compile_dir}/google/api/http.proto" \
       "${api_target_dir}/${name}"/*.proto; then
-        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-        exit 1
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
     fi
   done
 else
