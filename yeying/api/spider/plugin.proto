@@ -1,0 +1,90 @@
+syntax = "proto3";
+option go_package = "yeying/api/plugin";
+package yeying.api.plugin;
+
+import "yeying/api/common/message.proto";
+
+service Plugin {
+  // 安装或者升级
+  rpc Install(InstallRequest) returns (InstallResponse) {};
+  // 卸载
+  rpc Uninstall(UninstallRequest) returns (UninstallResponse) {};
+  // 查询或者搜索
+  rpc Search(SearchRequest) returns (SearchResponse) {};
+}
+
+// 为不同的应用开发的插件
+enum PluginType {
+  // 为浏览器开发的插件
+  WEB = 0;
+
+  // 为spider引擎开发的插件
+  SPIDER = 1;
+}
+
+message SearchRequest {
+  string owner = 1;
+  repeated Condition conditionList = 2;
+}
+
+message Condition {
+  string sql = 1;
+}
+
+message SearchResponse {
+  repeated PluginItem pluginItemList = 1;
+}
+
+message PluginItem {
+  // 插件名称
+  string name = 1;
+
+  // 插件描述
+  string description = 3;
+
+  // 插件版本
+  string version = 2;
+
+  // 代码片段或者安装包地址
+  string code = 4;
+
+  // 安装的时间
+  int64 timestamp = 5;
+}
+
+message InstallRequest {
+  // 谁安装
+  string owner = 1;
+
+  // 插件版本，版本格式必须为major.minor.patch，当用户安装插件的时候，如果没有指定版本，会根据插件code的哈希值来判断，如果是哈希值已经存在，则
+  // 直接返回用户插件已经安装，否则的话，自动在patch上增加1，生成一个新的版本。
+  string version = 2;
+
+  // 插件名称
+  string name = 3;
+
+  // 插件描述
+  string description = 4;
+
+  // 代码片段或者安装包地址
+  string code = 5;
+
+  // 插件扩展信息
+  string extend = 6;
+}
+
+message UninstallRequest {
+  // 谁安装谁卸载
+  string owner = 1;
+
+  // 插件名称
+  string name = 2;
+}
+
+message UninstallResponse {
+  common.ResponseStatus responseStatus = 1;
+}
+
+message InstallResponse {
+  common.ResponseStatus responseStatus = 1;
+}

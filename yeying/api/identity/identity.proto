@@ -20,6 +20,7 @@ message IdentityRequest {
   string did = 1;
   ActionType action = 2;
   RoleType role = 3;
+  string extend = 4;
 }
 
 message IdentityResponse {

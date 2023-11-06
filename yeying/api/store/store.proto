@@ -2,159 +2,212 @@ syntax = "proto3";
 option go_package = "yeying/api/store";
 package yeying.api.store;
 
-import "google/api/annotations.proto";
 import "yeying/api/common/message.proto";
 
 /**
- * 开放的分散式仓库网络（简称，odsn）的接口设计，参考了现实世界中的仓库，逻辑如下：
- * 1、仓库中的每件货物有且只有一个二维码，通过二维码管理货物，扫码入库和扫码出库，在odsn中的内容的唯一标识是内容的哈希值，通过哈希值判断是否已经入
- * 库。由于在网络世界中内容的复制成本几乎为零，并且可以做到一摸一样，无法辨别真伪，所以odsn中所有货物都会维持两个计数器，分别记录存和取的的次数。
- * 2、每件商品上市前都会提前备货，发送到不同地区的仓库。通过odsn发布内容时，也会可能会发送多份且分散到不同的网络节点中，一方面保证内容不会因为单个
- * 节点故障而丢失，另外也保证内容的可访问性。
- * 3、仓库的货物入库的可能是厂家，出库的可能是渠道商，货物的交易并不是在仓库中完成，而是通过协议约定当有顾客购买货物时从仓库调取，所以在设计odsn接
- * 口时也是尽可能简单，不会记录买卖关系，但会统计一些信息，比如统计内容取（浏览）的次数评估内容热度，或者统计内容存的次数（收藏）评估内容质量，目的
- * 是更好的分配存储资源。
- *
- * odsn的使用场景：
- * 1、创作场景，知识产权证明
- * 2、代码包分发场景，比如软件包，模型包等
- * 3、数字资产，类似nft等
- *
+
+开放的分散式仓库网络的接口设计，参考了现实世界中的仓库，逻辑如下：
+1、数字资产有两个标识，一个是数字资产的身份标识，可以是分布式数字身份，也可以是用户自定义的身份ID，另一个是数字资产内容的哈希值；
+2、数字资产入库，发送到指定存储网络中的节点，可以指定副本数量，一方面保证内容不会因为单个节点故障而丢失，另外也保证内容的可访问性；
+3、存储复用，如果两份资产哈希值一样，分两种情况来看，如果资产的所有者一样，则仓库会主动告知身份持有者存在重复，如果资产的所有者不同，会增加引用；
+4、授权数字资产，所有者和使用者立交易关系，确保使用者根据指定的策略访问数据，仓库会统计数字资产的使用情况，比如统计内容取（浏览）的次数评估内容热度
+，或者统计内容存的次数（收藏）评估内容质量，目的是更好的分配存储资源；
+
+分散式存储网络的使用场景：
+1、创作场景，知识产权证明
+2、代码包分发场景，比如软件包，模型包等
+3、数字资产，类似nft等
  */
 service Store {
   /**
    * 检索数字内容，基于数字内容的元信息检索，比如时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
-  rpc Search(SearchRequest) returns (SearchResponse) {
-    // 生成http1.x协议代码
-    option (google.api.http) = {
-      get: "/api/yeying/store/search"
-    };
-  }
+  rpc Search(SearchRequest) returns (SearchResponse) {}
 
   /**
-   * 入库数字内容，如果计算的内容哈希值已存在，直接返回ALREADY_EXISTS，否则入库成功返回OK
+   * 分块入库数字内容，正常的入库流程:1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
    */
-  rpc Put(stream PutRequest) returns (PutResponse) {
-    option (google.api.http) = {
-      post: "/api/yeying/store"
-      body: "*"
-    };
-  }
+  rpc PutChunk(stream PutChunkRequest) returns (PutChunkResponse) {}
 
   /**
-   * 出库数字内容，如果计算的内容哈希值已存在，直接返回ALREADY_EXISTS，否则入库成功返回OK
+   * 分块出库数字内容
    */
-  rpc Get(GetRequest) returns (stream GetResponse) {
-    option (google.api.http) = {
-      get: "/api/yeying/store"
-    };
-  }
+  rpc GetChunk(GetChunkRequest) returns (stream GetChunkResponse) {}
 
   /**
-   * 下架数字内容
+   * 以事务的形式和存储供应商签订协议并入库，当所有资产块入库成功后，资产的信息发送到后端服务签字确认，涵盖了新的资产和新的版本入库；
+   * 1、自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
    */
-  rpc Del(DelRequest) returns (DelResponse) {
-    option (google.api.http) = {
-      delete: "/api/yeying/store"
-    };
-  }
+  rpc Sign(SignRequest) returns (SignResponse) {}
+
+  /**
+   * 获得资产详细信息，提供该接口是为了更灵活处理资产信息，资产信息的复杂主要是几个方面：
+   * 1、资产分块，资产的块信息可能会很大
+   * 2、多版本，资产描述信息也会很大
+   * 3、分散存储，如果资产过大，可能会被存储到不同的供应商
+   */
+  rpc Detail(DetailRequest) returns (DetailResponse) {}
+
+  /**
+   * 从当前仓储网络移除掉数字内容；
+   */
+  rpc Remove(RemoveRequest) returns (RemoveResponse) {}
 }
 
-enum AssetType {
-  DIRECTORY = 0;
-  FILE = 1;
-  CHUNK = 2;
-}
-
-enum CipherType {
-  AES_GCM = 0;
+//enum CipherType {
+//  AES_GCM = 0;
+//}
+enum PartType {
+  ASSET = 0;
+  CHUNK = 1;
 }
 
 message Identity {
   string did = 1;
 }
 
+// 资产定义
 message Asset {
-  AssetType assetType = 1;
-  string name = 2;
-  string hash = 3;
-  string type = 4;
-  uint64 size = 5;
-  uint64 created = 6;
-  uint64 timestamp = 7;
-  uint32 index = 8;
-  uint32 total = 9;
-  string sibling = 10;
-  bool encrypted = 11;
-  Cipher cipher = 12;
+  uint32 version = 1;
+  // 每个资产在上传时，需要生成一个分布式数字身份，目前考虑到方案的成熟度，可以使用uuid代替；TODO：需要考虑分布式数字身份信息存在哪里；
+  string did = 2;
+  // 资产名称
+  string name = 3;
+  // 资产哈希值
+  string hash = 4;
+  // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小，和资产哈希值一样
+  string mergedHash = 5;
+  // 资产描述
+  string description = 6;
+  // 资产类型
+  string type = 7;
+  // 明文资产的大小
+  uint64 size = 8;
+  // 资产创建时间
+  int64 created = 9;
+  // 资产上传时间戳
+  int64 timestamp = 10;
+  // 资产内容分成多少块
+  uint32 total = 11;
+  // 资产块的大小
+  uint32 block = 12;
+  // 资产扩展信息
+  string extend = 13;
+  // 资产块信息
+  repeated Chunk chunks = 14;
 }
 
-message Cipher {
-  CipherType cipherType = 1;
-  string iv = 2;
-  string hash = 3;
-  string sibling = 4;
-  uint64 size = 5;
-}
+//message Cipher {
+//  // 加密类型
+//  CipherType type = 1;
+//  // 密文初始化向量
+//  string iv = 2;
+// 密文块合并后的哈希值
+//  string hash = 1;
+//  // 密文资产的大小
+//  uint64 size = 2;
+//  // 额外的配置
+//  string option = 3;
+//}
 
-message Namespace {
-  Identity owner = 1;
-  string path = 2;
+// 资产块信息
+message Chunk {
+  // 块在资产中的索引
+  uint32 index = 1;
+  // 明文块哈希值
+  string hash = 2;
+  // 明文块大小
+  uint64 size = 3;
+  // 块的扩展信息
+  string extend = 4;
 }
 
 message SearchRequest {
-  Namespace namespace = 1;
-  bool recursive = 2;
+  Identity identity = 1;
+  bool brief = 2;
   string condition = 3;
 }
 
 message SearchResponse {
   common.ResponseStatus status = 1;
-  Namespace namespace = 2;
-  repeated AssetBundle assetBundles = 3;
+  repeated Asset assets = 2;
 }
 
-message AssetBundle {
-  Asset asset = 1;
-  repeated Asset chunks = 2;
+//message AssetBundle {
+//  Asset asset = 1;
+//  repeated Asset chunks = 2;
+//}
+
+message Parent {
+  string hash = 1;
 }
 
-message PutRequest {
+// 先发送内容，然后发送的chunk元信息，
+message PutChunkRequest {
   oneof data {
-    Metadata metadata = 1;
-    bytes chunk = 2;
+    // 资产块头信息
+    ChunkHeader header = 1;
+    // 资产块内容
+    bytes body = 2;
   }
 }
 
-message Metadata {
-  Namespace namespace = 1;
+message ChunkHeader {
+  // 上传者身份
+  Identity identity = 1;
+  // 资产身份
+  string did = 2;
+  // 资产块元信息
+  Chunk chunk = 3;
+}
+
+message PutChunkResponse {
+  common.ResponseStatus status = 1;
+  // 当前传输的资产块
+  Chunk chunk = 2;
+}
+
+message SignRequest {
+  Identity identity = 1;
   Asset asset = 2;
 }
 
-message PutResponse {
+message SignResponse {
   common.ResponseStatus status = 1;
-  Namespace namespace = 2;
-  Asset asset = 3;
+  Asset asset = 2;
 }
 
-message GetRequest {
-  Namespace namespace = 1;
+message DetailRequest {
+  Identity identity = 1;
+  // 资产身份
+  string did = 2;
+  // 资产哈希值
+  string hash = 3;
+}
+
+message DetailResponse {
+  common.ResponseStatus status = 1;
+  repeated Asset assets = 2;
+}
+
+message GetChunkRequest {
+  Identity identity = 1;
   string hash = 2;
 }
 
-message GetResponse {
+message GetChunkResponse {
   oneof data {
     common.ResponseStatus status = 1;
     bytes chunk = 2;
   }
 }
 
-message DelRequest {
-  Namespace namespace = 1;
+message RemoveRequest {
+  Identity identity = 1;
   string hash = 2;
 }
 
-message DelResponse {
+message RemoveResponse {
   common.ResponseStatus status = 1;
+  Asset asset = 2;
 }

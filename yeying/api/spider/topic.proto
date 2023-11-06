@@ -1,0 +1,58 @@
+syntax = "proto3";
+option go_package = "yeying/api/topic";
+package yeying.api.topic;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+service Topic {
+  // 搜索订阅
+  rpc Search(SearchRequest) returns (SearchResponse) {}
+
+  // 订阅
+  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse) {}
+
+  // 取消订阅
+  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {}
+}
+
+message SearchRequest {
+  string owner = 1;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated TopicMetadata topicMetadata = 2;
+}
+
+message UnsubscribeRequest {
+  string owner = 1;
+  repeated string name = 2;
+}
+
+message UnsubscribeResponse {
+  common.ResponseStatus status = 1;
+}
+
+message TopicMetadata {
+  // 名称
+  string name = 1;
+
+  // 媒体类型
+  repeated common.MediaType mediaType = 2;
+
+  // cron表达式
+  string expression = 3;
+
+  // 合约
+  common.ContractStatusCode code = 4;
+}
+
+message SubscribeRequest {
+  string owner = 1;
+  repeated TopicMetadata topicMetadata = 2;
+}
+
+message SubscribeResponse {
+  common.ResponseStatus status = 1;
+}

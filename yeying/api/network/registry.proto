@@ -1,0 +1,53 @@
+syntax = "proto3";
+option go_package = "yeying/api/network";
+package yeying.network;
+
+import "yeying/api/common/code.proto";
+
+service Network {
+  rpc List(ListRequest) returns (ListResponse) {}
+  rpc Join(JoinRequest) returns (JoinResponse) {}
+  rpc Exit(ExitRequest) returns (ExitResponse) {}
+}
+
+message ListRequest {
+
+}
+
+message ListResponse {
+  repeated Contract contract = 1;
+}
+
+message ExitRequest {
+  string did = 1;
+  Peer peer = 2;
+  Contract contract = 3;
+}
+
+message Peer {
+  string id = 1;
+}
+
+message ExitResponse {
+  string status = 1;
+}
+
+message JoinRequest {
+  string did = 1;
+  Peer peer = 2;
+  Contract contract = 3;
+}
+
+message JoinResponse {
+  RegisterStatus status = 1;
+  Contract contract = 2;
+}
+
+enum RegisterStatus {
+  SUCCESS = 0;
+  REGISTERED = 1;
+}
+
+message Contract {
+  string address = 1;
+}
