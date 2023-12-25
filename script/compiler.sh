@@ -16,8 +16,9 @@ current_directory=$(
 usage() {
   printf "Usage: %s\n \
     -t <Specify the application type for the interface: server or client>\n \
-    -m <Specify the module name, such as robot, identity, store, or multiple module with comma separated>\n \
+    -m <Specify the module name, such as robot, identity,user, store or multiple module with comma separated>\n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
+    -g <Specify compile with grpc gateway\n \
     " "${base_name}"
   exit 1
 }
@@ -26,8 +27,9 @@ if [ $# -eq 0 ]; then
   usage
 fi
 
+gateway=0
 # For macos`s getopt, reference: https://formulae.brew.sh/formula/gnu-getopt
-while getopts ":ht:m:l:" o; do
+while getopts ":ht:m:l:g" o; do
   case "${o}" in
   t)
     app_type=${OPTARG}
@@ -38,6 +40,9 @@ while getopts ":ht:m:l:" o; do
   l)
     language=${OPTARG}
     ;;
+  g)
+    gateway=1
+    ;;
   *)
     usage
     ;;
@@ -45,7 +50,12 @@ while getopts ":ht:m:l:" o; do
 done
 shift $((OPTIND - 1))
 
-echo "Generate code for app_type=${app_type} with language=${language}, module=${module}"
+echo "Generate code for app_type=${app_type} with language=${language}, module=${module}, gateway=${gateway}"
+if [ ${gateway} -eq 0 ]; then
+  echo "grpc gateway not open"
+else
+  echo "grpc gateway open"
+fi
 
 if [ -z "${app_type}" ]; then
   echo "Please specify the app type to generate!"
@@ -106,14 +116,23 @@ if [ "${app_type}" == "server" ] && [ "${language}" == "go" ]; then
     echo "Compile module=${name}"
 
     # 在哪个路径下搜索.proto文件, 可以用-I<path>，也可以使用--proto_path=<path>
-    if ! protoc --proto_path="${compile_dir}" \
-      --go_out="${output_dir}" \
-      --go-grpc_out="${output_dir}" \
-      --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
-      --grpc-gateway_opt generate_unbound_methods=true \
-      "${api_target_dir}/${name}"/*.proto; then
-      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-      exit 1
+    if [ ${gateway} -eq 0 ]; then
+      if ! protoc --proto_path="${compile_dir}" \
+        --go_out="${output_dir}" \
+        --go-grpc_out="${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    else
+      if ! protoc --proto_path="${compile_dir}" \
+        --go_out="${output_dir}" \
+        --grpc-gateway_out="${output_dir}" --grpc-gateway_opt logtostderr=true \
+        --grpc-gateway_opt generate_unbound_methods=true \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
     fi
   done
 elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
@@ -125,18 +144,62 @@ elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
     # 1、使用protoc编译protobuf文件只会生成相应编程语言的protobuf文件，而使用grpc_tools.protoc编译protobuf文件会生成相应编程语言的
     # protobuf文件和与gRPC相关的服务端和客户端代码
     # 2、如果需要在生成的代码里面自动带上__init__.py文件需要带上参数init_python_out
-    if ! python3 -m grpc_tools.protoc -I"${compile_dir}" \
-      --python_out="${output_dir}" \
-      --pyi_out="${output_dir}" \
-      --grpc_python_out="${output_dir}" \
-      --init_python_out="${output_dir}" \
-      --init_python_opt=imports=protobuf+grpcio \
-      "${api_target_dir}/${name}"/*.proto; then
-      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-      exit 1
+    if [[ ${name} == "common" ]]; then
+      if ! python3 -m grpc_tools.protoc -I"${compile_dir}" \
+        --python_out="${output_dir}" \
+        --pyi_out="${output_dir}" \
+        --init_python_out="${output_dir}" \
+        --init_python_opt=imports=protobuf \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    else
+      if ! python3 -m grpc_tools.protoc -I"${compile_dir}" \
+        --python_out="${output_dir}" \
+        --pyi_out="${output_dir}" \
+        --grpc_python_out="${output_dir}" \
+        --init_python_out="${output_dir}" \
+        --init_python_opt=imports=protobuf+grpcio \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
     fi
   done
-elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
+elif [ "${app_type}" == "browser" ] && [ "${language}" == "javascript" ]; then
+  IFS=',' read -ra arr <<<"${module}"
+  for name in "${arr[@]}"; do
+    echo "Compile client module=${name} for browser"
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+    if [[ ${name} == "common" ]]; then
+      if ! protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    elif [[ ${name} == "robot" ]]; then
+      echo "Compile module=${name} to text"
+      if ! protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        --grpc-web_out=import_style=commonjs,mode=grpcweb:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    else
+      echo "Compile module=${name} to binary"
+      if ! protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        --grpc-web_out=import_style=commonjs,mode=grpcweb:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    fi
+  done
+elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
   installed=$(npm -g ls | grep grpc-tools)
   if [ -z "${installed}" ]; then
     npm install -g grpc-tools
@@ -144,15 +207,24 @@ elif [ "${app_type}" == "client" ] && [ "${language}" == "javascript" ]; then
 
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
-    echo "Compile module=${name}"
+    echo "Compile client module=${name} for nodejs"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
-    if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
-      --js_out=import_style=commonjs,binary:"${output_dir}" \
-      --grpc_out=grpc_js:"${output_dir}" \
-      --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-      "${api_target_dir}/${name}"/*.proto; then
-      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-      exit 1
+    if [[ ${name} == "common" ]]; then
+      if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    else
+      if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        --grpc_out=grpc_js:"${output_dir}" \
+        --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
     fi
   done
 else

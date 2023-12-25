@@ -18,7 +18,7 @@ option go_package = "yeying/api/common";
  * 3、含义
  * 4、使用场景
  */
-enum ResponseStatusCode {
+enum ResponseCode {
   /**
    * 含义：操作完成
    * 使用场景：成功创建、成功提交
@@ -75,7 +75,7 @@ enum ResponseStatusCode {
 }
 
 /**
- * 合同的状态码需要遵守的规则：
+ * 合约的状态码需要遵守的规则：
  * 1、编码
  * 2、编号
  * 3、含义
@@ -107,7 +107,10 @@ enum ContractStatusCode {
   CANCELED = 3;
 }
 
-enum Language {
+/**
+ *
+ */
+enum LanguageCode {
   // 简体中文
   ZH_CH = 0;
 
@@ -115,9 +118,10 @@ enum Language {
   EN_US = 1;
 }
 
-enum MediaType {
+enum MediaCode {
   TEXT = 0;
   IMAGE = 1;
   VIDEO = 2;
   AUDIO = 3;
 }
+

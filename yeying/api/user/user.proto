@@ -1,0 +1,102 @@
+syntax = "proto3";
+option go_package = "yeying/api/user";
+package yeying.api.user;
+
+import "yeying/api/common/message.proto";
+
+service User {
+  rpc Add(AddRequest) returns(AddResponse) {}
+  rpc Get(GetRequest) returns(GetResponse) {}
+  rpc Del(DelRequest) returns(DelResponse) {}
+  rpc Mod(ModRequest) returns(ModResponse) {}
+  rpc Invite(InviteRequest) returns(InviteResponse) {}
+}
+
+enum Role {
+  USER = 0;
+  OWNER = 1;
+}
+
+enum Status {
+  ACTIVE = 0; // 活跃：表示用户目前正在使用软件并与其进行交互。
+  OFFLINE = 1; // 离线：表示用户当前不处于活跃状态，但可能会随时返回。
+  DISABLE = 2; // 禁用：表示用户的访问权限被暂时或永久性地限制。
+  LOCK = 3; // 锁定：表示用户的账户被暂时性地冻结，通常是由于安全原因。
+  UNVERIFIED = 4; // 未验证：表示用户账户在创建后尚未通过验证。
+  DELETED = 5; // 删除：表示用户账户已经被永久删除，无法恢复。
+  DORMANT = 6; // 休眠：表示用户账户由于长时间未活跃而被标记为休眠状态。
+  FREEZE = 7; // 冻结：表示用户账户在一段时间内暂时不可用。
+  AUDIT = 8; // 待审核：表示新用户注册后正在等待管理员或审核人员审批。
+  REFUSED = 9; // 审核未通过：表示管理员或审核人员拒绝了用户的注册请求。
+}
+
+message UserMetadata {
+  string provider = 1;
+  string name = 2;
+  string did = 3;
+  Role role = 4;
+  string extend = 5;
+  Status status = 6;
+  string checkpoint = 7;
+}
+
+message AddRequest {
+  string provider = 1;
+  string name = 2;
+  string did = 3;
+  string invitation = 4;
+  string extend = 5;
+}
+
+message AddResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata metadata = 2;
+}
+
+message ModRequest {
+  string provider = 1;
+  string did = 2;
+  string extend = 3;
+}
+
+message ModResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata metadata = 2;
+}
+
+message DelRequest {
+  string provider = 1;
+  string did = 2;
+}
+
+message DelResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata metadata = 2;
+}
+
+message GetRequest {
+  string provider = 1;
+  string did = 2;
+}
+
+message GetResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata metadata = 2;
+}
+
+message InviteRequest {
+  string provider = 1;
+  string did = 2;
+}
+
+message Invitation {
+  string code = 1;
+  string expired = 2;
+}
+
+message InviteResponse {
+  common.ResponseStatus status = 1;
+  repeated Invitation invitation = 2;
+}
+
+

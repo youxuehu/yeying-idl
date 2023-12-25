@@ -25,16 +25,6 @@ service Store {
   rpc Search(SearchRequest) returns (SearchResponse) {}
 
   /**
-   * 分块入库数字内容，正常的入库流程:1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
-   */
-  rpc PutChunk(stream PutChunkRequest) returns (PutChunkResponse) {}
-
-  /**
-   * 分块出库数字内容
-   */
-  rpc GetChunk(GetChunkRequest) returns (stream GetChunkResponse) {}
-
-  /**
    * 以事务的形式和存储供应商签订协议并入库，当所有资产块入库成功后，资产的信息发送到后端服务签字确认，涵盖了新的资产和新的版本入库；
    * 1、自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
    */
@@ -52,14 +42,130 @@ service Store {
    * 从当前仓储网络移除掉数字内容；
    */
   rpc Remove(RemoveRequest) returns (RemoveResponse) {}
+
+  /**
+   * 前端浏览器不支持client stream，提供一个非流式的上传接口
+   */
+  rpc PutOnce(PutOnceRequest) returns (PutChunkResponse) {}
+
+  /**
+ * 分块入库数字内容，正常的入库流程:1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
+ */
+  rpc PutChunk(stream PutChunkRequest) returns (PutChunkResponse) {}
+
+  /**
+   * 分块出库数字内容
+   */
+  rpc GetChunk(GetChunkRequest) returns (stream GetChunkResponse) {}
+
+  /**
+   * 前端浏览器不支持server stream，提供一个非流式的下载接口
+   */
+  rpc GetOnce(GetChunkRequest) returns (GetOnceResponse) {}
 }
 
-//enum CipherType {
-//  AES_GCM = 0;
-//}
-enum PartType {
-  ASSET = 0;
-  CHUNK = 1;
+message SearchRequest {
+  Identity identity = 1;
+  string condition = 2;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated Asset assets = 2;
+}
+
+// 先发送内容，然后发送的chunk元信息，
+message PutChunkRequest {
+  oneof data {
+    // 资产块头信息
+    Header header = 1;
+    // 资产块内容
+    bytes body = 2;
+  }
+}
+
+message PutOnceRequest {
+  // 资产块头信息
+  Header header = 1;
+  // 资产块内容
+  bytes body = 2;
+}
+
+message PutChunkResponse {
+  common.ResponseStatus status = 1;
+  // 当前传输的资产块
+  Chunk chunk = 2;
+}
+
+message SignRequest {
+  Identity identity = 1;
+  Asset asset = 2;
+}
+
+message SignResponse {
+  common.ResponseStatus status = 1;
+  Asset asset = 2;
+}
+
+message DetailRequest {
+  Identity identity = 1;
+  // 资产身份
+  string assetDid = 2;
+  // 资产哈希值
+  string hash = 3;
+}
+
+message DetailResponse {
+  common.ResponseStatus status = 1;
+  repeated Asset assets = 2;
+}
+
+message GetChunkRequest {
+  Identity identity = 1;
+  string hash = 2;
+}
+
+message GetChunkResponse {
+  oneof data {
+    Header header = 1;
+    bytes body = 2;
+  }
+}
+
+message GetOnceResponse {
+  Header header = 1;
+  bytes body = 2;
+}
+
+message RemoveRequest {
+  Identity identity = 1;
+  string hash = 2;
+}
+
+message RemoveResponse {
+  common.ResponseStatus status = 1;
+  Asset asset = 2;
+}
+
+message Header {
+  // 上传者身份
+  Identity identity = 1;
+  // 资产身份
+  string assetDid = 2;
+  // 资产块元信息
+  Chunk chunk = 3;
+}
+
+// 资产块信息
+message Chunk {
+  // 块在资产中的索引
+  uint32 index = 1;
+  // 明文块哈希值
+  string hash = 2;
+  // 明文块大小
+  uint64 size = 3;
+  // 块的扩展信息
+  string extend = 4;
 }
 
 message Identity {
@@ -91,123 +197,10 @@ message Asset {
   uint32 total = 11;
   // 资产块的大小
   uint32 block = 12;
+  // 是否加密
+  bool encrypted = 13;
   // 资产扩展信息
-  string extend = 13;
+  string extend = 14;
   // 资产块信息
-  repeated Chunk chunks = 14;
-}
-
-//message Cipher {
-//  // 加密类型
-//  CipherType type = 1;
-//  // 密文初始化向量
-//  string iv = 2;
-// 密文块合并后的哈希值
-//  string hash = 1;
-//  // 密文资产的大小
-//  uint64 size = 2;
-//  // 额外的配置
-//  string option = 3;
-//}
-
-// 资产块信息
-message Chunk {
-  // 块在资产中的索引
-  uint32 index = 1;
-  // 明文块哈希值
-  string hash = 2;
-  // 明文块大小
-  uint64 size = 3;
-  // 块的扩展信息
-  string extend = 4;
-}
-
-message SearchRequest {
-  Identity identity = 1;
-  bool brief = 2;
-  string condition = 3;
-}
-
-message SearchResponse {
-  common.ResponseStatus status = 1;
-  repeated Asset assets = 2;
-}
-
-//message AssetBundle {
-//  Asset asset = 1;
-//  repeated Asset chunks = 2;
-//}
-
-message Parent {
-  string hash = 1;
-}
-
-// 先发送内容，然后发送的chunk元信息，
-message PutChunkRequest {
-  oneof data {
-    // 资产块头信息
-    ChunkHeader header = 1;
-    // 资产块内容
-    bytes body = 2;
-  }
-}
-
-message ChunkHeader {
-  // 上传者身份
-  Identity identity = 1;
-  // 资产身份
-  string did = 2;
-  // 资产块元信息
-  Chunk chunk = 3;
-}
-
-message PutChunkResponse {
-  common.ResponseStatus status = 1;
-  // 当前传输的资产块
-  Chunk chunk = 2;
-}
-
-message SignRequest {
-  Identity identity = 1;
-  Asset asset = 2;
-}
-
-message SignResponse {
-  common.ResponseStatus status = 1;
-  Asset asset = 2;
-}
-
-message DetailRequest {
-  Identity identity = 1;
-  // 资产身份
-  string did = 2;
-  // 资产哈希值
-  string hash = 3;
-}
-
-message DetailResponse {
-  common.ResponseStatus status = 1;
-  repeated Asset assets = 2;
-}
-
-message GetChunkRequest {
-  Identity identity = 1;
-  string hash = 2;
-}
-
-message GetChunkResponse {
-  oneof data {
-    common.ResponseStatus status = 1;
-    bytes chunk = 2;
-  }
-}
-
-message RemoveRequest {
-  Identity identity = 1;
-  string hash = 2;
-}
-
-message RemoveResponse {
-  common.ResponseStatus status = 1;
-  Asset asset = 2;
+  repeated Chunk chunks = 15;
 }

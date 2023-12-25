@@ -3,26 +3,78 @@ option go_package = "yeying/api/identity";
 package yeying.api.identity;
 
 import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
 
 service Identity {
-  rpc Action(IdentityRequest) returns (IdentityResponse) {}
+  rpc Register(RegisterRequest) returns (RegisterResponse) {}
+  rpc Search(SearchRequest) returns (SearchResponse) {}
+  rpc Update(UpdateRequest) returns (UpdateResponse) {}
+  rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
 
-enum RoleType {
-  USER = 0;
+enum Category {
+  HUMANITY = 0;
+  SOFTWARE = 1;
 }
 
-enum ActionType {
-  REGISTER = 0;
+message Condition {
+  string parent = 1;
+  string did = 2;
+  Category category = 3;
+  string type = 4;
 }
 
-message IdentityRequest {
-  string did = 1;
-  ActionType action = 2;
-  RoleType role = 3;
-  string extend = 4;
+message IdentityMetadata {
+  string parent = 1;
+  string network = 2;
+  string did = 3;
+  string address = 4;
+  Category category = 5;
+  string type = 6; // 某种身份类别下，身份的类型，比如SOFTWARE类别下，有robot、store、spider、node等，HUMANITY类别下有personal、enterprise等
+  string extend = 7;
+  string checkpoint = 8;
 }
 
-message IdentityResponse {
+message RegisterRequest {
+  string parent = 1;
+  string network = 2;
+  string did = 3;
+  string address = 4;
+  Category category = 5;
+  string type = 6;
+  string extend = 7;
+}
+
+message RegisterResponse {
   common.ResponseStatus status = 1;
+  IdentityMetadata metadata = 2;
+}
+
+message SearchRequest {
+  string did = 1;
+  Condition condition = 2;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated IdentityMetadata metadata = 2;
+}
+
+message UpdateRequest {
+  string did = 1;
+  string extend = 2;
+}
+
+message UpdateResponse {
+  common.ResponseStatus status = 1;
+  repeated IdentityMetadata metadata = 2;
+}
+
+message UnregisterRequest {
+  string did = 1;
+}
+
+message UnregisterResponse {
+  common.ResponseStatus status = 1;
+  IdentityMetadata metadata = 2;
 }
