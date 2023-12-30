@@ -19,59 +19,62 @@ option go_package = "yeying/api/common";
  * 4、使用场景
  */
 enum ResponseCode {
+  // 未知编码，是一种占位符
+  RESPONSE_CODE_UNKNOWN = 0;
+
   /**
    * 含义：操作完成
    * 使用场景：成功创建、成功提交
    */
-  OK = 0;
+  OK = 1;
 
   /**
    * 含义：提供的参数无效或不符合预期
    * 使用场景：当接收到客户端请求参数不正确时返回
    */
-  INVALID_ARGUMENT = 1;
+  INVALID_ARGUMENT = 2;
 
   /**
    * 含义：请求未通过身份验证
    * 使用场景：当请求需要身份验证但未提供有效凭据时返回
    */
-  UNAUTHENTICATED = 2;
+  UNAUTHENTICATED = 3;
 
   /**
    * 含义：请求无法被执行，因为没有足够的权限
    * 使用场景：当客户端没有执行请求所需操作的权限时返回
    */
-  PERMISSION_DENIED = 3;
+  PERMISSION_DENIED = 4;
 
   /**
    * 含义：请求对象或资源未找到
    * 使用场景：当请求的对象或资源不存在时返回
    */
-  NOT_FOUND = 4;
+  NOT_FOUND = 5;
 
   /**
    * 含义：请求创建的对象已经存在
    * 使用场景：当请求创建的对象（如用户、资源等）已经存在时返回
    */
-  ALREADY_EXISTS = 5;
+  ALREADY_EXISTS = 6;
 
   /**
    * 含义：超过了资源使用限制
    * 使用场景：当请求操作超过了预先设定的限制时返回
    */
-  LIMIT_EXCEEDED = 6;
+  LIMIT_EXCEEDED = 7;
 
   /**
    * 含义：请求的服务当前不可用
    * 使用场景：当请求的服务不可用（例如服务器维护、过载等）时返回
    */
-  UNAVAILABLE = 7;
+  UNAVAILABLE = 8;
 
   /**
    * 含义：未知错误
    * 使用场景：当出现未知错误时返回或无法精确匹配到其他错误码时使用
    */
-  UNKNOWN_ERROR = 8;
+  UNKNOWN_ERROR = 9;
 }
 
 /**
@@ -108,20 +111,50 @@ enum ContractStatusCode {
 }
 
 /**
- *
+ * 语言类型
  */
 enum LanguageCode {
+  // 未知编码，是一种占位符
+  LANGUAGE_COE_UNKNOWN = 0;
+
   // 简体中文
-  ZH_CH = 0;
+  ZH_CH = 1;
 
   // 美国英语
-  EN_US = 1;
+  EN_US = 2;
 }
 
 enum MediaCode {
-  TEXT = 0;
-  IMAGE = 1;
-  VIDEO = 2;
-  AUDIO = 3;
+  // 未知编码，是一种占位符
+  MEDIA_COE_UNKNOWN = 0;
+
+  // 文本
+  TEXT = 1;
+
+  // 图片
+  IMAGE = 2;
+
+  // 视频
+  VIDEO = 3;
+
+  // 音频
+  AUDIO = 4;
 }
 
+// 针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
+enum ServiceCode {
+  // 未知编码，是一种占位符
+  SERVICE_CODE_UNKNOWN = 0;
+
+  // 软件用户服务
+  USER = 1;
+
+  //身份和社交相关的服务
+  IDENTITY = 2;
+
+  // 机器人服务
+  ROBOT = 3;
+
+  // 资产仓储服务
+  STORE = 4;
+}
