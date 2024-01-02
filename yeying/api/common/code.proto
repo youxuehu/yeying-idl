@@ -157,4 +157,7 @@ enum ServiceCode {
 
   // 资产仓储服务
   STORE = 4;
+
+  // 证书服务
+  CERTIFICATE = 5;
 }

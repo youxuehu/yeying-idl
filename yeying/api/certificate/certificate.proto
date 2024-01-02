@@ -1,0 +1,20 @@
+syntax = "proto3";
+option go_package = "yeying/api/certificate";
+package yeying.api.certificate;
+
+import "yeying/api/common/message.proto";
+
+service Certificate {
+  rpc Sign(SignRequest) returns (SignResponse){}
+}
+
+message SignRequest {
+  string did = 1;
+  string csr = 2;
+}
+
+message SignResponse {
+  common.ResponseStatus status = 1;
+  string crt = 2;
+  string caCrt = 3;
+}
