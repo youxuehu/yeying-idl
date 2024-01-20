@@ -71,7 +71,8 @@ message IdentityMetadata {
   string type = 6; // 某种身份类别下，身份的类型，比如SOFTWARE类别下，有robot、store、spider、node等，HUMANITY类别下有personal、enterprise等
   string name = 7;
   string extend = 8;
-  string checkpoint = 9;
+  string created = 9;
+  string checkpoint = 10;
 }
 
 message RegisterRequest {
@@ -83,6 +84,8 @@ message RegisterRequest {
   string type = 6;
   string name = 7;
   string extend = 8;
+  string created = 9;
+  string checkpoint = 10;
 }
 
 message RegisterResponse {

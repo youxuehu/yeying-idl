@@ -3,123 +3,163 @@ option go_package = "yeying/api/robot";
 package yeying.api.robot;
 
 import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
 
 service Robot {
-  rpc Completion(ChatRequest) returns (stream ChatResponse){}
-  rpc Profile(ProfileRequest) returns (ProfileResponse){}
-  rpc Generation(GenerationRequest) returns (stream GenerationResponse){}
-  rpc Identity(IdentityRequest) returns (IdentityResponse){}
+  rpc AddProvider(AddProviderRequest) returns (AddProviderResponse){}
+  rpc GetProvider(GetProviderRequest) returns (GetProviderResponse){}
+  rpc DelProvider(DelProviderRequest) returns (DelProviderResponse){}
+
+  // 不同语言的文字翻译工作
+  rpc Translate(TranslateRequest) returns (TranslateResponse){}
+  // 内容补全
+  rpc Complete(CompleteRequest) returns (stream CompleteResponse){}
+  // 文本生成图片、图片生成文本、文本生成语音、语音生成文本
+  rpc Generate(GenerateRequest) returns (stream GenerateResponse){}
 }
 
-enum ActionType {
-  REGISTER = 0;
+enum RobotProviderName {
+  ROBOT_PROVIDER_NAME_UNKNOWN = 0;
+  OPENAI = 1;
+  GEMINI = 2;
 }
 
-enum ProviderName {
-  OPENAI = 0;
+enum RobotProviderStatus {
+  // 未知编码，是一种占位符
+  ROBOT_PROVIDER_STATUS_UNKNOWN = 0;
+
+  // 活跃：供应商激活状态
+  ACTIVE = 1;
 }
 
-enum ContentType {
-  PNG = 0;
+enum MessageRole {
+  // 未知编码，是一种占位符
+  MESSAGE_ROLE_UNKNOWN = 0;
+  ASSISTANT = 1;
+  USER = 2;
+  SYSTEM = 3;
 }
 
-enum ResponseFormatType {
-  URL = 0;
-  BASE64 = 1;
+message AddProviderRequest {
+  string did = 1;
+  string id = 2;
+  RobotProviderName name = 3;
+  string key = 4;
 }
 
-enum RoleType {
-  USER = 0;
-}
-
-message IdentityResponse {
+message AddProviderResponse {
   common.ResponseStatus status = 1;
+  RobotProvider robotProvider = 2;
 }
 
-message IdentityRequest {
+message GetProviderRequest {
   string did = 1;
-  ActionType action = 2;
-  RoleType role = 3;
+  string id = 2;
 }
 
-message GenerationRequest {
-  ProviderName providerName = 1;
-  string model = 2;
-  string did = 3;
-  ContentType contentType = 4;
-  string prompt = 5;
-  int32 count = 6;
-  string size = 7;
-  ResponseFormatType responseFormat = 8;
-  bytes image = 9;
-  bytes mask = 10;
+message GetProviderResponse {
+  common.ResponseStatus status = 1;
+  repeated RobotProvider robotProviders = 2;
 }
 
-message GenerationResponse {
-  bytes data = 1;
-}
-
-message ProfileRequest {
+message DelProviderRequest {
   string did = 1;
-  ProviderName providerName = 2;
-}
-
-message ProfileResponse {
-  repeated Model models = 1;
-  repeated Engine engines = 2;
-}
-
-message Engine {
-  int64 created = 1;
   string id = 2;
-  string object = 3;
-  string owner = 4;
-  repeated Permission permissions = 5;
-  bool ready = 6;
 }
 
-message Model {
-  int64 created = 1;
+message DelProviderResponse {
+  common.ResponseStatus status = 1;
+  RobotProvider robotProvider = 2;
+}
+
+message RobotProvider {
+  string owner = 1;
   string id = 2;
-  string object = 3;
-  string ownedBy = 4;
-  string parent = 5;
-  repeated Permission permissions = 6;
-  string root = 7;
+  RobotProviderName name = 3;
+  RobotProviderStatus status = 4;
+  string extend = 5;
+  string created = 6;
+  string checkpoint = 7;
 }
 
-message Permission {
-  bool allowCreateEngine = 1;
-  bool allowFineTuning = 2;
-  bool allowLogprobs = 3;
-  bool allowSampling = 4;
-  bool allowSearchIndices = 5;
-  bool allowView = 6;
-  int64 created = 7;
-  string group = 8;
-  string id = 9;
-  bool isBlocking = 10;
-  string object = 11;
-  string organization = 12;
-}
-
-message ChatRequest {
-  ProviderName providerName = 1;
-  string model = 2;
-  string did = 3;
-  repeated Message messages = 4;
+message CompleteRequest {
+  string did = 1;
+  string providerId = 2;
+  string model = 3;
+  bool stream = 4;
+  repeated Message messages = 5;
 }
 
 message Message {
-  string role = 1;
+  MessageRole role = 1;
   string content = 2;
 }
 
-message ChatResponse {
+message CompleteResponse {
   string id = 1;
-  string object = 2;
+  string model = 2;
   int64 created = 3;
-  repeated Choice choices = 4;
+  repeated Choice choices = 6;
+}
+
+message GenerateRequest {
+  string did = 1;
+  string providerId = 2;
+  string model = 3;
+
+  common.DigitalFormat srcType = 5;
+  common.DigitalFormat desType = 6;
+  oneof prompt {
+    TextPrompt textPrompt = 7;
+    ImagePrompt imagePrompt = 8;
+  }
+
+  oneof result {
+    ImageResult imageResult = 9;
+  }
+}
+
+message TextPrompt {
+  string message = 1;
+}
+
+message ImagePrompt {
+  string message = 1;
+  bytes originImage = 2;
+  bytes mask = 3;
+}
+
+message ImageResult {
+  common.ResponseFormat format = 1;
+  int32 count = 2;
+  string size = 3;
+}
+
+message GenerateResponse {
+  oneof data {
+    string base64 = 1;
+    bytes bytes = 2;
+  }
+}
+
+message TranslateRequest {
+  string did = 1;
+  string robotProviderId = 2;
+  string instance = 3;
+}
+
+message TranslateResponse {
+  common.ResponseStatus status = 1;
+}
+
+message ConvertRequest {
+  string did = 1;
+  string robotProviderId = 2;
+  string instance = 3;
+}
+
+message ConvertResponse {
+  common.ResponseStatus status = 1;
 }
 
 message Choice {

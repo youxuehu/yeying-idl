@@ -1,8 +1,9 @@
 syntax = "proto3";
-option go_package = "yeying/api/store";
-package yeying.api.store;
+option go_package = "yeying/api/asset";
+package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
 
 /**
 
@@ -18,7 +19,7 @@ import "yeying/api/common/message.proto";
 2、代码包分发场景，比如软件包，模型包等
 3、数字资产，类似nft等
  */
-service Store {
+service Asset {
   /**
    * 检索数字内容，基于数字内容的元信息检索，比如时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
@@ -65,13 +66,13 @@ service Store {
 }
 
 message SearchRequest {
-  Identity identity = 1;
+  string did = 1;
   string condition = 2;
 }
 
 message SearchResponse {
   common.ResponseStatus status = 1;
-  repeated Asset assets = 2;
+  repeated AssetMetadata assets = 2;
 }
 
 // 先发送内容，然后发送的chunk元信息，
@@ -94,21 +95,21 @@ message PutOnceRequest {
 message PutChunkResponse {
   common.ResponseStatus status = 1;
   // 当前传输的资产块
-  Chunk chunk = 2;
+  ChunkMetadata chunk = 2;
 }
 
 message SignRequest {
-  Identity identity = 1;
-  Asset asset = 2;
+  string did = 1;
+  AssetMetadata asset = 2;
 }
 
 message SignResponse {
   common.ResponseStatus status = 1;
-  Asset asset = 2;
+  AssetMetadata asset = 2;
 }
 
 message DetailRequest {
-  Identity identity = 1;
+  string did = 1;
   // 资产身份
   string assetDid = 2;
   // 资产哈希值
@@ -117,11 +118,11 @@ message DetailRequest {
 
 message DetailResponse {
   common.ResponseStatus status = 1;
-  repeated Asset assets = 2;
+  repeated AssetMetadata assets = 2;
 }
 
 message GetChunkRequest {
-  Identity identity = 1;
+  string did = 1;
   string hash = 2;
 }
 
@@ -138,26 +139,26 @@ message GetOnceResponse {
 }
 
 message RemoveRequest {
-  Identity identity = 1;
+  string did = 1;
   string hash = 2;
 }
 
 message RemoveResponse {
   common.ResponseStatus status = 1;
-  Asset asset = 2;
+  AssetMetadata asset = 2;
 }
 
 message Header {
   // 上传者身份
-  Identity identity = 1;
+  string did = 1;
   // 资产身份
   string assetDid = 2;
   // 资产块元信息
-  Chunk chunk = 3;
+  ChunkMetadata chunk = 3;
 }
 
 // 资产块信息
-message Chunk {
+message ChunkMetadata {
   // 块在资产中的索引
   uint32 index = 1;
   // 明文块哈希值
@@ -168,12 +169,8 @@ message Chunk {
   string extend = 4;
 }
 
-message Identity {
-  string did = 1;
-}
-
 // 资产定义
-message Asset {
+message AssetMetadata {
   uint32 version = 1;
   // 每个资产在上传时，需要生成一个分布式数字身份，目前考虑到方案的成熟度，可以使用uuid代替；TODO：需要考虑分布式数字身份信息存在哪里；
   string did = 2;
@@ -186,13 +183,13 @@ message Asset {
   // 资产描述
   string description = 6;
   // 资产类型
-  string type = 7;
+  common.DigitalFormat format = 7;
   // 明文资产的大小
   uint64 size = 8;
   // 资产创建时间
-  int64 created = 9;
-  // 资产上传时间戳
-  int64 timestamp = 10;
+  string created = 9;
+  // 资产更新时间点
+  string checkpoint = 10;
   // 资产内容分成多少块
   uint32 total = 11;
   // 资产块的大小
@@ -202,5 +199,5 @@ message Asset {
   // 资产扩展信息
   string extend = 14;
   // 资产块信息
-  repeated Chunk chunks = 15;
+  repeated ChunkMetadata chunks = 15;
 }

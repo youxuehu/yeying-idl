@@ -115,30 +115,13 @@ enum ContractStatusCode {
  */
 enum LanguageCode {
   // 未知编码，是一种占位符
-  LANGUAGE_COE_UNKNOWN = 0;
+  LANGUAGE_CODE_UNKNOWN = 0;
 
   // 简体中文
   ZH_CH = 1;
 
   // 美国英语
   EN_US = 2;
-}
-
-enum MediaCode {
-  // 未知编码，是一种占位符
-  MEDIA_COE_UNKNOWN = 0;
-
-  // 文本
-  TEXT = 1;
-
-  // 图片
-  IMAGE = 2;
-
-  // 视频
-  VIDEO = 3;
-
-  // 音频
-  AUDIO = 4;
 }
 
 // 针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
@@ -155,9 +138,58 @@ enum ServiceCode {
   // 机器人服务
   ROBOT = 3;
 
-  // 资产仓储服务
-  STORE = 4;
+  // 资产服务
+  ASSET = 4;
 
   // 证书服务
   CERTIFICATE = 5;
+
+  // 资产服务
+  STORAGE = 6;
+}
+
+enum ImageFormat {
+  IMAGE_FORMAT_CODE_UNKNOWN = 0;
+  PNG = 1;
+}
+
+// 数字格式
+enum DigitalFormat {
+  // 未知数字格式，是一种占位符
+  DIGITAL_FORMAT_UNKNOWN = 0;
+
+  // 文本
+  TEXT = 1;
+
+  // 图片
+  IMAGE = 2;
+
+  // 视频
+  VIDEO = 3;
+
+  // 音频
+  AUDIO = 4;
+
+  // 未知
+  OTHER = 5;
+}
+
+enum ResponseFormat {
+  RESPONSE_FORMAT_UNKNOWN = 0;
+  URL = 1;
+  BASE64 = 2;
+}
+
+enum SessionScene {
+  // 未知编码，是一种占位符
+  SESSION_SCENE_UNKNOWN = 0;
+
+  // 对话
+  DIALOGUE = 1;
+
+  // 作图
+  DRAWING = 2;
+
+  // 翻译
+  TRANSLATION = 3;
 }

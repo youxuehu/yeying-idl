@@ -1,0 +1,35 @@
+syntax = "proto3";
+option go_package = "yeying/api/store";
+package yeying.api.store;
+
+import "yeying/api/common/message.proto";
+
+/**
+
+开放的分散式仓库网络的接口设计，参考了现实世界中的仓库，逻辑如下：
+1、数字资产有两个标识，一个是数字资产的身份标识，可以是分布式数字身份，也可以是用户自定义的身份ID，另一个是数字资产内容的哈希值；
+2、数字资产入库，发送到指定存储网络中的节点，可以指定副本数量，一方面保证内容不会因为单个节点故障而丢失，另外也保证内容的可访问性；
+3、存储复用，如果两份资产哈希值一样，分两种情况来看，如果资产的所有者一样，则仓库会主动告知身份持有者存在重复，如果资产的所有者不同，会增加引用；
+4、授权数字资产，所有者和使用者立交易关系，确保使用者根据指定的策略访问数据，仓库会统计数字资产的使用情况，比如统计内容取（浏览）的次数评估内容热度
+，或者统计内容存的次数（收藏）评估内容质量，目的是更好的分配存储资源；
+
+分散式存储网络的使用场景：
+1、创作场景，知识产权证明
+2、代码包分发场景，比如软件包，模型包等
+3、数字资产，类似nft等
+ */
+service Storage {
+  /**
+   * 不同仓库间同步数字资产
+   */
+  rpc Sync(SyncRequest) returns (SyncResponse) {}
+}
+
+message SyncRequest {
+  string did = 1;
+  string condition = 2;
+}
+
+message SyncResponse {
+  common.ResponseStatus status = 1;
+}
