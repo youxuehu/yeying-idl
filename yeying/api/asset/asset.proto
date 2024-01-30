@@ -47,27 +47,28 @@ service Asset {
   /**
    * 前端浏览器不支持client stream，提供一个非流式的上传接口
    */
-  rpc PutOnce(PutOnceRequest) returns (PutChunkResponse) {}
+  rpc Put(PutOnceRequest) returns (PutChunkResponse) {}
 
   /**
- * 分块入库数字内容，正常的入库流程:1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
- */
-  rpc PutChunk(stream PutChunkRequest) returns (PutChunkResponse) {}
+   * 分块入库数字内容，正常的入库流程:1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
+   */
+  rpc StreamPut(stream PutChunkRequest) returns (PutChunkResponse) {}
 
   /**
    * 分块出库数字内容
    */
-  rpc GetChunk(GetChunkRequest) returns (stream GetChunkResponse) {}
+  rpc StreamGet(GetChunkRequest) returns (stream GetChunkResponse) {}
 
   /**
    * 前端浏览器不支持server stream，提供一个非流式的下载接口
    */
-  rpc GetOnce(GetChunkRequest) returns (GetOnceResponse) {}
+  rpc Get(GetChunkRequest) returns (GetOnceResponse) {}
 }
 
 message SearchRequest {
   string did = 1;
   string condition = 2;
+  common.DigitalFormat format = 3;
 }
 
 message SearchResponse {

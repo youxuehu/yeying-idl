@@ -6,16 +6,29 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 service Robot {
+  // 增加供应商
   rpc AddProvider(AddProviderRequest) returns (AddProviderResponse){}
+
+  // 查询供应商
   rpc GetProvider(GetProviderRequest) returns (GetProviderResponse){}
+
+  // 删除供应商
   rpc DelProvider(DelProviderRequest) returns (DelProviderResponse){}
 
   // 不同语言的文字翻译工作
   rpc Translate(TranslateRequest) returns (TranslateResponse){}
+
   // 内容补全
   rpc Complete(CompleteRequest) returns (stream CompleteResponse){}
-  // 文本生成图片、图片生成文本、文本生成语音、语音生成文本
+
+  // 编辑图片
+  rpc Edit(EditRequest) returns (stream EditResponse){}
+
+  // 文本生成图片
   rpc Generate(GenerateRequest) returns (stream GenerateResponse){}
+
+  // 文本生成语音
+  rpc Speech(SpeechRequest) returns (SpeechResponse) {}
 }
 
 enum RobotProviderName {
@@ -106,16 +119,18 @@ message GenerateRequest {
   string did = 1;
   string providerId = 2;
   string model = 3;
+  string prompt = 4;
+  common.ResponseFormat responseFormat = 5;
+  int32 count = 6;
+  string size = 7;
+  string quality = 8;
+  string style = 9;
+}
 
-  common.DigitalFormat srcType = 5;
-  common.DigitalFormat desType = 6;
-  oneof prompt {
-    TextPrompt textPrompt = 7;
-    ImagePrompt imagePrompt = 8;
-  }
-
-  oneof result {
-    ImageResult imageResult = 9;
+message GenerateResponse {
+  oneof data {
+    string base64 = 1;
+    string url = 2;
   }
 }
 
@@ -133,9 +148,28 @@ message ImageResult {
   common.ResponseFormat format = 1;
   int32 count = 2;
   string size = 3;
+  string quality = 4;
+  string style = 5;
 }
 
-message GenerateResponse {
+message EditRequest {
+  string did = 1;
+  string providerId = 2;
+  string model = 3;
+
+  common.DigitalFormat srcType = 5;
+  common.DigitalFormat desType = 6;
+  oneof prompt {
+    TextPrompt textPrompt = 7;
+    ImagePrompt imagePrompt = 8;
+  }
+
+  oneof result {
+    ImageResult imageResult = 9;
+  }
+}
+
+message EditResponse {
   oneof data {
     string base64 = 1;
     bytes bytes = 2;
@@ -166,4 +200,12 @@ message Choice {
   int32 index = 1;
   Message message = 2;
   string finishReason = 3;
+}
+
+message SpeechRequest {
+
+}
+
+message SpeechResponse {
+
 }
