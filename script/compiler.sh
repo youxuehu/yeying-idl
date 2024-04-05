@@ -69,11 +69,11 @@ fi
 
 module_check_and_install() {
   #/dev/null 是一个特殊的文件，写入到它的内容都会被丢弃
-  if pip3 show "$1" >/dev/null 2>&1; then
+  if pip show "$1" >/dev/null 2>&1; then
     echo "The $1 module has been installed"
   else
     echo "Try to install $1 module"
-    pip3 install "$1"
+    pip install "$1" --break-system-packages
   fi
 }
 
