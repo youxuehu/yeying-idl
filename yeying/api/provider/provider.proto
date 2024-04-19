@@ -1,0 +1,91 @@
+syntax = "proto3";
+option go_package = "yeying/api/provider";
+package yeying.api.provider;
+
+import "yeying/api/common/message.proto";
+
+service Provider {
+  // 增加供应商
+  rpc Add(AddRequest) returns (AddResponse){}
+
+  // 查询供应商
+  rpc Get(GetRequest) returns (GetResponse){}
+
+  // 删除供应商
+  rpc Del(DelRequest) returns (DelResponse){}
+
+  // 搜索供应商
+  rpc Search(SearchRequest) returns (SearchResponse){}
+}
+
+enum ProviderCodeEnum {
+  PROVIDER_CODE_UNKNOWN = 0;
+  PROVIDER_CODE_OPENAI = 1;
+  PROVIDER_CODE_GEMINI = 2;
+}
+
+enum ProviderStatusEnum {
+  // 未知编码，是一种占位符
+  PROVIDER_STATUS_UNKNOWN = 0;
+
+  // 供应商未激活状态
+  PROVIDER_STATUS_DEACTIVATED = 1;
+
+  // 供应商激活状态
+  PROVIDER_STATUS_ACTIVATED = 2;
+}
+
+message AddRequest {
+  string did = 1;
+  string id = 2;
+  string name = 3;
+  ProviderCodeEnum code = 4;
+  string key = 5;
+  string extend = 6;
+}
+
+message AddResponse {
+  common.ResponseStatus status = 1;
+  ProviderMetadata provider = 2;
+}
+
+message GetRequest {
+  string did = 1;
+  string id = 2;
+}
+
+message GetResponse {
+  common.ResponseStatus status = 1;
+  ProviderMetadata provider = 2;
+}
+
+message SearchRequest {
+  string did = 1;
+  string condition = 2;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated ProviderMetadata providers = 2;
+}
+
+message DelRequest {
+  string did = 1;
+  string id = 2;
+}
+
+message DelResponse {
+  common.ResponseStatus status = 1;
+  ProviderMetadata provider = 2;
+}
+
+message ProviderMetadata {
+  string owner = 1;
+  string id = 2;
+  string name = 3;
+  ProviderCodeEnum code = 4;
+  ProviderStatusEnum status = 5;
+  string extend = 6;
+  string created = 7;
+  string checkpoint = 8;
+}

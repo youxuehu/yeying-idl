@@ -9,7 +9,7 @@ import "yeying/api/common/code.proto";
 
 message ResponseStatus {
   // 响应状态码
-  ResponseCode code = 1;
+  ResponseCodeEnum code = 1;
   // 可读的消息
   string message = 2;
 }

@@ -39,13 +39,13 @@ message TopicMetadata {
   string name = 1;
 
   // 媒体类型
-  repeated common.MediaType mediaType = 2;
+  repeated common.DigitalFormatEnum format = 2;
 
   // cron表达式
   string expression = 3;
 
-  // 合约
-  common.ContractStatusCode code = 4;
+  // 合约状态
+  common.ContractStatusEnum status = 4;
 }
 
 message SubscribeRequest {

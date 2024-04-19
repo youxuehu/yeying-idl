@@ -18,7 +18,7 @@ option go_package = "yeying/api/common";
  * 3、含义
  * 4、使用场景
  */
-enum ResponseCode {
+enum ResponseCodeEnum {
   // 未知编码，是一种占位符
   RESPONSE_CODE_UNKNOWN = 0;
 
@@ -75,6 +75,24 @@ enum ResponseCode {
    * 使用场景：当出现未知错误时返回或无法精确匹配到其他错误码时使用
    */
   UNKNOWN_ERROR = 9;
+
+  /**
+   * 含义：网络错误
+   * 使用场景：应为网络错误，无法发送到服务器
+   */
+  NETWORK_ERROR = 10;
+
+  /**
+   * 含义：无效证书
+   * 使用场景：浏览器无法识别证书，在浏览器中添加为受信任证书
+   */
+  INVALID_CERT = 11;
+
+  /**
+   * 含义：不支持
+   * 使用场景：接口、服务不支持
+   */
+  NOT_SUPPORTED = 12;
 }
 
 /**
@@ -84,112 +102,189 @@ enum ResponseCode {
  * 3、含义
  * 4、使用场景
  */
-enum ContractStatusCode {
+enum ContractStatusEnum {
+  // 未知编码，是一种占位符
+  CONTRACT_STATUS_UNKNOWN = 0;
+
   /**
    * 含义：未生效
    * 使用场景：拟定了一份合同，参与方没有完全签字
   */
-  INACTIVATED = 0;
+  CONTRACT_STATUS_INACTIVATED = 1;
 
   /**
    * 含义：生效中
    * 使用场景：合同的参与方都已签字认可，合同已经开始工作
    */
-  ACTIVATED = 1;
+  CONTRACT_STATUS_ACTIVATED = 2;
 
   /**
    * 含义：过期了
    * 使用场景：合同已经过期了，合同已停止工作
    */
-  EXPIRED = 2;
+  CONTRACT_STATUS_EXPIRED = 3;
 
   /**
    * 含义：终止了
    * 使用场景：合同的参与方中有人主动退出了合同
    */
-  CANCELED = 3;
+  CONTRACT_STATUS_CANCELED = 4;
 }
 
 /**
  * 语言类型
  */
-enum LanguageCode {
+enum LanguageCodeEnum {
   // 未知编码，是一种占位符
   LANGUAGE_CODE_UNKNOWN = 0;
 
   // 简体中文
-  ZH_CH = 1;
+  LANGUAGE_CODE_ZH_CH = 1;
 
   // 美国英语
-  EN_US = 2;
+  LANGUAGE_CODE_EN_US = 2;
+}
+
+enum AppCodeEnum {
+  // 未知编码，是一种占位符
+  APP_CODE_UNKNOWN = 0;
+
+  // 身份应用
+  APP_CODE_IDENTITY = 1;
+
+  // 仓库应用
+  APP_CODE_STORE = 2;
+
+  // 机器人应用
+  APP_CODE_ROBOT = 3;
+
+  // 应用仓库
+  APP_CODE_WAREHOUSE = 4;
 }
 
 // 针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
-enum ServiceCode {
+enum ApiCodeEnum {
+  // 未知编码，是一种占位符
+  API_CODE_UNKNOWN = 0;
+
+  // 用户服务
+  API_CODE_USER = 1;
+
+  // 身份服务
+  API_CODE_IDENTITY = 2;
+
+  // 机器问答服务
+  API_CODE_PROMPT = 3;
+
+  // 资产服务
+  API_CODE_ASSET = 4;
+
+  // 证书服务
+  API_CODE_CERTIFICATE = 5;
+
+  // 存储服务
+  API_CODE_STORAGE = 6;
+
+  // 供应商，比如机器问答服务供应商
+  API_CODE_PROVIDER = 7;
+}
+
+// 服务定义会不断的演化
+enum ServiceCodeEnum {
   // 未知编码，是一种占位符
   SERVICE_CODE_UNKNOWN = 0;
 
-  // 软件用户服务
-  USER = 1;
+  // 网络节点服务供应商
+  SERVICE_CODE_NODE = 1;
 
-  //身份和社交相关的服务
-  IDENTITY = 2;
+  // 机器人服务供应商，提供各种模型和算法服务
+  SERVICE_CODE_ROBOT = 2;
 
-  // 机器人服务
-  ROBOT = 3;
-
-  // 资产服务
-  ASSET = 4;
-
-  // 证书服务
-  CERTIFICATE = 5;
-
-  // 资产服务
-  STORAGE = 6;
+  // 仓储服务供应商
+  SERVICE_CODE_STORE = 3;
 }
 
-enum ImageFormat {
-  IMAGE_FORMAT_CODE_UNKNOWN = 0;
-  PNG = 1;
+enum AccountCodeEnum {
+  // 未知编码，是一种占位符
+  ACCOUNT_CODE_UNKNOWN = 0;
+
+  // 个人
+  ACCOUNT_CODE_PERSONAL = 1;
+
+  // 企业
+  ACCOUNT_CODE_ENTERPRISE = 2;
+
+  // 社团
+  ACCOUNT_CODE_COMMUNITY = 3;
+}
+
+enum CategoryCodeEnum {
+  // 未知编码，是一种占位符
+  CATEGORY_CODE_UNKNOWN = 0;
+
+  // 与人相关的身份
+  CATEGORY_CODE_HUMANITY = 1;
+
+  // 与软件相关的身份
+  CATEGORY_CODE_SOFTWARE = 2;
+}
+
+enum ImageFormatEnum {
+  IMAGE_FORMAT_UNKNOWN = 0;
+  IMAGE_FORMAT_PNG = 1;
 }
 
 // 数字格式
-enum DigitalFormat {
+enum DigitalFormatEnum {
   // 未知数字格式，是一种占位符
   DIGITAL_FORMAT_UNKNOWN = 0;
 
   // 文本
-  TEXT = 1;
+  DIGITAL_FORMAT_TEXT = 1;
 
   // 图片
-  IMAGE = 2;
+  DIGITAL_FORMAT_IMAGE = 2;
 
   // 视频
-  VIDEO = 3;
+  DIGITAL_FORMAT_VIDEO = 3;
 
   // 音频
-  AUDIO = 4;
+  DIGITAL_FORMAT_AUDIO = 4;
+
+  // 应用
+  DIGITAL_FORMAT_APP = 5;
 
   // 未知
-  OTHER = 5;
+  DIGITAL_FORMAT_OTHER = 10000;
 }
 
-enum ResponseFormat {
-  RESPONSE_FORMAT_UNKNOWN = 0;
-  URL = 1;
-  BASE64 = 2;
+enum ResponseContentFormatEnum {
+  RESPONSE_CONTENT_FORMAT_UNKNOWN = 0;
+  RESPONSE_CONTENT_FORMAT_URL = 1;
+  RESPONSE_CONTENT_FORMAT_BASE64 = 2;
 }
 
-enum SessionScene {
+enum SessionSceneEnum {
   // 未知编码，是一种占位符
   SESSION_SCENE_UNKNOWN = 0;
 
   // 对话
-  DIALOGUE = 1;
+  SESSION_SCENE_DIALOGUE = 1;
 
   // 作图
-  DRAWING = 2;
+  SESSION_SCENE_DRAWING = 2;
 
   // 翻译
-  TRANSLATION = 3;
+  SESSION_SCENE_TRANSLATION = 3;
+}
+
+enum ParticipantRoleEnum {
+  // 未知编码，是一种占位符
+  PARTICIPANT_ROLE_UNKNOWN = 0;
+
+  // 普通参与者
+  PARTICIPANT_ROLE_NORMAL = 1;
+
+  // 发起者
+  PARTICIPANT_ROLE_ADMIN = 2;
 }

@@ -15,51 +15,12 @@ service Identity {
   rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
 
-enum Category {
-  // 未知编码，是一种占位符
-  CATEGORY_UNKNOWN = 0;
-
-  // 与人相关的身份
-  HUMANITY = 1;
-
-  // 与软件相关的身份
-  SOFTWARE = 2;
-}
-
-// 服务定义会不断的演化
-enum ServiceType {
-  // 未知编码，是一种占位符
-  SERVICE_TYPE_UNKNOWN = 0;
-
-  // 节点服务供应商
-  NODE = 1;
-
-  // 机器人服务供应商，提供各种模型和算法服务
-  ROBOT = 2;
-
-  // 仓储服务供应商
-  STORE = 3;
-}
-
-enum OrganizationType {
-  // 未知编码，是一种占位符
-  ORGANIZATION_TYPE_UNKNOWN = 0;
-
-  // 个人
-  PERSONAL = 1;
-
-  // 企业
-  ENTERPRISE = 2;
-
-  // 社区
-  COMMUNITY = 3;
-}
-
 message Condition {
   string parent = 1;
   string did = 2;
-  Category category = 3;
-  string type = 4;
+  common.CategoryCodeEnum category = 3;
+  common.ServiceCodeEnum serviceCode = 4;
+  common.AccountCodeEnum accountCode = 5;
 }
 
 message IdentityMetadata {
@@ -67,8 +28,8 @@ message IdentityMetadata {
   string network = 2;
   string did = 3;
   string address = 4;
-  Category category = 5;
-  string type = 6; // 某种身份类别下，身份的类型，比如SOFTWARE类别下，有robot、store、spider、node等，HUMANITY类别下有personal、enterprise等
+  common.CategoryCodeEnum category = 5;
+  string code = 6; // 某种身份类别下，身份的类型，比如SOFTWARE类别下，有robot、store、spider、node等，HUMANITY类别下有personal、enterprise等
   string name = 7;
   string extend = 8;
   string created = 9;
@@ -80,8 +41,8 @@ message RegisterRequest {
   string network = 2;
   string did = 3;
   string address = 4;
-  Category category = 5;
-  string type = 6;
+  common.CategoryCodeEnum category = 5;
+  string code = 6;
   string name = 7;
   string extend = 8;
   string created = 9;

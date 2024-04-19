@@ -6,15 +6,6 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 service Robot {
-  // 增加供应商
-  rpc AddProvider(AddProviderRequest) returns (AddProviderResponse){}
-
-  // 查询供应商
-  rpc GetProvider(GetProviderRequest) returns (GetProviderResponse){}
-
-  // 删除供应商
-  rpc DelProvider(DelProviderRequest) returns (DelProviderResponse){}
-
   // 不同语言的文字翻译工作
   rpc Translate(TranslateRequest) returns (TranslateResponse){}
 
@@ -27,72 +18,23 @@ service Robot {
   // 文本生成图片
   rpc Generate(GenerateRequest) returns (stream GenerateResponse){}
 
-  // 文本生成语音
-  rpc Speech(SpeechRequest) returns (SpeechResponse) {}
+  // 文本生成语
+  rpc Speech(SpeechRequest) returns (SpeechResponse){}
 }
 
-enum RobotProviderName {
-  ROBOT_PROVIDER_NAME_UNKNOWN = 0;
-  OPENAI = 1;
-  GEMINI = 2;
-}
-
-enum RobotProviderStatus {
-  // 未知编码，是一种占位符
-  ROBOT_PROVIDER_STATUS_UNKNOWN = 0;
-
-  // 活跃：供应商激活状态
-  ACTIVE = 1;
-}
-
-enum MessageRole {
+// 消息角色，在大模型进行推理时，涉及到多个系统组件的配合，有设定场景的，有理解意图的，有给出答案的等等。
+enum MessageRoleEnum {
   // 未知编码，是一种占位符
   MESSAGE_ROLE_UNKNOWN = 0;
-  ASSISTANT = 1;
-  USER = 2;
-  SYSTEM = 3;
-}
 
-message AddProviderRequest {
-  string did = 1;
-  string id = 2;
-  RobotProviderName name = 3;
-  string key = 4;
-}
+  // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
+  MESSAGE_ROLE_ASSISTANT = 1;
 
-message AddProviderResponse {
-  common.ResponseStatus status = 1;
-  RobotProvider robotProvider = 2;
-}
+  // 用于用户输入的对话内容，当用户想要与对话模型交互时
+  MESSAGE_ROLE_USER = 2;
 
-message GetProviderRequest {
-  string did = 1;
-  string id = 2;
-}
-
-message GetProviderResponse {
-  common.ResponseStatus status = 1;
-  repeated RobotProvider robotProviders = 2;
-}
-
-message DelProviderRequest {
-  string did = 1;
-  string id = 2;
-}
-
-message DelProviderResponse {
-  common.ResponseStatus status = 1;
-  RobotProvider robotProvider = 2;
-}
-
-message RobotProvider {
-  string owner = 1;
-  string id = 2;
-  RobotProviderName name = 3;
-  RobotProviderStatus status = 4;
-  string extend = 5;
-  string created = 6;
-  string checkpoint = 7;
+  // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
+  MESSAGE_ROLE_SYSTEM = 3;
 }
 
 message CompleteRequest {
@@ -100,19 +42,24 @@ message CompleteRequest {
   string providerId = 2;
   string model = 3;
   bool stream = 4;
-  repeated Message messages = 5;
+  repeated Prompt prompts = 5;
 }
 
-message Message {
-  MessageRole role = 1;
+message Prompt {
+  MessageRoleEnum role = 1;
   string content = 2;
 }
 
-message CompleteResponse {
-  string id = 1;
-  string model = 2;
+message Answer {
+  string model = 1;
+  string id = 2;
   int64 created = 3;
-  repeated Choice choices = 6;
+  repeated Choice choices = 4;
+}
+
+message CompleteResponse {
+  common.ResponseStatus status = 1;
+  Answer answer = 2;
 }
 
 message GenerateRequest {
@@ -120,7 +67,7 @@ message GenerateRequest {
   string providerId = 2;
   string model = 3;
   string prompt = 4;
-  common.ResponseFormat responseFormat = 5;
+  common.ResponseContentFormatEnum responseContentFormat = 5;
   int32 count = 6;
   string size = 7;
   string quality = 8;
@@ -128,9 +75,10 @@ message GenerateRequest {
 }
 
 message GenerateResponse {
+  common.ResponseStatus status = 1;
   oneof data {
-    string base64 = 1;
-    string url = 2;
+    string base64 = 2;
+    string url = 3;
   }
 }
 
@@ -140,12 +88,12 @@ message TextPrompt {
 
 message ImagePrompt {
   string message = 1;
-  bytes originImage = 2;
-  bytes mask = 3;
+  bytes mask = 2;
+  bytes image = 3;
 }
 
 message ImageResult {
-  common.ResponseFormat format = 1;
+  common.ResponseContentFormatEnum responseContentFormat = 1;
   int32 count = 2;
   string size = 3;
   string quality = 4;
@@ -157,8 +105,8 @@ message EditRequest {
   string providerId = 2;
   string model = 3;
 
-  common.DigitalFormat srcType = 5;
-  common.DigitalFormat desType = 6;
+  common.DigitalFormatEnum srcType = 5;
+  common.DigitalFormatEnum desType = 6;
   oneof prompt {
     TextPrompt textPrompt = 7;
     ImagePrompt imagePrompt = 8;
@@ -170,15 +118,16 @@ message EditRequest {
 }
 
 message EditResponse {
+  common.ResponseStatus status = 1;
   oneof data {
-    string base64 = 1;
-    bytes bytes = 2;
+    string base64 = 2;
+    bytes bytes = 3;
   }
 }
 
 message TranslateRequest {
   string did = 1;
-  string robotProviderId = 2;
+  string providerId = 2;
   string instance = 3;
 }
 
@@ -188,7 +137,7 @@ message TranslateResponse {
 
 message ConvertRequest {
   string did = 1;
-  string robotProviderId = 2;
+  string providerId = 2;
   string instance = 3;
 }
 
@@ -198,8 +147,9 @@ message ConvertResponse {
 
 message Choice {
   int32 index = 1;
-  Message message = 2;
-  string finishReason = 3;
+  MessageRoleEnum role = 2;
+  string content = 3;
+  string finishReason = 4;
 }
 
 message SpeechRequest {

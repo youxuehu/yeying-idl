@@ -1,0 +1,15 @@
+syntax = "proto3";
+option go_package = "yeying/api/social";
+package yeying.api.social;
+
+import "yeying/api/common/message.proto";
+
+service Social {
+  rpc MakeFriends(MakeFriendsRequest) returns (MakeFriendsResponse){}
+  rpc GetFriends(GetFriendsRequest) returns (GetFriendResponse) {}
+}
+
+message MakeFriendsRequest {}
+message MakeFriendsResponse {}
+message GetFriendsRequest {}
+message GetFriendResponse {}

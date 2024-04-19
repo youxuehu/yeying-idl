@@ -5,66 +5,68 @@ package yeying.api.user;
 import "yeying/api/common/message.proto";
 
 service User {
+  rpc Search(SearchRequest) returns(SearchResponse) {}
   rpc Add(AddRequest) returns(AddResponse) {}
   rpc Get(GetRequest) returns(GetResponse) {}
   rpc Del(DelRequest) returns(DelResponse) {}
   rpc Mod(ModRequest) returns(ModResponse) {}
   rpc Invite(InviteRequest) returns(InviteResponse) {}
+  rpc Audit(AuditRequest) returns(AuditResponse) {}
 }
 
-enum Role {
+enum UserRoleEnum {
   // 未知编码，是一种占位符
-  ROLE_UNKNOWN = 0;
+  USER_ROLE_UNKNOWN = 0;
 
-  // 服务的用户
-  USER = 1;
+  // 所有者
+  USER_ROLE_OWNER = 2;
 
-  // 服务的所有者
-  OWNER = 2;
+  // 普通用户
+  USER_ROLE_NORMAL = 1;
 }
 
-enum Status {
+enum UserStatusEnum {
   // 未知编码，是一种占位符
-  STATUS_UNKNOWN = 0;
+  USER_STATUS_UNKNOWN = 0;
 
   // 活跃：表示用户目前正在使用软件并与其进行交互
-  ACTIVE = 1;
+  USER_STATUS_ACTIVE = 1;
 
   // 离线：表示用户当前不处于活跃状态，但可能会随时返回
-  OFFLINE = 2;
+  USER_STATUS_OFFLINE = 2;
 
   // 禁用：表示用户的访问权限被暂时或永久性地限制
-  DISABLE = 3;
+  USER_STATUS_DISABLE = 3;
 
   // 锁定：表示用户的账户被暂时性地冻结，通常是由于安全原因
-  LOCK = 4;
+  USER_STATUS_LOCK = 4;
 
   // 未验证：表示用户账户在创建后尚未通过验证
-  UNVERIFIED = 5;
+  USER_STATUS_UNVERIFIED = 5;
 
   // 删除：表示用户账户已经被永久删除，无法恢复
-  DELETED = 6;
+  USER_STATUS_DELETED = 6;
 
   // 休眠：表示用户账户由于长时间未活跃而被标记为休眠状态
-  DORMANT = 7;
+  USER_STATUS_DORMANT = 7;
 
   // 冻结：表示用户账户在一段时间内暂时不可用
-  FREEZE = 8;
+  USER_STATUS_FREEZE = 8;
 
   // 待审核：表示新用户注册后正在等待管理员或审核人员审批
-  AUDIT = 9;
+  USER_STATUS_AUDIT = 9;
 
   // 审核未通过：表示管理员或审核人员拒绝了用户的注册请求
-  REFUSED = 10;
+  USER_STATUS_REFUSED = 10;
 }
 
 message UserMetadata {
   string provider = 1;
   string name = 2;
   string did = 3;
-  Role role = 4;
+  UserRoleEnum role = 4;
   string extend = 5;
-  Status status = 6;
+  UserStatusEnum status = 6;
   string created = 7;
   string checkpoint = 8;
 }
@@ -128,4 +130,26 @@ message InviteResponse {
   repeated Invitation invitation = 2;
 }
 
+message AuditRequest {
+  string provider = 1;
+  string did = 2;
+  string auditDid = 3;
+}
 
+message AuditResponse {
+  common.ResponseStatus status = 1;
+}
+
+message SearchRequest {
+  string did = 1;
+  Condition condition = 2;
+}
+
+message Condition {
+  UserStatusEnum status = 1;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated UserMetadata metadata = 2;
+}

@@ -27,9 +27,14 @@ service Asset {
 
   /**
    * 以事务的形式和存储供应商签订协议并入库，当所有资产块入库成功后，资产的信息发送到后端服务签字确认，涵盖了新的资产和新的版本入库；
-   * 1、自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
+   * 1、根据规则，自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
    */
   rpc Sign(SignRequest) returns (SignResponse) {}
+
+  /**
+   * 查看某个资产的版本
+   */
+  rpc Version(VersionRequest) returns (VersionResponse) {}
 
   /**
    * 获得资产详细信息，提供该接口是为了更灵活处理资产信息，资产信息的复杂主要是几个方面：
@@ -50,8 +55,8 @@ service Asset {
   rpc Put(PutRequest) returns (PutResponse) {}
 
   /**
- * 前端浏览器不支持server stream，提供一个非流式的下载接口
- */
+   * 前端浏览器不支持server stream，提供一个非流式的下载接口
+   */
   rpc Get(GetRequest) returns (GetResponse) {}
 
   /**
@@ -68,7 +73,7 @@ service Asset {
 message SearchRequest {
   string did = 1;
   string condition = 2;
-  common.DigitalFormat format = 3;
+  common.DigitalFormatEnum format = 3;
 }
 
 message SearchResponse {
@@ -80,15 +85,24 @@ message SearchResponse {
 message StreamPutRequest {
   oneof data {
     // 资产块头信息
-    Header header = 1;
+    PutHeader header = 1;
     // 资产块内容
     bytes body = 2;
   }
 }
 
+message PutHeader {
+  // 所有者身份
+  string did = 1;
+  // 资产ID
+  string assetId = 2;
+  // 资产块元信息
+  ChunkMetadata chunk = 3;
+}
+
 message PutRequest {
   // 资产块头信息
-  Header header = 1;
+  PutHeader header = 1;
   // 资产块内容
   bytes body = 2;
 }
@@ -99,9 +113,45 @@ message PutResponse {
   ChunkMetadata chunk = 2;
 }
 
+enum Action {
+  OVERWRITE = 0;
+  APPEND = 1;
+}
+
+// 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignRequest {
   string did = 1;
-  AssetMetadata asset = 2;
+  Action action = 2;
+  // 资产ID
+  string id = 3;
+  // 资产名称
+  string name = 4;
+  // 基线资产的哈希值，针对变更场景，从那个资产派生出来了
+  string parentHash = 5;
+  // 资产哈希值
+  string hash = 6;
+  // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小，和资产哈希值一样
+  string mergedHash = 7;
+  // 资产描述
+  string description = 8;
+  // 资产类型
+  common.DigitalFormatEnum format = 9;
+  // 明文资产的大小
+  uint64 size = 10;
+  // 资产创建时间
+  string created = 11;
+  // 资产更新时间点
+  string checkpoint = 12;
+  // 资产内容分成多少块
+  uint32 total = 13;
+  // 资产块的大小
+  uint32 block = 14;
+  // 是否加密
+  bool encrypted = 15;
+  // 资产扩展信息
+  string extend = 16;
+  // 资产块信息
+  repeated ChunkMetadata chunks = 17;
 }
 
 message SignResponse {
@@ -109,53 +159,60 @@ message SignResponse {
   AssetMetadata asset = 2;
 }
 
-message DetailRequest {
+message VersionRequest {
   string did = 1;
-  // 资产身份
-  string assetDid = 2;
-  // 资产哈希值
-  string hash = 3;
+  // 资产ID
+  string assetId = 2;
 }
 
-message DetailResponse {
+message VersionResponse {
   common.ResponseStatus status = 1;
   repeated AssetMetadata assets = 2;
 }
 
+message DetailRequest {
+  // 资产所有者
+  string did = 1;
+  // 资产哈希值
+  string assetHash = 2;
+}
+
+message DetailResponse {
+  common.ResponseStatus status = 1;
+  AssetMetadata asset = 2;
+}
+
 message GetRequest {
   string did = 1;
-  string hash = 2;
+  string assetMergedHash = 2;
+  string chunkHash = 3;
 }
 
 message StreamGetResponse {
   oneof data {
-    Header header = 1;
+    GetHeader header = 1;
     bytes body = 2;
   }
 }
 
+message GetHeader {
+  common.ResponseStatus status = 1;
+  ChunkMetadata chunk = 2;
+}
+
 message GetResponse {
-  Header header = 1;
+  GetHeader header = 1;
   bytes body = 2;
 }
 
 message RemoveRequest {
   string did = 1;
-  string hash = 2;
+  string assetHash = 2;
 }
 
 message RemoveResponse {
   common.ResponseStatus status = 1;
   AssetMetadata asset = 2;
-}
-
-message Header {
-  // 上传者身份
-  string did = 1;
-  // 资产身份
-  string assetDid = 2;
-  // 资产块元信息
-  ChunkMetadata chunk = 3;
 }
 
 // 资产块信息
@@ -172,33 +229,36 @@ message ChunkMetadata {
 
 // 资产定义
 message AssetMetadata {
+  // 资产版本
   uint32 version = 1;
-  // 每个资产在上传时，需要生成一个分布式数字身份，目前考虑到方案的成熟度，可以使用uuid代替；TODO：需要考虑分布式数字身份信息存在哪里；
-  string did = 2;
+  // 资产ID
+  string id = 2;
   // 资产名称
   string name = 3;
+  // 基线资产的哈希值，针对变更场景，从那个资产派生出来了
+  string parentHash = 4;
   // 资产哈希值
-  string hash = 4;
+  string hash = 5;
   // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小，和资产哈希值一样
-  string mergedHash = 5;
+  string mergedHash = 6;
   // 资产描述
-  string description = 6;
+  string description = 7;
   // 资产类型
-  common.DigitalFormat format = 7;
+  common.DigitalFormatEnum format = 8;
   // 明文资产的大小
-  uint64 size = 8;
+  uint64 size = 9;
   // 资产创建时间
-  string created = 9;
+  string created = 10;
   // 资产更新时间点
-  string checkpoint = 10;
+  string checkpoint = 11;
   // 资产内容分成多少块
-  uint32 total = 11;
+  uint32 total = 12;
   // 资产块的大小
-  uint32 block = 12;
+  uint32 block = 13;
   // 是否加密
-  bool encrypted = 13;
+  bool encrypted = 14;
   // 资产扩展信息
-  string extend = 14;
+  string extend = 15;
   // 资产块信息
-  repeated ChunkMetadata chunks = 15;
+  repeated ChunkMetadata chunks = 16;
 }

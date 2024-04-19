@@ -10,7 +10,8 @@ service Certificate {
 
 message SignRequest {
   string did = 1;
-  string csr = 2;
+  string serviceDid = 2;
+  string csr = 3;
 }
 
 message SignResponse {
