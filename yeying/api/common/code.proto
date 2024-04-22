@@ -278,13 +278,24 @@ enum SessionSceneEnum {
   SESSION_SCENE_TRANSLATION = 3;
 }
 
-enum ParticipantRoleEnum {
+enum SessionRoleEnum {
   // 未知编码，是一种占位符
-  PARTICIPANT_ROLE_UNKNOWN = 0;
+  SESSION_ROLE_UNKNOWN = 0;
 
-  // 普通参与者
-  PARTICIPANT_ROLE_NORMAL = 1;
+  // 参与者
+  SESSION_ROLE_PARTICIPANT = 1;
 
-  // 发起者
-  PARTICIPANT_ROLE_ADMIN = 2;
+  // 管理员
+  SESSION_ROLE_ADMIN = 2;
+}
+
+enum ParticipantTypeEnum {
+  // 未知编码，是一种占位符
+  PARTICIPANT_TYPE_UNKNOWN = 0;
+
+  // 服务
+  PARTICIPANT_TYPE_SERVICE = 1;
+
+  // 人
+  PARTICIPANT_TYPE_PEOPLE = 2;
 }
