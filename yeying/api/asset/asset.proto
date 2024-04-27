@@ -92,7 +92,7 @@ message StreamPutRequest {
 }
 
 message PutHeader {
-  // 所有者身份
+  // 所有者身份DID
   string did = 1;
   // 资产ID
   string assetId = 2;
@@ -120,7 +120,9 @@ enum Action {
 
 // 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignRequest {
+  // 资产所有者
   string did = 1;
+  // 覆盖老的，还是追加
   Action action = 2;
   // 资产ID
   string id = 3;
@@ -189,20 +191,21 @@ message GetRequest {
 }
 
 message StreamGetResponse {
+  common.ResponseStatus status = 1;
   oneof data {
-    GetHeader header = 1;
-    bytes body = 2;
+    GetHeader header = 2;
+    bytes body = 3;
   }
 }
 
 message GetHeader {
-  common.ResponseStatus status = 1;
-  ChunkMetadata chunk = 2;
+  ChunkMetadata chunk = 1;
 }
 
 message GetResponse {
-  GetHeader header = 1;
-  bytes body = 2;
+  common.ResponseStatus status = 1;
+  GetHeader header = 2;
+  bytes body = 3;
 }
 
 message RemoveRequest {
@@ -229,36 +232,37 @@ message ChunkMetadata {
 
 // 资产定义
 message AssetMetadata {
+  string owner = 1;
   // 资产版本
-  uint32 version = 1;
+  uint32 version = 2;
   // 资产ID
-  string id = 2;
+  string id = 3;
   // 资产名称
-  string name = 3;
+  string name = 4;
   // 基线资产的哈希值，针对变更场景，从那个资产派生出来了
-  string parentHash = 4;
+  string parentHash = 5;
   // 资产哈希值
-  string hash = 5;
+  string hash = 6;
   // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小，和资产哈希值一样
-  string mergedHash = 6;
+  string mergedHash = 7;
   // 资产描述
-  string description = 7;
+  string description = 8;
   // 资产类型
-  common.DigitalFormatEnum format = 8;
+  common.DigitalFormatEnum format = 9;
   // 明文资产的大小
-  uint64 size = 9;
+  uint64 size = 10;
   // 资产创建时间
-  string created = 10;
+  string created = 11;
   // 资产更新时间点
-  string checkpoint = 11;
+  string checkpoint = 12;
   // 资产内容分成多少块
-  uint32 total = 12;
+  uint32 total = 13;
   // 资产块的大小
-  uint32 block = 13;
+  uint32 block = 14;
   // 是否加密
-  bool encrypted = 14;
+  bool encrypted = 15;
   // 资产扩展信息
-  string extend = 15;
+  string extend = 16;
   // 资产块信息
-  repeated ChunkMetadata chunks = 16;
+  repeated ChunkMetadata chunks = 17;
 }
