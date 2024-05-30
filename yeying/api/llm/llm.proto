@@ -1,11 +1,14 @@
 syntax = "proto3";
-option go_package = "yeying/api/robot";
-package yeying.api.robot;
+option go_package = "yeying/api/llm";
+package yeying.api.llm;
 
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
-service Robot {
+service Llm {
+  // 配置
+  rpc Config(ConfigRequest) returns (ConfigResponse) {}
+
   // 不同语言的文字翻译工作
   rpc Translate(TranslateRequest) returns (TranslateResponse){}
 
@@ -37,9 +40,84 @@ enum MessageRoleEnum {
   MESSAGE_ROLE_SYSTEM = 3;
 }
 
+enum ConfigOperatorCodeEnum {
+  // 未知编码，是一种占位符
+  CONFIG_OPERATOR_CODE_UNKNOWN = 0;
+  CONFIG_OPERATOR_CODE_LLM_ADD = 1;
+  CONFIG_OPERATOR_CODE_LLM_GET = 2;
+  CONFIG_OPERATOR_CODE_LLM_DELETE = 3;
+  CONFIG_OPERATOR_CODE_LLM_UPDATE = 4;
+  CONFIG_OPERATOR_CODE_LLM_SEARCH = 5;
+}
+
+enum LlmCodeEnum {
+  LLM_CODE_UNKNOWN = 0;
+  LLM_CODE_OPENAI = 1;
+  LLM_CODE_GEMINI = 2;
+}
+
+enum LlmStatusEnum {
+  LLM_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
+  LLM_STATUS_DEACTIVATED = 1; // 供应商未激活状态
+  LLM_STATUS_ACTIVATED = 2; // 供应商激活状态
+}
+
+message ConfigRequest {
+  string did = 1;
+  ConfigOperatorCodeEnum code = 2;
+  oneof request {
+    AddLlmRequest addLlmRequest = 3;
+    CommonLlmRequest commonLlmRequest = 4;
+    SearchLlmRequest searchLlmRequest = 5;
+  }
+}
+
+message CommonLlmRequest {
+  string llmId = 1;
+}
+
+message SearchLlmRequest {
+  string condition = 1;
+}
+
+message CommonLlmResponse {
+  LlmMetadata llm = 1;
+}
+
+message SearchLlmResponse {
+  repeated LlmMetadata llms = 1;
+}
+
+message AddLlmRequest {
+  string llmId = 1;
+  string name = 2;
+  LlmCodeEnum code = 3;
+  string key = 4;
+  string extend = 5;
+  string created = 6;
+}
+
+message ConfigResponse {
+  common.ResponseStatus status = 1;
+  oneof response {
+    CommonLlmResponse commonLlmResponse = 2;
+    SearchLlmResponse searchLlmResponse = 3;
+  }
+}
+
+message LlmMetadata {
+  string llmId = 1;
+  string name = 2;
+  LlmCodeEnum code = 3;
+  LlmStatusEnum status = 4;
+  string extend = 5;
+  string created = 6;
+  string checkpoint = 7;
+}
+
 message CompleteRequest {
   string did = 1;
-  string providerId = 2;
+  string llmId = 2;
   string model = 3;
   bool stream = 4;
   repeated Prompt prompts = 5;
@@ -64,7 +142,7 @@ message CompleteResponse {
 
 message GenerateRequest {
   string did = 1;
-  string providerId = 2;
+  string llmId = 2;
   string model = 3;
   string prompt = 4;
   common.ResponseContentFormatEnum responseContentFormat = 5;
@@ -102,7 +180,7 @@ message ImageResult {
 
 message EditRequest {
   string did = 1;
-  string providerId = 2;
+  string llmId = 2;
   string model = 3;
 
   common.DigitalFormatEnum srcType = 5;
@@ -127,7 +205,7 @@ message EditResponse {
 
 message TranslateRequest {
   string did = 1;
-  string providerId = 2;
+  string llmId = 2;
   string instance = 3;
 }
 
@@ -137,7 +215,7 @@ message TranslateResponse {
 
 message ConvertRequest {
   string did = 1;
-  string providerId = 2;
+  string llmId = 2;
   string instance = 3;
 }
 

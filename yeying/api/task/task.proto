@@ -1,0 +1,17 @@
+
+
+// 做任务，转灯油，任务创建者签名任务，做任务的人签名任务和任务结果，类似发起一笔交易，但是内容是有着本质不一样的；
+// 任务创建者、任务内容、任务行动者三者之间的关系：
+
+
+service Task {
+  rpc Create(CreateTaskRequest) returns(CreateTaskResponse) {}
+}
+
+message CreateTaskRequest {
+
+}
+
+message CreateTaskResponse {
+
+}

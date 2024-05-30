@@ -16,7 +16,7 @@ current_directory=$(
 usage() {
   printf "Usage: %s\n \
     -t <Specify the application type for the interface: server or client>\n \
-    -m <Specify the module name, such as robot,identity,user,asset,store,certificate or multiple module with comma separated>\n \
+    -m <Specify the module name, such as agent,identity,user,asset,store,certificate or multiple module with comma separated>\n \
     -l <Specify language to generate code, such go, javascript, python and so on>\n \
     -g <Specify compile with grpc gateway\n \
     " "${base_name}"
@@ -179,7 +179,7 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "javascript" ]; then
         echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
         exit 1
       fi
-    elif [[ ${name} == "robot" ]]; then
+    elif [[ ${name} == "llm" ]]; then
       echo "Compile module=${name} to text"
       # grpcweb和grpcwebtext的本质区别是在接受服务器的流式响应时，grpcweb会转变为非流式的形式，一致性收所有消息。
       if ! protoc --proto_path="${compile_dir}" \

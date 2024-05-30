@@ -1,0 +1,130 @@
+syntax = "proto3";
+option go_package = "yeying/api/application";
+package yeying.api.application;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+/**
+ * 节点自带的应用和后面发布的应用，夜莺社区提供一个节点和一组组网协议。当然其他的社团或者个人，也可以基于源代码，发布自己的节点和一组组网协议，当然
+ * 也可以加入到夜莺社区的网络。
+ * TODO: 一种是节点自带的应用，另一种通过节点发布的应用，需要考虑如何统一起来，做合规审计以及管理。
+ */
+service Application {
+  /* 搜索 */
+  rpc Search(SearchRequest) returns (SearchResponse) {}
+
+  /* 应用审计 */
+  rpc Audit(AuditRequest) returns (AuditResponse) {}
+
+  /* 应用上架 */
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+
+  /* 应用下架 */
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+}
+
+message SearchRequest {
+  string did = 1;
+  Condition condition = 2;
+}
+
+message Condition {
+  common.ApplicationCodeEnum code = 1;
+  common.ApplicationStatusEnum status = 2;
+  string publisher = 3;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated ApplicationMetadata applications = 2;
+}
+
+message CreateRequest {
+  /* 应用发布者DID */
+  string did = 1;
+  /* 应用的唯一ID */
+  string uid = 2;
+  /* 应用版本, 主版本和辅版本 */
+  string version = 3;
+  /* 应用名称 */
+  string name = 4;
+  /* 应用编号 */
+  common.ApplicationCodeEnum code = 5;
+  /* 应用描述 */
+  string description = 6;
+  /* 应用状态 */
+  common.ApplicationStatusEnum status = 7;
+  /* 访问路径 */
+  string path = 8;
+  /* 应用依赖的服务编码 */
+  string serviceCodes = 9;
+  /* 应用扩展信息 */
+  string extend = 10;
+  /* 应用的创建时间 */
+  string created = 11;
+  /* 应用的检查点 */
+  string checkpoint = 12;
+}
+
+message ApplicationExtend {
+  /* 应用图片 */
+  string image = 1;
+  /* 应用默克尔根, 应用的代码和元信息的默克尔根 */
+  string merkleRoot = 2;
+  /* 应用完整包存储地址 */
+  string storage = 3;
+  /* 应用发布者 */
+  string publisher = 4;
+}
+
+message CreateResponse {
+  common.ResponseStatus status = 1;
+  ApplicationMetadata application = 2;
+}
+
+message ApplicationMetadata {
+  /* 应用唯一ID */
+  string uid = 1;
+  /* 应用版本, 主版本和辅版本 */
+  string version = 2;
+  /* 应用名称 */
+  string name = 3;
+  /* 应用编号 */
+  common.ApplicationCodeEnum code = 4;
+  /* 应用描述 */
+  string description = 5;
+  /* 应用状态 */
+  common.ApplicationStatusEnum status = 6;
+  /* 访问路径 */
+  string path = 7;
+  /* 应用发布者 */
+  string publisher = 8;
+  /* 应用依赖的服务编码 */
+  string serviceCodes = 9;
+  /* 应用扩展信息 */
+  string extend = 10;
+  /* 应用的创建时间 */
+  string created = 11;
+  /* 应用的检查点 */
+  string checkpoint = 12;
+}
+
+message DeleteRequest {
+  string did = 1;
+  string uid = 2;
+}
+
+message DeleteResponse {
+  common.ResponseStatus status = 1;
+  ApplicationMetadata application = 2;
+}
+
+message AuditRequest {
+  string did = 1;
+  string uid = 2;
+}
+
+message AuditResponse {
+  common.ResponseStatus status = 1;
+}

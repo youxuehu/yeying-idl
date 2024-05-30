@@ -5,13 +5,88 @@ package yeying.api.user;
 import "yeying/api/common/message.proto";
 
 service User {
+  // 通用请求
   rpc Search(SearchRequest) returns(SearchResponse) {}
   rpc Add(AddRequest) returns(AddResponse) {}
   rpc Get(GetRequest) returns(GetResponse) {}
   rpc Del(DelRequest) returns(DelResponse) {}
   rpc Mod(ModRequest) returns(ModResponse) {}
-  rpc Invite(InviteRequest) returns(InviteResponse) {}
-  rpc Audit(AuditRequest) returns(AuditResponse) {}
+  // 通常owner才可以发送命令，帮助服务提供者做决策
+  rpc Command(CommandRequest) returns(CommandResponse) {}
+}
+
+enum CommandCodeEnum {
+  // 未知编码，是一种占位符
+  COMMAND_CODE_UNKNOWN = 0;
+
+  // 获取任务
+  COMMAND_CODE_FETCH_TASK = 1;
+
+  // 生成邀请码
+  COMMAND_CODE_GENERATE_INVITATION_CODE = 2;
+
+  // 给出意见
+  COMMAND_CODE_PROVIDE_OPINION = 3;
+}
+
+enum TaskCodeEnum {
+  // 未知编码，是一种占位符
+  TASK_CODE_UNKNOWN = 0;
+
+  // 任务编码
+  TASK_CODE_YES_OR_NO = 1;
+}
+
+message TaskMetadata {
+  // 任务Id
+  string uid = 1;
+  // 任务编码
+  TaskCodeEnum code = 2;
+  // 任务创建者，通常是服务自己
+  string creator = 3;
+  // 任务参与，比如申请者
+  string participant = 4;
+  // 任务结束者, 比如yes or no类型的任务，需要做个选者，以结束任务
+  string terminator = 5;
+  // 创建时间
+  string created = 6;
+  // 任务内容
+  string content = 7;
+}
+
+message CommandRequest {
+  // 服务提供者身份DID
+  string serviceDid = 1;
+  // 命令者身份DID
+  string did = 2;
+  // 命令编码
+  CommandCodeEnum commandCode = 3;
+  // 命令者的意见
+  UserOpinion opinion = 4;
+}
+
+message FetchTaskResponse {
+  // 任务元信息
+  repeated TaskMetadata tasks = 1;
+}
+
+message GenerateInvitationCodeResponse {
+  repeated InvitationCode invitationCodes = 1;
+}
+
+message UserOpinion {
+  // 任务ID
+  string taskId = 1;
+  // 任务意见
+  string opinion = 2;
+}
+
+message CommandResponse {
+  common.ResponseStatus status = 1;
+  oneof data {
+    FetchTaskResponse fetchTaskResponse = 2;
+    GenerateInvitationCodeResponse generateInvitationCodeResponse = 3;
+  }
 }
 
 enum UserRoleEnum {
@@ -61,7 +136,7 @@ enum UserStatusEnum {
 }
 
 message UserMetadata {
-  string provider = 1;
+  string serviceDid = 1;
   string name = 2;
   string did = 3;
   UserRoleEnum role = 4;
@@ -72,72 +147,54 @@ message UserMetadata {
 }
 
 message AddRequest {
-  string provider = 1;
+  string serviceDid = 1;
   string name = 2;
   string did = 3;
-  string invitation = 4;
+  string invitationCode = 4;
   string extend = 5;
 }
 
 message AddResponse {
   common.ResponseStatus status = 1;
-  UserMetadata metadata = 2;
+  UserMetadata user = 2;
 }
 
 message ModRequest {
-  string provider = 1;
+  string serviceDid = 1;
   string did = 2;
   string extend = 3;
 }
 
 message ModResponse {
   common.ResponseStatus status = 1;
-  UserMetadata metadata = 2;
+  UserMetadata user = 2;
 }
 
 message DelRequest {
-  string provider = 1;
+  string serviceDid = 1;
   string did = 2;
 }
 
 message DelResponse {
   common.ResponseStatus status = 1;
-  UserMetadata metadata = 2;
+  UserMetadata user = 2;
 }
 
 message GetRequest {
-  string provider = 1;
+  string serviceDid = 1;
   string did = 2;
 }
 
 message GetResponse {
   common.ResponseStatus status = 1;
-  UserMetadata metadata = 2;
+  UserMetadata user = 2;
 }
 
-message InviteRequest {
-  string provider = 1;
-  string did = 2;
-}
-
-message Invitation {
-  string code = 1;
-  string expired = 2;
-}
-
-message InviteResponse {
-  common.ResponseStatus status = 1;
-  repeated Invitation invitation = 2;
-}
-
-message AuditRequest {
-  string provider = 1;
-  string did = 2;
-  string auditDid = 3;
-}
-
-message AuditResponse {
-  common.ResponseStatus status = 1;
+message InvitationCode {
+  string applier = 1;
+  string serviceDid = 2;
+  string code = 3;
+  string expired = 4;
 }
 
 message SearchRequest {
@@ -151,5 +208,5 @@ message Condition {
 
 message SearchResponse {
   common.ResponseStatus status = 1;
-  repeated UserMetadata metadata = 2;
+  repeated UserMetadata users = 2;
 }
