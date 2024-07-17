@@ -18,18 +18,28 @@ import "yeying/api/common/message.proto";
 2、代码包分发场景，比如软件包，模型包等
 3、数字资产，类似nft等
  */
-service Storage {
+service Warehouse {
   /**
-   * 不同仓库间同步数字资产
+   * 仓库和仓库之间同步数字资产，或者用户和仓库者之间
    */
-  rpc Sync(SyncRequest) returns (SyncResponse) {}
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+
+  rpc Transfer(TransferRequest) returns (GetStateResponse) {}
 }
 
-message SyncRequest {
+message GetStateRequest {
   string did = 1;
   string condition = 2;
 }
 
-message SyncResponse {
+message GetStateResponse {
+  common.ResponseStatus status = 1;
+}
+
+message TransferRequest {
+  string did =1;
+}
+
+message TransferResponse {
   common.ResponseStatus status = 1;
 }

@@ -313,3 +313,9 @@ enum ApplicationCodeEnum {
   // 应用仓库
   APPLICATION_CODE_WAREHOUSE = 4;
 }
+
+enum CipherTypeEnum {
+  // 未知编码，是一种占位符
+  CIPHER_TYPE_UNKNOWN = 0;
+  CIPHER_TYPE_AES_GCM_256 = 1;
+}

@@ -1,11 +1,21 @@
 /**
- * 定义基础的结构
+ * 为了方便拦截处理，以及统一安全规范，夜莺社区提供的消息定义，遵循几个约定：
+ * 1、所有消息都有通用部分，叫基础消息，其定义是BaseMessage;
+ * 2、基础消息在消息体中的定义，其变量名约定为base
+ * 3、消息分为流式消息和非流式消息，流式消息，其消息体里面必须要有变量header，而base变量在header变量里面；非流式消息base变量在消息体里面即可
  */
 syntax = "proto3";
 package yeying.api.common;
 option go_package = "yeying/api/common";
 
 import "yeying/api/common/code.proto";
+
+message BaseMessage {
+  string did = 1;
+  string signature = 2;
+  string nonce = 3;
+  string timestamp = 4;
+}
 
 message ResponseStatus {
   // 响应状态码

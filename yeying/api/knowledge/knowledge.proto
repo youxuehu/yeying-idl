@@ -3,6 +3,7 @@ option go_package = "yeying/api/content";
 package yeying.api.content;
 
 import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
 
 /**
  * 数字内容的流动采用生产、存储、服务分离的技术，也就是采归采、存归存、取归取方式。以文本内容为例，爬取内容、创作内容、分发内容、以及阅读内容，独立
@@ -11,11 +12,11 @@ import "yeying/api/common/message.proto";
  * 2、减少重复工作，协作保持内容新鲜度；
  *
  */
-service Content {
+service Knowledge {
   /**
    * 内容通知
    */
-  rpc Notify(NotifyRequest) returns (NotifyResponse) {}
+  rpc Search(SearchRequest) returns (SearchResponse) {}
 
   /**
    * 内容保鲜
@@ -27,16 +28,16 @@ enum ContentType {
   ARTICLE = 0;
 }
 
-message NotifyRequest {
-  repeated ContentMetadata articleMetadata = 1;
+message SearchRequest {
+  repeated KnowledgeMetadata articleMetadata = 1;
 }
 
-message NotifyResponse {
+message SearchResponse {
   common.ResponseStatus status = 1;
 }
 
-message ContentMetadata {
-  ContentType contentType = 1;
+message KnowledgeMetadata {
+  common.DigitalFormatEnum format = 1;
   string hash = 2;
   string author = 3;
   string source = 4;

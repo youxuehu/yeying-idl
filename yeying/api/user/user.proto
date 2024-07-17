@@ -25,8 +25,11 @@ enum CommandCodeEnum {
   // 生成邀请码
   COMMAND_CODE_GENERATE_INVITATION_CODE = 2;
 
+  // 输入邀请码
+  COMMAND_CODE_INPUT_INVITATION_CODE = 3;
+
   // 给出意见
-  COMMAND_CODE_PROVIDE_OPINION = 3;
+  COMMAND_CODE_PROVIDE_OPINION = 4;
 }
 
 enum TaskCodeEnum {
@@ -61,9 +64,23 @@ message CommandRequest {
   string did = 2;
   // 命令编码
   CommandCodeEnum commandCode = 3;
-  // 命令者的意见
-  UserOpinion opinion = 4;
+  oneof subCommand {
+    TaskOpinion taskOpinion = 4;
+    InputInvitationCode inputInvitationCode = 5;
+  }
 }
+
+message InputInvitationCode {
+  string code = 1;
+}
+
+message TaskOpinion {
+  // 任务ID
+  string taskId = 1;
+  // 任务意见
+  string opinion = 2;
+}
+
 
 message FetchTaskResponse {
   // 任务元信息
@@ -72,6 +89,10 @@ message FetchTaskResponse {
 
 message GenerateInvitationCodeResponse {
   repeated InvitationCode invitationCodes = 1;
+}
+
+message GetStateResponse {
+  string state = 1;
 }
 
 message UserOpinion {
@@ -86,6 +107,7 @@ message CommandResponse {
   oneof data {
     FetchTaskResponse fetchTaskResponse = 2;
     GenerateInvitationCodeResponse generateInvitationCodeResponse = 3;
+    GetStateResponse getStateResponse = 4;
   }
 }
 
@@ -150,8 +172,7 @@ message AddRequest {
   string serviceDid = 1;
   string name = 2;
   string did = 3;
-  string invitationCode = 4;
-  string extend = 5;
+  string extend = 4;
 }
 
 message AddResponse {

@@ -4,13 +4,21 @@ package yeying.api.plugin;
 
 import "yeying/api/common/message.proto";
 
-service Plugin {
-  // 安装或者升级
-  rpc Install(InstallRequest) returns (InstallResponse) {};
-  // 卸载
-  rpc Uninstall(UninstallRequest) returns (UninstallResponse) {};
-  // 查询或者搜索
+service Spider {
+  // 搜索
   rpc Search(SearchRequest) returns (SearchResponse) {};
+
+  // 安装
+  rpc Install(InstallRequest) returns (InstallResponse) {};
+
+  // 升级
+  rpc Upgrade(InstallRequest) returns (InstallResponse) {};
+
+  // 配置
+  rpc Config(InstallRequest) returns (InstallResponse) {};
+
+  // 卸载
+  rpc Remove(UninstallRequest) returns (UninstallResponse) {};
 }
 
 // 为不同的应用开发的插件
