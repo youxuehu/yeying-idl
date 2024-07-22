@@ -71,9 +71,8 @@ service Asset {
 }
 
 message SearchRequest {
-  string did = 1;
-  string condition = 2;
-  common.DigitalFormatEnum format = 3;
+  string condition = 1;
+  common.DigitalFormatEnum format = 2;
 }
 
 message SearchResponse {
@@ -92,8 +91,6 @@ message StreamPutRequest {
 }
 
 message PutHeader {
-  // 所有者身份DID
-  string did = 1;
   // 资产ID
   string assetId = 2;
   // 资产块元信息
@@ -120,10 +117,10 @@ enum Action {
 
 // 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignRequest {
-  // 覆盖老的，还是追加
-  Action action = 1;
   // 资产元信息
-  AssetMetadata asset = 2;
+  AssetMetadata asset = 1;
+  // 覆盖老的，还是追加
+  Action action = 2;
 }
 
 message SignResponse {
@@ -132,9 +129,8 @@ message SignResponse {
 }
 
 message VersionRequest {
-  string did = 1;
   // 资产ID
-  string assetId = 2;
+  string assetId = 1;
 }
 
 message VersionResponse {
@@ -143,10 +139,8 @@ message VersionResponse {
 }
 
 message DetailRequest {
-  // 资产所有者
-  string did = 1;
   // 资产哈希值
-  string assetHash = 2;
+  string assetHash = 1;
 }
 
 message DetailResponse {
@@ -155,9 +149,8 @@ message DetailResponse {
 }
 
 message GetRequest {
-  string did = 1;
-  string assetMergedHash = 2;
-  string chunkHash = 3;
+  string assetMergedHash = 1;
+  string chunkHash = 2;
 }
 
 message StreamGetResponse {
@@ -179,7 +172,6 @@ message GetResponse {
 }
 
 message RemoveRequest {
-  string did = 1;
   string assetHash = 2;
 }
 

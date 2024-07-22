@@ -89,12 +89,14 @@ message SearchLlmResponse {
 }
 
 message AddLlmRequest {
-  string llmId = 1;
-  string name = 2;
-  LlmCodeEnum code = 3;
-  string key = 4;
-  string extend = 5;
-  string created = 6;
+  string owner = 1;
+  string llmId = 2;
+  string name = 3;
+  LlmCodeEnum code = 4;
+  string key = 5;
+  string extend = 6;
+  string created = 7;
+  string checkpoint = 8;
 }
 
 message ConfigResponse {
@@ -106,13 +108,14 @@ message ConfigResponse {
 }
 
 message LlmMetadata {
-  string llmId = 1;
-  string name = 2;
-  LlmCodeEnum code = 3;
-  LlmStatusEnum status = 4;
-  string extend = 5;
-  string created = 6;
-  string checkpoint = 7;
+  string owner = 1;
+  string llmId = 2;
+  string name = 3;
+  LlmCodeEnum code = 4;
+  LlmStatusEnum status = 5;
+  string extend = 6;
+  string created = 7;
+  string checkpoint = 8;
 }
 
 message CompleteRequest {

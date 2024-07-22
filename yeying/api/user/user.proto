@@ -15,29 +15,105 @@ service User {
   rpc Command(CommandRequest) returns(CommandResponse) {}
 }
 
-enum CommandCodeEnum {
-  // 未知编码，是一种占位符
-  COMMAND_CODE_UNKNOWN = 0;
-
-  // 获取任务
-  COMMAND_CODE_FETCH_TASK = 1;
-
-  // 生成邀请码
-  COMMAND_CODE_GENERATE_INVITATION_CODE = 2;
-
-  // 输入邀请码
-  COMMAND_CODE_INPUT_INVITATION_CODE = 3;
-
-  // 给出意见
-  COMMAND_CODE_PROVIDE_OPINION = 4;
+message UserMetadata {
+  string name = 1;
+  string did = 2;
+  UserRoleEnum role = 3;
+  string extend = 4;
+  UserStatusEnum status = 5;
+  string created = 6;
+  string checkpoint = 7;
 }
 
-enum TaskCodeEnum {
-  // 未知编码，是一种占位符
-  TASK_CODE_UNKNOWN = 0;
+message AddRequest {
+  string name = 1;
+  string did = 2;
+  string extend = 3;
+  string created = 4;
+  string checkpoint = 5;
+}
 
-  // 任务编码
-  TASK_CODE_YES_OR_NO = 1;
+message AddResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata user = 2;
+}
+
+message ModRequest {
+  string did = 1;
+  string extend = 2;
+  string checkpoint = 3;
+}
+
+message ModResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata user = 2;
+}
+
+message DelRequest {
+  string did = 1;
+}
+
+message DelResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata user = 2;
+}
+
+message GetRequest {
+  string did = 1;
+}
+
+message GetResponse {
+  common.ResponseStatus status = 1;
+  UserMetadata user = 2;
+}
+
+message Invitation {
+  string scene = 1;
+  string code = 2;
+  string expiredTime = 3;
+  string inviter = 4;
+  string invitee = 5;
+}
+
+message SearchRequest {
+  string did = 1;
+  Condition condition = 2;
+}
+
+message Condition {
+  UserStatusEnum status = 1;
+}
+
+message SearchResponse {
+  common.ResponseStatus status = 1;
+  repeated UserMetadata users = 2;
+}
+
+message CommandRequest {
+  // 命令者身份DID
+  string did = 1;
+  // 命令编码
+  CommandCodeEnum commandCode = 2;
+  oneof subCommand {
+    TaskOpinion taskOpinion = 3;
+    InputInvitationCode inputInvitationCode = 4;
+  }
+}
+
+message InputInvitationCode {
+  string code = 1;
+}
+
+message TaskOpinion {
+  // 任务ID
+  string taskId = 1;
+  // 任务意见
+  string opinion = 2;
+}
+
+message FetchTaskResponse {
+  // 任务元信息
+  repeated TaskMetadata tasks = 1;
 }
 
 message TaskMetadata {
@@ -57,38 +133,8 @@ message TaskMetadata {
   string content = 7;
 }
 
-message CommandRequest {
-  // 服务提供者身份DID
-  string serviceDid = 1;
-  // 命令者身份DID
-  string did = 2;
-  // 命令编码
-  CommandCodeEnum commandCode = 3;
-  oneof subCommand {
-    TaskOpinion taskOpinion = 4;
-    InputInvitationCode inputInvitationCode = 5;
-  }
-}
-
-message InputInvitationCode {
-  string code = 1;
-}
-
-message TaskOpinion {
-  // 任务ID
-  string taskId = 1;
-  // 任务意见
-  string opinion = 2;
-}
-
-
-message FetchTaskResponse {
-  // 任务元信息
-  repeated TaskMetadata tasks = 1;
-}
-
-message GenerateInvitationCodeResponse {
-  repeated InvitationCode invitationCodes = 1;
+message GenerateInvitationResponse {
+  repeated Invitation invitations = 1;
 }
 
 message GetStateResponse {
@@ -106,20 +152,26 @@ message CommandResponse {
   common.ResponseStatus status = 1;
   oneof data {
     FetchTaskResponse fetchTaskResponse = 2;
-    GenerateInvitationCodeResponse generateInvitationCodeResponse = 3;
+    GenerateInvitationResponse generateInvitationResponse = 3;
     GetStateResponse getStateResponse = 4;
   }
 }
 
-enum UserRoleEnum {
+enum CommandCodeEnum {
   // 未知编码，是一种占位符
-  USER_ROLE_UNKNOWN = 0;
+  COMMAND_CODE_UNKNOWN = 0;
 
-  // 所有者
-  USER_ROLE_OWNER = 2;
+  // 获取任务
+  COMMAND_CODE_FETCH_TASK = 1;
 
-  // 普通用户
-  USER_ROLE_NORMAL = 1;
+  // 生成邀请码
+  COMMAND_CODE_GENERATE_INVITATION = 2;
+
+  // 输入邀请码
+  COMMAND_CODE_INPUT_INVITATION = 3;
+
+  // 给出意见
+  COMMAND_CODE_PROVIDE_OPINION = 4;
 }
 
 enum UserStatusEnum {
@@ -157,77 +209,21 @@ enum UserStatusEnum {
   USER_STATUS_REFUSED = 10;
 }
 
-message UserMetadata {
-  string serviceDid = 1;
-  string name = 2;
-  string did = 3;
-  UserRoleEnum role = 4;
-  string extend = 5;
-  UserStatusEnum status = 6;
-  string created = 7;
-  string checkpoint = 8;
+enum UserRoleEnum {
+  // 未知编码，是一种占位符
+  USER_ROLE_UNKNOWN = 0;
+
+  // 所有者
+  USER_ROLE_OWNER = 2;
+
+  // 普通用户
+  USER_ROLE_NORMAL = 1;
 }
 
-message AddRequest {
-  string serviceDid = 1;
-  string name = 2;
-  string did = 3;
-  string extend = 4;
-}
+enum TaskCodeEnum {
+  // 未知编码，是一种占位符
+  TASK_CODE_UNKNOWN = 0;
 
-message AddResponse {
-  common.ResponseStatus status = 1;
-  UserMetadata user = 2;
-}
-
-message ModRequest {
-  string serviceDid = 1;
-  string did = 2;
-  string extend = 3;
-}
-
-message ModResponse {
-  common.ResponseStatus status = 1;
-  UserMetadata user = 2;
-}
-
-message DelRequest {
-  string serviceDid = 1;
-  string did = 2;
-}
-
-message DelResponse {
-  common.ResponseStatus status = 1;
-  UserMetadata user = 2;
-}
-
-message GetRequest {
-  string serviceDid = 1;
-  string did = 2;
-}
-
-message GetResponse {
-  common.ResponseStatus status = 1;
-  UserMetadata user = 2;
-}
-
-message InvitationCode {
-  string applier = 1;
-  string serviceDid = 2;
-  string code = 3;
-  string expired = 4;
-}
-
-message SearchRequest {
-  string did = 1;
-  Condition condition = 2;
-}
-
-message Condition {
-  UserStatusEnum status = 1;
-}
-
-message SearchResponse {
-  common.ResponseStatus status = 1;
-  repeated UserMetadata users = 2;
+  // 任务编码
+  TASK_CODE_YES_OR_NO = 1;
 }
