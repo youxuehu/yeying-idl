@@ -1,0 +1,17 @@
+syntax = "proto3";
+option go_package = "yeying/api/vector";
+package yeying.api.vector;
+
+import "yeying/api/common/message.proto";
+
+service Vector {
+  rpc Query(VectorRequest) returns(VectorResponse) {}
+}
+
+message VectorRequest {
+  string did = 1;
+}
+
+message VectorResponse {
+  common.ResponseStatus status = 1;
+}
