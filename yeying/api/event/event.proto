@@ -1,0 +1,124 @@
+syntax = "proto3";
+option go_package = "yeying/api/event";
+package yeying.api.event;
+
+import "yeying/api/common/message.proto";
+
+service Event {
+  rpc Produce(ProduceRequest) returns (ProduceResponse){}
+  rpc Consume(ConsumeRequest) returns (ConsumeResponse){}
+}
+
+
+enum EventTypeEnum {
+  // 未知事件类型，是一种占位符
+  EVENT_TYPE_UNKNOWN = 0;
+
+  // 提醒事件，需要被通知方查看事件，比如生日提醒、会议提醒等
+  EVENT_TYPE_REMIND = 1;
+
+  // 通知事件，需要被通知方获取内容，通常是信息比较大，并发生了更新，需要用户按需获取
+  EVENT_TYPE_NOTIFY = 2;
+
+  // 申请事件，需要被通知方做出通过或者拒绝，比如审核账户、网络准入等
+  EVENT_TYPE_APPLY = 3;
+
+  // 自定义事件，需要被通知方基于事件内容做出响应行动
+  EVENT_TYPE_CUSTOM = 4;
+}
+
+enum ApplyActionEnum {
+  // 未知申请事件的行为类型，是一种占位符
+  APPLY_ACTION_UNKNOWN = 0;
+
+  // 申请通过
+  APPLY_ACTION_PASSED = 1;
+
+  // 申请拒绝
+  APPLY_ACTION_REFUSED = 2;
+}
+
+enum NotifyActionEnum {
+  // 未知通知事件的行为类型，是一种占位符
+  NOTIFY_ACTION_UNKNOWN = 0;
+
+  // 增加
+  NOTIFY_ACTION_ADD = 1;
+
+  // 删除
+  NOTIFY_ACTION_DEL = 2;
+
+  // 修改
+  NOTIFY_ACTION_MOD = 3;
+}
+
+message EventMetadata {
+  string uid = 1;
+  EventTypeEnum type = 2;
+  string publisher = 3;
+  string pSignature = 4;
+  string operator = 5;
+  string oSignature = 6;
+  string extend = 7;
+  string created = 8;
+  string processed = 9;
+  oneof content {
+    CustomContent customContent = 10;
+    ApplyContent applyContent = 11;
+    NotifyContent notifyContent = 12;
+  }
+}
+
+message CustomContent {
+  string name = 1;
+  string object = 2;
+}
+
+message ApplyContent {
+  string applier = 1;
+}
+
+message NotifyContent {
+  string name = 1;
+  repeated NotifyItem items = 2;
+}
+
+message NotifyItem {
+  string uid = 1;
+  NotifyActionEnum action = 2;
+}
+
+message ProduceRequest {
+  EventMetadata metadata = 1;
+}
+
+message ProduceResponse {
+  common.ResponseStatus status = 1;
+}
+
+message ConsumeRequest {
+  EventMetadata metadata = 1;
+  oneof opinion {
+    NotifyOpinion notifyOpinion = 2;
+    ApplyOpinion applyOpinion = 3;
+    CustomOpinion customOpinion = 4;
+  }
+}
+
+message NotifyOpinion {
+  string processed = 1;
+}
+
+message ApplyOpinion {
+  ApplyActionEnum action = 2;
+  string processed = 1;
+}
+
+message CustomOpinion {
+  string name = 1;
+  string object = 2;
+}
+
+message ConsumeResponse {
+  common.ResponseStatus status = 1;
+}
