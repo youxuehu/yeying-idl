@@ -11,6 +11,7 @@ service User {
   rpc Get(GetRequest) returns(GetResponse) {}
   rpc Del(DelRequest) returns(DelResponse) {}
   rpc Mod(ModRequest) returns(ModResponse) {}
+  rpc State(StateRequest) returns(StateResponse) {}
   // 通常owner才可以发送命令，帮助服务提供者做决策
   rpc Command(CommandRequest) returns(CommandResponse) {}
 }
@@ -95,8 +96,7 @@ message CommandRequest {
   // 命令编码
   CommandCodeEnum commandCode = 2;
   oneof subCommand {
-    TaskOpinion taskOpinion = 3;
-    InputInvitationCode inputInvitationCode = 4;
+    InputInvitationCode inputInvitationCode = 3;
   }
 }
 
@@ -104,56 +104,22 @@ message InputInvitationCode {
   string code = 1;
 }
 
-message TaskOpinion {
-  // 任务ID
-  string taskId = 1;
-  // 任务意见
-  string opinion = 2;
-}
-
-message FetchTaskResponse {
-  // 任务元信息
-  repeated TaskMetadata tasks = 1;
-}
-
-message TaskMetadata {
-  // 任务Id
-  string uid = 1;
-  // 任务编码
-  TaskCodeEnum code = 2;
-  // 任务创建者，通常是服务自己
-  string creator = 3;
-  // 任务参与，比如申请者
-  string participant = 4;
-  // 任务结束者, 比如yes or no类型的任务，需要做个选者，以结束任务
-  string terminator = 5;
-  // 创建时间
-  string created = 6;
-  // 任务内容
-  string content = 7;
-}
-
 message GenerateInvitationResponse {
   repeated Invitation invitations = 1;
 }
 
-message GetStateResponse {
-  string state = 1;
+message StateRequest {
+  string version = 1;
 }
 
-message UserOpinion {
-  // 任务ID
-  string taskId = 1;
-  // 任务意见
-  string opinion = 2;
+message StateResponse {
+  string state = 1;
 }
 
 message CommandResponse {
   common.ResponseStatus status = 1;
   oneof data {
-    FetchTaskResponse fetchTaskResponse = 2;
-    GenerateInvitationResponse generateInvitationResponse = 3;
-    GetStateResponse getStateResponse = 4;
+    GenerateInvitationResponse generateInvitationResponse = 2;
   }
 }
 
@@ -161,17 +127,11 @@ enum CommandCodeEnum {
   // 未知编码，是一种占位符
   COMMAND_CODE_UNKNOWN = 0;
 
-  // 获取任务
-  COMMAND_CODE_FETCH_TASK = 1;
+  // 输入邀请码
+  COMMAND_CODE_INPUT_INVITATION = 2;
 
   // 生成邀请码
-  COMMAND_CODE_GENERATE_INVITATION = 2;
-
-  // 输入邀请码
-  COMMAND_CODE_INPUT_INVITATION = 3;
-
-  // 给出意见
-  COMMAND_CODE_PROVIDE_OPINION = 4;
+  COMMAND_CODE_GENERATE_INVITATION = 3;
 }
 
 enum UserStatusEnum {
@@ -220,10 +180,3 @@ enum UserRoleEnum {
   USER_ROLE_NORMAL = 1;
 }
 
-enum TaskCodeEnum {
-  // 未知编码，是一种占位符
-  TASK_CODE_UNKNOWN = 0;
-
-  // 任务编码
-  TASK_CODE_YES_OR_NO = 1;
-}

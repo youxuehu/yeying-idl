@@ -5,7 +5,10 @@ package yeying.api.event;
 import "yeying/api/common/message.proto";
 
 service Event {
+  // 某个服务作为客户端生成了事件，通常node会实现服务端，然后同步给用户
   rpc Produce(ProduceRequest) returns (ProduceResponse){}
+
+  // 用户直接向生成事件的服务消费并给出处理意见
   rpc Consume(ConsumeRequest) returns (ConsumeResponse){}
 }
 
@@ -55,18 +58,40 @@ enum NotifyActionEnum {
 message EventMetadata {
   string uid = 1;
   EventTypeEnum type = 2;
-  string publisher = 3;
-  string pSignature = 4;
-  string operator = 5;
-  string oSignature = 6;
-  string extend = 7;
-  string created = 8;
-  string processed = 9;
+  repeated string producers = 3;
+  repeated string consumers = 4;
+  EventSignature signature = 5;
+  string extend = 6;
+  string created = 7;
+  string processed = 8;
   oneof content {
-    CustomContent customContent = 10;
-    ApplyContent applyContent = 11;
-    NotifyContent notifyContent = 12;
+    NotifyContent notifyContent = 9;
+    ApplyContent applyContent = 10;
+    CustomContent customContent = 11;
   }
+  oneof opinion {
+    NotifyOpinion notifyOpinion = 12;
+    ApplyOpinion applyOpinion = 13;
+    CustomOpinion customOpinion = 14;
+  }
+}
+
+message SignatureObject {
+  string uid = 1;
+  EventTypeEnum type = 2;
+  repeated string  producers = 3;
+  repeated string  consumers = 4;
+  bytes signature = 5;
+  string extend = 6;
+  string created = 7;
+  string processed = 8;
+  bytes opinion = 9;
+  bytes content = 10;
+}
+
+message EventSignature {
+  repeated string producers = 1;
+  repeated string consumers = 2;
 }
 
 message CustomContent {
@@ -89,20 +114,30 @@ message NotifyItem {
 }
 
 message ProduceRequest {
+  common.MessageHeader header = 1;
+  ProduceRequestBody body = 2;
+}
+
+message ProduceRequestBody {
   EventMetadata metadata = 1;
 }
 
 message ProduceResponse {
+  common.MessageHeader header = 1;
+  ProduceResponseBody body = 2;
+}
+
+message ProduceResponseBody {
   common.ResponseStatus status = 1;
 }
 
 message ConsumeRequest {
+  common.MessageHeader header = 1;
+  ConsumeRequestBody body = 2;
+}
+
+message ConsumeRequestBody {
   EventMetadata metadata = 1;
-  oneof opinion {
-    NotifyOpinion notifyOpinion = 2;
-    ApplyOpinion applyOpinion = 3;
-    CustomOpinion customOpinion = 4;
-  }
 }
 
 message NotifyOpinion {
@@ -110,8 +145,9 @@ message NotifyOpinion {
 }
 
 message ApplyOpinion {
-  ApplyActionEnum action = 2;
-  string processed = 1;
+  ApplyActionEnum action = 1;
+  string cause = 2;
+  string processed = 3;
 }
 
 message CustomOpinion {
@@ -120,5 +156,10 @@ message CustomOpinion {
 }
 
 message ConsumeResponse {
+  common.MessageHeader header = 1;
+  ConsumeResponseBody body = 2;
+}
+
+message ConsumeResponseBody {
   common.ResponseStatus status = 1;
 }

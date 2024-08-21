@@ -1,3 +1,8 @@
+syntax = "proto3";
+option go_package = "yeying/api/task";
+package yeying.api.task;
+
+import "yeying/api/common/message.proto";
 
 
 // 做任务，转灯油，任务创建者签名任务，做任务的人签名任务和任务结果，类似发起一笔交易，但是内容是有着本质不一样的；
@@ -6,6 +11,7 @@
 
 service Task {
   rpc Create(CreateTaskRequest) returns(CreateTaskResponse) {}
+  rpc Fetch(FetchTaskRequest) returns(FetchTaskResponse) {}
 }
 
 message CreateTaskRequest {
@@ -14,4 +20,34 @@ message CreateTaskRequest {
 
 message CreateTaskResponse {
 
+}
+
+message TaskMetadata {
+  // 任务Id
+  string uid = 1;
+  // 任务编码
+  TaskCodeEnum code = 2;
+  // 任务创建者，通常是服务自己
+  string creator = 3;
+  // 任务参与，比如申请者
+  string participant = 4;
+  // 任务结束者, 比如yes or no类型的任务，需要做个选者，以结束任务
+  string terminator = 5;
+  // 创建时间
+  string created = 6;
+  // 任务内容
+  string content = 7;
+}
+
+message FetchTaskResponse {
+  // 任务元信息
+  repeated TaskMetadata tasks = 1;
+}
+
+enum TaskCodeEnum {
+  // 未知编码，是一种占位符
+  TASK_CODE_UNKNOWN = 0;
+
+  // 统计任务
+  TASK_CODE_STATISTIC = 1;
 }

@@ -1,9 +1,10 @@
 /**
  * 为了方便拦截处理，以及统一安全规范，夜莺社区提供的消息定义，遵循几个约定：
- * 1、所有消息都有通用部分，叫基础消息，其定义是BaseMessage;
+ * 1、所有消息都有通用部分，叫基础消息，其定义是BaseMessage
  * 2、基础消息在消息体中的定义，其变量名约定为base
  * 3、消息分为流式消息和非流式消息，流式消息，其消息体里面必须要有变量header，而base变量在header变量里面；非流式消息base变量在消息体里面即可
  * 4、时间字段请务必转化为UTC支付串，统一使用这种格式：2024-07-19T06:38:38.332Z
+ * 5、版本字段，用于标识消息体如何解析
  */
 
 syntax = "proto3";
@@ -12,11 +13,13 @@ option go_package = "yeying/api/common";
 
 import "yeying/api/common/code.proto";
 
-message BaseMessage {
+message MessageHeader {
   string did = 1;
-  string signature = 2;
-  string nonce = 3;
-  string timestamp = 4;
+  AuthenticateTypeEnum authType = 2;
+  string authContent = 3;
+  string nonce = 4;
+  string timestamp = 5;
+  uint32 version = 6;
 }
 
 message ResponseStatus {
@@ -26,7 +29,7 @@ message ResponseStatus {
   string message = 2;
 }
 
-message ResponsePageMetadata {
+message ResponsePage {
   // 总记录数
   int32 totalCount = 1;
   // 总页数
@@ -37,7 +40,7 @@ message ResponsePageMetadata {
   int32 pageSize = 4;
 }
 
-message RequestPageMetadata {
+message RequestPage {
   // 请求第几页，从1开始
   int32 pageIndex = 1;
   // 每页记录数

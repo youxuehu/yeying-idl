@@ -170,6 +170,9 @@ enum ApiCodeEnum {
 
   // 应用仓库
   API_CODE_APPLICATION = 7;
+
+  // 事件服务
+  API_CODE_EVENT = 8;
 }
 
 // 服务定义会不断的演化
@@ -185,6 +188,9 @@ enum ServiceCodeEnum {
 
   // 仓储服务供应商
   SERVICE_CODE_STORE = 3;
+
+  // 消息盒子
+  SERVICE_CODE_MESSAGEBOX = 4;
 }
 
 enum AccountCodeEnum {
@@ -318,4 +324,13 @@ enum CipherTypeEnum {
   // 未知编码，是一种占位符
   CIPHER_TYPE_UNKNOWN = 0;
   CIPHER_TYPE_AES_GCM_256 = 1;
+}
+
+enum AuthenticateTypeEnum {
+  // 未知编码，是一种占位符
+  AUTHENTICATE_TYPE_UNKNOWN = 0;
+
+  AUTHENTICATE_TYPE_CERT = 1;
+
+  AUTHENTICATE_TYPE_TOKEN = 2;
 }

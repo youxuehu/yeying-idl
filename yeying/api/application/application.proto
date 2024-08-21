@@ -27,6 +27,8 @@ service Application {
 message SearchRequest {
   string did = 1;
   Condition condition = 2;
+  uint32 page = 3;
+  uint32 pageSize = 4;
 }
 
 message Condition {

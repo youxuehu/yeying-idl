@@ -6,15 +6,39 @@ import "yeying/api/common/message.proto";
 
 service Certificate {
   rpc Sign(SignRequest) returns (SignResponse){}
+  rpc Get(GetRequest) returns (GetResponse){}
 }
 
 message SignRequest {
-  string did = 1;
-  string serviceDid = 2;
-  string csr = 3;
+  common.MessageHeader header = 1;
+  SignRequestBody body = 2;
+}
+
+message SignRequestBody {
+  string csr = 1;
 }
 
 message SignResponse {
+  common.MessageHeader header = 1;
+  SignResponseBody body = 2;
+}
+
+message SignResponseBody {
+  common.ResponseStatus status = 1;
+  string crt = 2;
+  string caCrt = 3;
+}
+
+message GetRequest {
+  common.MessageHeader header = 1;
+}
+
+message GetResponse {
+  common.MessageHeader header = 1;
+  GetResponseBody body = 2;
+}
+
+message GetResponseBody {
   common.ResponseStatus status = 1;
   string crt = 2;
   string caCrt = 3;
