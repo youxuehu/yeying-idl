@@ -173,6 +173,9 @@ enum ApiCodeEnum {
 
   // 事件服务
   API_CODE_EVENT = 8;
+
+  // 邀请码服务
+  API_CODE_INVITATION = 9;
 }
 
 // 服务定义会不断的演化

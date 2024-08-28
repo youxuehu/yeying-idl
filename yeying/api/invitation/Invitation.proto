@@ -1,0 +1,63 @@
+syntax = "proto3";
+option go_package = "yeying/api/invitation";
+package yeying.api.invitation;
+
+import "yeying/api/common/message.proto";
+
+service Invitation {
+  rpc Input(InputRequest) returns(InputResponse) {}
+  rpc Generate(GenerateRequest) returns(GenerateResponse) {}
+}
+
+message InvitationMetadata {
+  string scene = 1;
+  string code = 2;
+  string expiredTime = 3;
+  string inviter = 4;
+  string invitee = 5;
+}
+
+message GenerateRequest {
+  common.MessageHeader header = 1;
+  GenerateRequestBody body = 2;
+}
+
+message GenerateRequestBody {
+  uint32 count = 1;
+}
+
+message InputRequest {
+  common.MessageHeader header = 1;
+  InputRequestBody body = 2;
+}
+
+message InputRequestBody {
+  string code = 1;
+}
+
+message InputResponse {
+  common.MessageHeader header = 1;
+  InputResponseBody body = 2;
+}
+
+message InputResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message GenerateResponse {
+  common.MessageHeader header = 1;
+  GenerateResponseBody body = 2;
+}
+
+message GenerateResponseBody {
+  common.ResponseStatus status = 1;
+  repeated InvitationMetadata invitations = 2;
+}
+
+enum InvitationSceneEnum {
+  // 未知编码，是一种占位符
+  INVITATION_SCENE_UNKNOWN = 0;
+
+  // 注册场景
+  INVITATION_SCENE_REGISTER = 1;
+}

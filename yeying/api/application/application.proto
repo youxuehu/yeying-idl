@@ -25,48 +25,44 @@ service Application {
 }
 
 message SearchRequest {
-  string did = 1;
-  Condition condition = 2;
-  uint32 page = 3;
-  uint32 pageSize = 4;
+  common.MessageHeader header = 1;
+  SearchRequestBody body = 2;
 }
 
-message Condition {
+message SearchRequestBody {
   common.ApplicationCodeEnum code = 1;
   common.ApplicationStatusEnum status = 2;
   string publisher = 3;
+  uint32 page = 4;
+  uint32 pageSize = 5;
 }
 
 message SearchResponse {
+  common.MessageHeader header = 1;
+  SearchResponseBody body = 2;
+}
+
+message SearchResponseBody {
   common.ResponseStatus status = 1;
   repeated ApplicationMetadata applications = 2;
 }
 
 message CreateRequest {
-  /* 应用发布者DID */
-  string did = 1;
-  /* 应用的唯一ID */
-  string uid = 2;
-  /* 应用版本, 主版本和辅版本 */
-  string version = 3;
-  /* 应用名称 */
-  string name = 4;
-  /* 应用编号 */
-  common.ApplicationCodeEnum code = 5;
-  /* 应用描述 */
-  string description = 6;
-  /* 应用状态 */
-  common.ApplicationStatusEnum status = 7;
-  /* 访问路径 */
-  string path = 8;
-  /* 应用依赖的服务编码 */
-  string serviceCodes = 9;
-  /* 应用扩展信息 */
-  string extend = 10;
-  /* 应用的创建时间 */
-  string created = 11;
-  /* 应用的检查点 */
-  string checkpoint = 12;
+  common.MessageHeader header = 1;
+  CreateRequestBody body = 2;
+}
+
+message CreateRequestBody {
+  ApplicationMetadata application = 1;
+}
+
+message CreateResponse {
+  common.MessageHeader header = 1;
+  CreateResponseBody body = 2;
+}
+
+message CreateResponseBody {
+  common.ResponseStatus status = 1;
 }
 
 message ApplicationExtend {
@@ -80,9 +76,10 @@ message ApplicationExtend {
   string publisher = 4;
 }
 
-message CreateResponse {
-  common.ResponseStatus status = 1;
-  ApplicationMetadata application = 2;
+message ApplicationComment {
+  string auditor = 1;
+  string comment = 2;
+  string signature = 3;
 }
 
 message ApplicationMetadata {
@@ -110,21 +107,37 @@ message ApplicationMetadata {
   string created = 11;
   /* 应用的检查点 */
   string checkpoint = 12;
+  /* 审批意见 */
+  repeated ApplicationComment comments = 13;
 }
 
 message DeleteRequest {
+  common.MessageHeader header = 1;
+  DeleteRequestBody body = 2;
+}
+
+message DeleteRequestBody {
   string did = 1;
   string uid = 2;
 }
 
 message DeleteResponse {
+  common.MessageHeader header = 1;
+  DeleteResponseBody body = 2;
+}
+
+message DeleteResponseBody {
   common.ResponseStatus status = 1;
-  ApplicationMetadata application = 2;
 }
 
 message AuditRequest {
-  string did = 1;
-  string uid = 2;
+  common.MessageHeader header = 1;
+  AuditRequestBody body = 2;
+}
+
+message AuditRequestBody {
+  string uid = 1;
+  string comment = 2;
 }
 
 message AuditResponse {

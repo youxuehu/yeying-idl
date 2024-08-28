@@ -71,11 +71,21 @@ service Asset {
 }
 
 message SearchRequest {
+  common.MessageHeader header = 1;
+  SearchRequestBody body = 2;
+}
+
+message SearchRequestBody {
   string condition = 1;
   common.DigitalFormatEnum format = 2;
 }
 
 message SearchResponse {
+  common.MessageHeader header = 1;
+  SearchResponseBody body = 2;
+}
+
+message SearchResponseBody {
   common.ResponseStatus status = 1;
   repeated AssetMetadata assets = 2;
 }
@@ -89,12 +99,16 @@ message StreamPutRequest {
     bytes body = 2;
   }
 }
-
 message PutHeader {
+  common.MessageHeader header = 1;
+  PutHeaderBody body = 2;
+}
+
+message PutHeaderBody {
   // 资产ID
-  string assetId = 2;
+  string assetId = 1;
   // 资产块元信息
-  ChunkMetadata chunk = 3;
+  ChunkMetadata chunk = 2;
 }
 
 message PutRequest {
@@ -105,18 +119,25 @@ message PutRequest {
 }
 
 message PutResponse {
-  common.ResponseStatus status = 1;
-  // 当前传输的资产块
-  ChunkMetadata chunk = 2;
+  common.MessageHeader header = 1;
+  PutResponseBody body = 2;
 }
 
+message PutResponseBody {
+  common.ResponseStatus status = 1;
+}
 enum Action {
   OVERWRITE = 0;
   APPEND = 1;
 }
 
-// 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignRequest {
+  common.MessageHeader header = 1;
+  SignRequestBody body = 2;
+}
+
+// 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
+message SignRequestBody {
   // 资产元信息
   AssetMetadata asset = 1;
   // 覆盖老的，还是追加
@@ -124,62 +145,102 @@ message SignRequest {
 }
 
 message SignResponse {
-  common.ResponseStatus status = 1;
-  AssetMetadata asset = 2;
+  common.MessageHeader header = 1;
+  SignResponseBody body = 2;
 }
 
+message SignResponseBody {
+  common.ResponseStatus status = 1;
+}
 message VersionRequest {
+  common.MessageHeader header = 1;
+  VersionRequestBody body = 2;
+}
+
+message VersionRequestBody {
   // 资产ID
   string assetId = 1;
 }
 
 message VersionResponse {
+  common.MessageHeader header = 1;
+  VersionResponseBody body = 2;
+}
+
+message VersionResponseBody {
   common.ResponseStatus status = 1;
   repeated AssetMetadata assets = 2;
 }
 
 message DetailRequest {
+  common.MessageHeader header = 1;
+  DetailRequestBody body = 2;
+}
+
+message DetailRequestBody {
   // 资产哈希值
   string assetHash = 1;
 }
 
 message DetailResponse {
+  common.MessageHeader header = 1;
+  DetailResponseBody body = 2;
+}
+
+message DetailResponseBody {
   common.ResponseStatus status = 1;
   AssetMetadata asset = 2;
 }
 
 message GetRequest {
+  common.MessageHeader header = 1;
+  GetRequestBody body = 2;
+}
+
+message GetRequestBody {
   string assetMergedHash = 1;
   string chunkHash = 2;
 }
 
 message StreamGetResponse {
-  common.ResponseStatus status = 1;
   oneof data {
-    GetHeader header = 2;
-    bytes body = 3;
+    GetHeader header = 1;
+    bytes body = 2;
   }
 }
 
 message GetHeader {
-  ChunkMetadata chunk = 1;
+  common.MessageHeader header = 1;
+  GetHeaderBody body = 2;
+}
+
+message GetHeaderBody {
+  common.ResponseStatus status = 1;
+  ChunkMetadata chunk = 2;
 }
 
 message GetResponse {
-  common.ResponseStatus status = 1;
   GetHeader header = 2;
   bytes body = 3;
 }
 
 message RemoveRequest {
+  common.MessageHeader header = 1;
+  RemoveRequestBody body = 2;
+}
+
+message RemoveRequestBody {
   string assetHash = 2;
 }
 
 message RemoveResponse {
-  common.ResponseStatus status = 1;
-  AssetMetadata asset = 2;
+  common.MessageHeader header = 1;
+  RemoveResponseBody body = 2;
 }
 
+message RemoveResponseBody {
+  common.ResponseStatus status = 1;
+}
 // 资产块信息
 message ChunkMetadata {
   // 块在资产中的索引

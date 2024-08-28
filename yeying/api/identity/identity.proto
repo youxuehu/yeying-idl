@@ -11,16 +11,49 @@ import "yeying/api/common/code.proto";
 service Identity {
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Search(SearchRequest) returns (SearchResponse) {}
-  rpc Update(UpdateRequest) returns (UpdateResponse) {}
   rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
 }
 
-message Condition {
-  string parent = 1;
-  string did = 2;
-  common.CategoryCodeEnum category = 3;
-  common.ServiceCodeEnum serviceCode = 4;
-  common.AccountCodeEnum accountCode = 5;
+message RegisterRequest {
+  common.MessageHeader header = 1;
+  RegisterRequestBody body = 2;
+}
+
+message RegisterRequestBody {
+  IdentityMetadata identity = 1;
+}
+
+message RegisterResponse {
+  common.MessageHeader header = 1;
+
+  common.ResponseStatus status = 2;
+}
+
+message SearchRequest {
+  common.MessageHeader header = 1;
+  SearchRequestBody body = 2 ;
+}
+
+message SearchRequestBody {
+  common.ServiceCodeEnum serviceCode = 1;
+}
+
+message SearchResponse {
+  common.MessageHeader header = 1;
+  SearchResponseBody body = 2 ;
+}
+
+message SearchResponseBody {
+  common.ResponseStatus status = 1;
+  repeated IdentityMetadata identities = 2;
+}
+
+message UnregisterRequest {
+  common.MessageHeader header = 1;
+}
+
+message UnregisterResponse {
+  common.ResponseStatus status = 1;
 }
 
 message IdentityMetadata {
@@ -34,51 +67,4 @@ message IdentityMetadata {
   string extend = 8;
   string created = 9;
   string checkpoint = 10;
-}
-
-message RegisterRequest {
-  string parent = 1;
-  string network = 2;
-  string did = 3;
-  string address = 4;
-  common.CategoryCodeEnum category = 5;
-  string code = 6;
-  string name = 7;
-  string extend = 8;
-  string created = 9;
-  string checkpoint = 10;
-}
-
-message RegisterResponse {
-  common.ResponseStatus status = 1;
-  IdentityMetadata identity = 2;
-}
-
-message SearchRequest {
-  string did = 1;
-  Condition condition = 2;
-}
-
-message SearchResponse {
-  common.ResponseStatus status = 1;
-  repeated IdentityMetadata identities = 2;
-}
-
-message UpdateRequest {
-  string did = 1;
-  string extend = 2;
-}
-
-message UpdateResponse {
-  common.ResponseStatus status = 1;
-  IdentityMetadata identity = 2;
-}
-
-message UnregisterRequest {
-  string did = 1;
-}
-
-message UnregisterResponse {
-  common.ResponseStatus status = 1;
-  IdentityMetadata identity = 2;
 }

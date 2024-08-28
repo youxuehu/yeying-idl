@@ -6,6 +6,10 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 service Llm {
+  rpc AddLlm(AddLlmRequest) returns (AddLlmResponse) {}
+
+  rpc DelLlm(DelLlmRequest) returns (DelLlmResponse) {}
+
   // 配置
   rpc Config(ConfigRequest) returns (ConfigResponse) {}
 
@@ -54,6 +58,7 @@ enum LlmCodeEnum {
   LLM_CODE_UNKNOWN = 0;
   LLM_CODE_OPENAI = 1;
   LLM_CODE_GEMINI = 2;
+  LLM_CODE_ZHIPUAI = 3;
 }
 
 enum LlmStatusEnum {
@@ -70,6 +75,23 @@ message ConfigRequest {
     CommonLlmRequest commonLlmRequest = 4;
     SearchLlmRequest searchLlmRequest = 5;
   }
+}
+message DelLlmRequest {
+  common.MessageHeader header = 1;
+  DelLlmRequestBody body = 2;
+}
+
+message DelLlmResponse {
+  common.MessageHeader header = 1;
+  DelLlmResponseBody body = 2;
+}
+
+message DelLlmRequestBody {
+  string llmId = 1;
+}
+
+message DelLlmResponseBody {
+  common.ResponseStatus status = 1;
 }
 
 message CommonLlmRequest {
@@ -89,6 +111,11 @@ message SearchLlmResponse {
 }
 
 message AddLlmRequest {
+  common.MessageHeader header = 1;
+  AddLlmRequestBody body = 2;
+}
+
+message AddLlmRequestBody {
   string owner = 1;
   string llmId = 2;
   string name = 3;
@@ -97,6 +124,15 @@ message AddLlmRequest {
   string extend = 6;
   string created = 7;
   string checkpoint = 8;
+}
+
+message AddLlmResponse {
+  common.MessageHeader header = 1;
+  AddLlmResponseBody body = 2;
+}
+
+message AddLlmResponseBody {
+  common.ResponseStatus status = 1;
 }
 
 message ConfigResponse {

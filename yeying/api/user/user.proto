@@ -5,15 +5,11 @@ package yeying.api.user;
 import "yeying/api/common/message.proto";
 
 service User {
-  // 通用请求
-  rpc Search(SearchRequest) returns(SearchResponse) {}
   rpc Add(AddRequest) returns(AddResponse) {}
+  // 用户元信息和状态信息
   rpc Get(GetRequest) returns(GetResponse) {}
   rpc Del(DelRequest) returns(DelResponse) {}
   rpc Mod(ModRequest) returns(ModResponse) {}
-  rpc State(StateRequest) returns(StateResponse) {}
-  // 通常owner才可以发送命令，帮助服务提供者做决策
-  rpc Command(CommandRequest) returns(CommandResponse) {}
 }
 
 message UserMetadata {
@@ -27,111 +23,69 @@ message UserMetadata {
 }
 
 message AddRequest {
+  common.MessageHeader header = 1;
+  AddRequestBody body = 2;
+}
+
+message AddRequestBody {
   string name = 1;
-  string did = 2;
-  string extend = 3;
-  string created = 4;
-  string checkpoint = 5;
+  string extend = 2;
+  string created = 3;
+  string checkpoint = 4;
 }
 
 message AddResponse {
+  common.MessageHeader header = 1;
+  AddResponseBody body = 2;
+}
+
+message AddResponseBody {
   common.ResponseStatus status = 1;
-  UserMetadata user = 2;
 }
 
 message ModRequest {
-  string did = 1;
-  string extend = 2;
-  string checkpoint = 3;
+  common.MessageHeader header = 1;
+  ModRequestBody body = 2;
+}
+
+message ModRequestBody {
+  string extend = 1;
+  string name = 2;
 }
 
 message ModResponse {
-  common.ResponseStatus status = 1;
-  UserMetadata user = 2;
+  common.MessageHeader header = 1;
+  ModResponseBody body = 2;
 }
 
+message ModResponseBody {
+  common.ResponseStatus status = 1;
+}
 message DelRequest {
-  string did = 1;
+  common.MessageHeader header = 1;
 }
 
 message DelResponse {
+  common.MessageHeader header = 1;
+  DelResponseBody body = 2;
+}
+
+message DelResponseBody {
   common.ResponseStatus status = 1;
-  UserMetadata user = 2;
 }
 
 message GetRequest {
-  string did = 1;
+  common.MessageHeader header = 1;
 }
 
 message GetResponse {
+  common.MessageHeader header = 1;
+  GetResponseBody body = 2;
+}
+
+message GetResponseBody {
   common.ResponseStatus status = 1;
   UserMetadata user = 2;
-}
-
-message Invitation {
-  string scene = 1;
-  string code = 2;
-  string expiredTime = 3;
-  string inviter = 4;
-  string invitee = 5;
-}
-
-message SearchRequest {
-  string did = 1;
-  Condition condition = 2;
-}
-
-message Condition {
-  UserStatusEnum status = 1;
-}
-
-message SearchResponse {
-  common.ResponseStatus status = 1;
-  repeated UserMetadata users = 2;
-}
-
-message CommandRequest {
-  // 命令者身份DID
-  string did = 1;
-  // 命令编码
-  CommandCodeEnum commandCode = 2;
-  oneof subCommand {
-    InputInvitationCode inputInvitationCode = 3;
-  }
-}
-
-message InputInvitationCode {
-  string code = 1;
-}
-
-message GenerateInvitationResponse {
-  repeated Invitation invitations = 1;
-}
-
-message StateRequest {
-  string version = 1;
-}
-
-message StateResponse {
-  string state = 1;
-}
-
-message CommandResponse {
-  common.ResponseStatus status = 1;
-  oneof data {
-    GenerateInvitationResponse generateInvitationResponse = 2;
-  }
-}
-
-enum CommandCodeEnum {
-  // 未知编码，是一种占位符
-  COMMAND_CODE_UNKNOWN = 0;
-
-  // 输入邀请码
-  COMMAND_CODE_INPUT_INVITATION = 2;
-
-  // 生成邀请码
-  COMMAND_CODE_GENERATE_INVITATION = 3;
 }
 
 enum UserStatusEnum {
@@ -174,9 +128,9 @@ enum UserRoleEnum {
   USER_ROLE_UNKNOWN = 0;
 
   // 所有者
-  USER_ROLE_OWNER = 2;
+  USER_ROLE_OWNER = 1;
 
   // 普通用户
-  USER_ROLE_NORMAL = 1;
+  USER_ROLE_NORMAL = 2;
 }
 

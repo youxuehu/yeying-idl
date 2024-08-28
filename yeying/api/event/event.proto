@@ -119,7 +119,7 @@ message ProduceRequest {
 }
 
 message ProduceRequestBody {
-  EventMetadata metadata = 1;
+  EventMetadata event = 1;
 }
 
 message ProduceResponse {
@@ -130,7 +130,6 @@ message ProduceResponse {
 message ProduceResponseBody {
   common.ResponseStatus status = 1;
 }
-
 message ConsumeRequest {
   common.MessageHeader header = 1;
   ConsumeRequestBody body = 2;

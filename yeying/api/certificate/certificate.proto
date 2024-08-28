@@ -23,10 +23,14 @@ message SignResponse {
   SignResponseBody body = 2;
 }
 
+message CertificateMetadata {
+  string crt = 1;
+  string ca = 2;
+}
+
 message SignResponseBody {
   common.ResponseStatus status = 1;
-  string crt = 2;
-  string caCrt = 3;
+  CertificateMetadata certificate = 2;
 }
 
 message GetRequest {
@@ -40,6 +44,5 @@ message GetResponse {
 
 message GetResponseBody {
   common.ResponseStatus status = 1;
-  string crt = 2;
-  string caCrt = 3;
+  CertificateMetadata certificate = 2;
 }
