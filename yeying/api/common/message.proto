@@ -35,14 +35,37 @@ message ResponsePage {
   // 总页数
   int32 pageCount = 2;
   // 当前页数
-  int32 currentPage = 3;
+  uint32 currentPage = 3;
   // 每页记录数
-  int32 pageSize = 4;
+  uint32 pageSize = 4;
 }
 
 message RequestPage {
   // 请求第几页，从1开始
-  int32 pageIndex = 1;
+  uint32 pageIndex = 1;
   // 每页记录数
-  int32 pageSize = 2;
+  uint32 pageSize = 2;
+}
+
+message IdentityMetadata {
+  // 身份父亲
+  string parent = 1;
+  // 身份所在网络
+  string network = 2;
+  // 身份did
+  string did = 3;
+  // 身份版本
+  uint32 version = 4;
+  // 区块链地址
+  string address = 5;
+  // 身份名称
+  string name = 6;
+  // 身份编码
+  string code = 7;
+  // 身份头像
+  string avatar = 8;
+  // 身份创建utc时间
+  string created = 9;
+  // 身份修改utc时间
+  string checkpoint = 10;
 }

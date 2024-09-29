@@ -105,42 +105,22 @@ enum ResponseCodeEnum {
 enum ContractStatusEnum {
   // 未知编码，是一种占位符
   CONTRACT_STATUS_UNKNOWN = 0;
-
-  /**
-   * 含义：未生效
-   * 使用场景：拟定了一份合同，参与方没有完全签字
-  */
+  // 未生效，拟定了一份合同，参与方没有完全签字
   CONTRACT_STATUS_INACTIVATED = 1;
-
-  /**
-   * 含义：生效中
-   * 使用场景：合同的参与方都已签字认可，合同已经开始工作
-   */
+  // 生效中，合同的参与方都已签字认可，合同已经开始工作
   CONTRACT_STATUS_ACTIVATED = 2;
-
-  /**
-   * 含义：过期了
-   * 使用场景：合同已经过期了，合同已停止工作
-   */
+  // 过期了，合同已经过期了，合同已停止工作
   CONTRACT_STATUS_EXPIRED = 3;
-
-  /**
-   * 含义：终止了
-   * 使用场景：合同的参与方中有人主动退出了合同
-   */
+  // 终止了，合同的参与方中有人主动退出了合同
   CONTRACT_STATUS_CANCELED = 4;
 }
 
-/**
- * 语言类型
- */
+// 语言类型
 enum LanguageCodeEnum {
   // 未知编码，是一种占位符
   LANGUAGE_CODE_UNKNOWN = 0;
-
   // 简体中文
   LANGUAGE_CODE_ZH_CH = 1;
-
   // 美国英语
   LANGUAGE_CODE_EN_US = 2;
 }
@@ -149,80 +129,62 @@ enum LanguageCodeEnum {
 enum ApiCodeEnum {
   // 未知编码，是一种占位符
   API_CODE_UNKNOWN = 0;
-
   // 用户服务
   API_CODE_USER = 1;
-
   // 身份服务
   API_CODE_IDENTITY = 2;
-
   // 大模型服务
   API_CODE_LLM = 3;
-
   // 资产服务
   API_CODE_ASSET = 4;
-
   // 证书服务
   API_CODE_CERTIFICATE = 5;
-
   // 存储服务
   API_CODE_STORAGE = 6;
-
   // 应用仓库
   API_CODE_APPLICATION = 7;
-
   // 事件服务
   API_CODE_EVENT = 8;
-
   // 邀请码服务
   API_CODE_INVITATION = 9;
+  // 服务接口
+  API_CODE_SERVICE = 10;
 }
 
 // 服务定义会不断的演化
 enum ServiceCodeEnum {
   // 未知编码，是一种占位符
   SERVICE_CODE_UNKNOWN = 0;
-
   // 网络节点服务供应商
   SERVICE_CODE_NODE = 1;
-
   // 机器人服务供应商，提供各种模型和算法服务
   SERVICE_CODE_AGENT = 2;
-
   // 仓储服务供应商
   SERVICE_CODE_STORE = 3;
-
   // 消息盒子
   SERVICE_CODE_MESSAGEBOX = 4;
 }
 
-enum AccountCodeEnum {
+enum IdentityCodeEnum {
   // 未知编码，是一种占位符
-  ACCOUNT_CODE_UNKNOWN = 0;
-
-  // 个人
-  ACCOUNT_CODE_PERSONAL = 1;
-
-  // 企业
-  ACCOUNT_CODE_ENTERPRISE = 2;
-
-  // 社团
-  ACCOUNT_CODE_COMMUNITY = 3;
+  IDENTITY_CODE_UNKNOWN = 0;
+  // 与个人相关的身份
+  IDENTITY_CODE_PERSONAL = 1;
+  // 与组织相关的身份
+  IDENTITY_CODE_ORGANIZATION = 2;
+  // 与服务相关的身份
+  IDENTITY_CODE_SERVICE = 3;
+  // 与应用相关的身份
+  IDENTITY_CODE_APPLICATION = 4;
+  // 与资产相关的身份
+  IDENTITY_CODE_ASSET = 5;
 }
 
-enum CategoryCodeEnum {
-  // 未知编码，是一种占位符
-  CATEGORY_CODE_UNKNOWN = 0;
-
-  // 与人相关的身份
-  CATEGORY_CODE_HUMANITY = 1;
-
-  // 与软件相关的身份
-  CATEGORY_CODE_SOFTWARE = 2;
-}
-
+// 图片格式
 enum ImageFormatEnum {
+  // 未知图片格式，是一种占位符
   IMAGE_FORMAT_UNKNOWN = 0;
+  // PNG格式
   IMAGE_FORMAT_PNG = 1;
 }
 
@@ -259,13 +221,10 @@ enum ResponseContentFormatEnum {
 enum SessionSceneEnum {
   // 未知编码，是一种占位符
   SESSION_SCENE_UNKNOWN = 0;
-
   // 对话
   SESSION_SCENE_DIALOGUE = 1;
-
   // 作图
   SESSION_SCENE_DRAWING = 2;
-
   // 翻译
   SESSION_SCENE_TRANSLATION = 3;
 }
@@ -273,10 +232,8 @@ enum SessionSceneEnum {
 enum SessionRoleEnum {
   // 未知编码，是一种占位符
   SESSION_ROLE_UNKNOWN = 0;
-
   // 参与者
   SESSION_ROLE_PARTICIPANT = 1;
-
   // 管理员
   SESSION_ROLE_ADMIN = 2;
 }
@@ -284,10 +241,8 @@ enum SessionRoleEnum {
 enum ParticipantTypeEnum {
   // 未知编码，是一种占位符
   PARTICIPANT_TYPE_UNKNOWN = 0;
-
   // 服务
   PARTICIPANT_TYPE_SERVICE = 1;
-
   // 人
   PARTICIPANT_TYPE_PEOPLE = 2;
 }
@@ -295,13 +250,10 @@ enum ParticipantTypeEnum {
 enum ApplicationStatusEnum {
   // 未知编码，是一种占位符
   APPLICATION_STATUS_UNKNOWN = 0;
-
   // 已创建
   APPLICATION_STATUS_CREATED = 1;
-
   // 已审计
   APPLICATION_STATUS_AUDITED = 2;
-
   // 已拒绝
   APPLICATION_STATUS_REFUSED = 3;
 }
@@ -309,31 +261,41 @@ enum ApplicationStatusEnum {
 enum ApplicationCodeEnum {
   // 未知编码，是一种占位符
   APPLICATION_CODE_UNKNOWN = 0;
-
-  // 身份应用
-  APPLICATION_CODE_IDENTITY = 1;
-
-  // 仓库应用
-  APPLICATION_CODE_STORE = 2;
-
-  // 机器人应用
-  APPLICATION_CODE_AGENT = 3;
-
-  // 应用仓库
-  APPLICATION_CODE_WAREHOUSE = 4;
+  // 节点应用
+  APPLICATION_CODE_NODE = 1;
+  // 知识库应用
+  APPLICATION_CODE_KNOWLEDGE = 2;
+  // 资产应用
+  APPLICATION_CODE_STORE = 3;
+  // 管家应用
+  APPLICATION_CODE_KEEPER = 4;
+  // 社交应用
+  APPLICATION_CODE_SOCIAL = 5;
+  // 工作台应用
+  APPLICATION_CODE_WORKBENCH = 6;
 }
 
 enum CipherTypeEnum {
   // 未知编码，是一种占位符
   CIPHER_TYPE_UNKNOWN = 0;
+  // AES_GCM，加密算法
   CIPHER_TYPE_AES_GCM_256 = 1;
 }
 
 enum AuthenticateTypeEnum {
   // 未知编码，是一种占位符
   AUTHENTICATE_TYPE_UNKNOWN = 0;
-
+  // 基于证书的认证
   AUTHENTICATE_TYPE_CERT = 1;
-
+  // 基于token的认证
   AUTHENTICATE_TYPE_TOKEN = 2;
+}
+
+enum StreamDataTagEnum {
+  // 描述数据
+  STREAM_DATA_TAG_HEAD = 0;
+  // 业务数据
+  STREAM_DATA_TAG_BODY = 1;
+  // 业务数据
+  STREAM_DATA_TAG_TAIL = 2;
 }

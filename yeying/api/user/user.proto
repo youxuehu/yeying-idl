@@ -14,12 +14,13 @@ service User {
 
 message UserMetadata {
   string name = 1;
-  string did = 2;
-  UserRoleEnum role = 3;
-  string extend = 4;
-  UserStatusEnum status = 5;
-  string created = 6;
-  string checkpoint = 7;
+  string avatar = 2;
+  string did = 3;
+  UserRoleEnum role = 4;
+  string extend = 5;
+  UserStatusEnum status = 6;
+  string created = 7;
+  string checkpoint = 8;
 }
 
 message AddRequest {
@@ -29,9 +30,10 @@ message AddRequest {
 
 message AddRequestBody {
   string name = 1;
-  string extend = 2;
-  string created = 3;
-  string checkpoint = 4;
+  string avatar = 2;
+  string extend = 3;
+  string created = 4;
+  string checkpoint = 5;
 }
 
 message AddResponse {

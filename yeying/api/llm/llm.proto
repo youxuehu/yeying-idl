@@ -6,12 +6,14 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 service Llm {
+  // 添加llm
   rpc AddLlm(AddLlmRequest) returns (AddLlmResponse) {}
 
+  // 删除llm
   rpc DelLlm(DelLlmRequest) returns (DelLlmResponse) {}
 
-  // 配置
-  rpc Config(ConfigRequest) returns (ConfigResponse) {}
+  // 获取llm
+  rpc GetLlm(GetLlmRequest) returns (GetLlmResponse) {}
 
   // 不同语言的文字翻译工作
   rpc Translate(TranslateRequest) returns (TranslateResponse){}
@@ -44,16 +46,6 @@ enum MessageRoleEnum {
   MESSAGE_ROLE_SYSTEM = 3;
 }
 
-enum ConfigOperatorCodeEnum {
-  // 未知编码，是一种占位符
-  CONFIG_OPERATOR_CODE_UNKNOWN = 0;
-  CONFIG_OPERATOR_CODE_LLM_ADD = 1;
-  CONFIG_OPERATOR_CODE_LLM_GET = 2;
-  CONFIG_OPERATOR_CODE_LLM_DELETE = 3;
-  CONFIG_OPERATOR_CODE_LLM_UPDATE = 4;
-  CONFIG_OPERATOR_CODE_LLM_SEARCH = 5;
-}
-
 enum LlmCodeEnum {
   LLM_CODE_UNKNOWN = 0;
   LLM_CODE_OPENAI = 1;
@@ -67,23 +59,33 @@ enum LlmStatusEnum {
   LLM_STATUS_ACTIVATED = 2; // 供应商激活状态
 }
 
-message ConfigRequest {
-  string did = 1;
-  ConfigOperatorCodeEnum code = 2;
-  oneof request {
-    AddLlmRequest addLlmRequest = 3;
-    CommonLlmRequest commonLlmRequest = 4;
-    SearchLlmRequest searchLlmRequest = 5;
-  }
-}
 message DelLlmRequest {
   common.MessageHeader header = 1;
   DelLlmRequestBody body = 2;
 }
 
+message GetLlmRequest {
+  common.MessageHeader header = 1;
+  GetLlmRequestBody body = 2;
+}
+
 message DelLlmResponse {
   common.MessageHeader header = 1;
   DelLlmResponseBody body = 2;
+}
+
+message GetLlmResponse {
+  common.MessageHeader header = 1;
+  GetLlmResponseBody body = 2;
+}
+
+message GetLlmResponseBody {
+  common.ResponseStatus status = 1;
+  repeated LlmMetadata llms = 2;
+}
+
+message GetLlmRequestBody {
+  string llmId = 1;
 }
 
 message DelLlmRequestBody {
@@ -94,36 +96,19 @@ message DelLlmResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message CommonLlmRequest {
-  string llmId = 1;
-}
-
-message SearchLlmRequest {
-  string condition = 1;
-}
-
-message CommonLlmResponse {
-  LlmMetadata llm = 1;
-}
-
-message SearchLlmResponse {
-  repeated LlmMetadata llms = 1;
-}
-
 message AddLlmRequest {
   common.MessageHeader header = 1;
   AddLlmRequestBody body = 2;
 }
 
 message AddLlmRequestBody {
-  string owner = 1;
-  string llmId = 2;
-  string name = 3;
-  LlmCodeEnum code = 4;
-  string key = 5;
-  string extend = 6;
-  string created = 7;
-  string checkpoint = 8;
+  string llmId = 1;
+  string name = 2;
+  LlmCodeEnum code = 3;
+  string key = 4;
+  string extend = 5;
+  string created = 6;
+  string checkpoint = 7;
 }
 
 message AddLlmResponse {
@@ -133,14 +118,6 @@ message AddLlmResponse {
 
 message AddLlmResponseBody {
   common.ResponseStatus status = 1;
-}
-
-message ConfigResponse {
-  common.ResponseStatus status = 1;
-  oneof response {
-    CommonLlmResponse commonLlmResponse = 2;
-    SearchLlmResponse searchLlmResponse = 3;
-  }
 }
 
 message LlmMetadata {
@@ -155,11 +132,15 @@ message LlmMetadata {
 }
 
 message CompleteRequest {
-  string did = 1;
-  string llmId = 2;
-  string model = 3;
-  bool stream = 4;
-  repeated Prompt prompts = 5;
+  common.MessageHeader header = 1;
+  CompleteRequestBody body = 2;
+}
+
+message CompleteRequestBody {
+  string llmId = 1;
+  string model = 2;
+  bool stream = 3;
+  repeated Prompt prompts = 4;
 }
 
 message Prompt {
@@ -174,29 +155,87 @@ message Answer {
   repeated Choice choices = 4;
 }
 
+// 对于流式响应的消息，设计一个统一的处理规则：采用三段式逻辑：header、body、tailer，先发送头部，然后发送数据，最后发送尾部
+// 头部通常是消息描述
+// 数据通常是本次消息的业务数据
+// 尾部通常是消息描述
 message CompleteResponse {
+  common.StreamDataTagEnum contentTag = 1;
+  oneof data {
+    CompleteResponseHead head = 2;
+    CompleteResponseBody body = 3;
+    CompleteResponseTail tail = 4;
+  }
+}
+
+message CompleteResponseHead {
+  common.MessageHeader header = 1;
+  CompleteResponseHeadBody body = 2;
+}
+
+message CompleteResponseHeadBody {
   common.ResponseStatus status = 1;
+}
+
+message CompleteResponseBody {
   Answer answer = 2;
 }
 
+message CompleteResponseTail {
+  common.MessageHeader header = 1;
+  CompleteResponseTailBody body = 2;
+}
+
+message CompleteResponseTailBody {
+  common.ResponseStatus status = 1;
+}
+
 message GenerateRequest {
-  string did = 1;
-  string llmId = 2;
-  string model = 3;
-  string prompt = 4;
-  common.ResponseContentFormatEnum responseContentFormat = 5;
-  int32 count = 6;
-  string size = 7;
-  string quality = 8;
-  string style = 9;
+  common.MessageHeader header = 1;
+  GenerateRequestBody body = 2;
+}
+
+message GenerateRequestBody {
+  string llmId = 1;
+  string model = 2;
+  string prompt = 3;
+  common.ResponseContentFormatEnum responseContentFormat = 4;
+  int32 count = 5;
+  string size = 6;
+  string quality = 7;
+  string style = 8;
 }
 
 message GenerateResponse {
-  common.ResponseStatus status = 1;
+  common.StreamDataTagEnum contentTag = 1;
   oneof data {
-    string base64 = 2;
-    string url = 3;
+    GenerateResponseHead head = 2;
+    GenerateResponseBody body = 3;
+    GenerateResponseTail tail = 4;
   }
+}
+
+message GenerateResponseHead {
+  common.MessageHeader header = 1;
+  GenerateResponseHeadBody body = 2;
+}
+
+message GenerateResponseHeadBody {
+  common.ResponseStatus status = 1;
+}
+
+// 根据请求时要求返回的格式确定具体内容，可能是base64编码，也可能是一个地址
+message GenerateResponseBody {
+  string data = 1;
+}
+
+message GenerateResponseTail {
+  common.MessageHeader header = 1;
+  GenerateResponseTailBody body = 2;
+}
+
+message GenerateResponseTailBody {
+  common.ResponseStatus status = 1;
 }
 
 message TextPrompt {

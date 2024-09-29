@@ -15,7 +15,8 @@ message SignRequest {
 }
 
 message SignRequestBody {
-  string csr = 1;
+  string domain = 1;
+  string csr = 2;
 }
 
 message SignResponse {

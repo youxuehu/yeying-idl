@@ -21,7 +21,7 @@ import "yeying/api/common/code.proto";
  */
 service Asset {
   /**
-   * 检索数字内容，基于数字内容的元信息检索，比如时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
+   * 检索数字内容，基于数字内容的元信息检索，比如哈希值、时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
   rpc Search(SearchRequest) returns (SearchResponse) {}
 
@@ -76,8 +76,10 @@ message SearchRequest {
 }
 
 message SearchRequestBody {
-  string condition = 1;
-  common.DigitalFormatEnum format = 2;
+  common.DigitalFormatEnum format = 1;
+  string assetHash = 2;
+  uint32 page = 3;
+  uint32 pageSize = 4;
 }
 
 message SearchResponse {
@@ -92,30 +94,59 @@ message SearchResponseBody {
 
 // 先发送内容，然后发送的chunk元信息，
 message StreamPutRequest {
+  common.StreamDataTagEnum contentTag = 1;
   oneof data {
-    // 资产块头信息
-    PutHeader header = 1;
-    // 资产块内容
-    bytes body = 2;
+    StreamPutRequestHead head = 2;
+    StreamPutRequestBody body = 3;
+    StreamPutRequestTail tail = 4;
   }
 }
-message PutHeader {
+
+message StreamPutRequestHead {
   common.MessageHeader header = 1;
-  PutHeaderBody body = 2;
+  StreamPutRequestHeadBody body = 2;
 }
 
-message PutHeaderBody {
+message StreamPutRequestHeadBody {
   // 资产ID
   string assetId = 1;
-  // 资产块元信息
-  ChunkMetadata chunk = 2;
+  // 资产版本
+  uint32 version = 2;
+  // 资产块哈希值
+  string chunkHash = 3;
+  // 资产块大小
+  uint64 chunkSize = 4;
+}
+
+message StreamPutRequestBody {
+  bytes data = 1;
+}
+
+message StreamPutRequestTail {
+  common.MessageHeader header = 1;
+  StreamPutRequestTailBody body = 2;
+}
+
+message StreamPutRequestTailBody {
+  string chunkHash = 1;
+}
+
+message PutRequestBody {
+  // 资产ID
+  string assetId = 1;
+  // 资产版本
+  uint32 version = 2;
+  // 资产块哈希值，有可能是加密，也可能是明文，取决于用户是否加密
+  string chunkHash = 3;
+  // 明文块大小
+  uint64 chunkSize = 4;
 }
 
 message PutRequest {
-  // 资产块头信息
-  PutHeader header = 1;
+  common.MessageHeader header = 1;
+  PutRequestBody body = 2;
   // 资产块内容
-  bytes body = 2;
+  bytes data = 3;
 }
 
 message PutResponse {
@@ -126,9 +157,14 @@ message PutResponse {
 message PutResponseBody {
   common.ResponseStatus status = 1;
 }
-enum Action {
-  OVERWRITE = 0;
-  APPEND = 1;
+
+enum AssetActionEnum {
+  // 占位符
+  ASSET_ACTION_UNKNOWN = 0;
+  // 覆盖老的
+  ASSET_ACTION_OVERWRITE = 1;
+  // 追加
+  ASSET_ACTION_APPEND = 2;
 }
 
 message SignRequest {
@@ -138,10 +174,10 @@ message SignRequest {
 
 // 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignRequestBody {
-  // 资产元信息
-  AssetMetadata asset = 1;
   // 覆盖老的，还是追加
-  Action action = 2;
+  AssetActionEnum action = 1;
+  // 资产信息
+  AssetMetadata asset = 2;
 }
 
 message SignResponse {
@@ -160,6 +196,9 @@ message VersionRequest {
 message VersionRequestBody {
   // 资产ID
   string assetId = 1;
+  // 返回的资产按照版本从到小排列
+  uint32 page = 2;
+  uint32 pageSize = 3;
 }
 
 message VersionResponse {
@@ -179,7 +218,8 @@ message DetailRequest {
 
 message DetailRequestBody {
   // 资产哈希值
-  string assetHash = 1;
+  string assetId = 1;
+  uint32 version = 2;
 }
 
 message DetailResponse {
@@ -198,30 +238,55 @@ message GetRequest {
 }
 
 message GetRequestBody {
-  string assetMergedHash = 1;
-  string chunkHash = 2;
-}
-
-message StreamGetResponse {
-  oneof data {
-    GetHeader header = 1;
-    bytes body = 2;
+  string assetId = 1;
+  uint32 version = 2;
+  oneof chunk {
+    string Hash = 3;
+    uint32 Index = 4;
   }
 }
 
-message GetHeader {
-  common.MessageHeader header = 1;
-  GetHeaderBody body = 2;
+message StreamGetResponse {
+  common.StreamDataTagEnum contentTag = 1;
+  oneof data {
+    StreamGetResponseHead head = 2;
+    StreamGetResponseBody body = 3;
+    StreamGetResponseTail tail = 4;
+  }
 }
 
-message GetHeaderBody {
+message StreamGetResponseHead {
+  common.MessageHeader header = 1;
+  StreamGetResponseHeadBody body = 2;
+}
+
+message StreamGetResponseHeadBody {
+  common.ResponseStatus status = 1;
+  ChunkMetadata chunk = 2;
+}
+
+message StreamGetResponseBody {
+  bytes data = 1;
+}
+
+message StreamGetResponseTail {
+  common.MessageHeader header = 1;
+  StreamGetResponseTailBody body = 2;
+}
+
+message StreamGetResponseTailBody {
+  common.ResponseStatus status = 1;
+}
+
+message GetResponseBody {
   common.ResponseStatus status = 1;
   ChunkMetadata chunk = 2;
 }
 
 message GetResponse {
-  GetHeader header = 2;
-  bytes body = 3;
+  common.MessageHeader header = 1;
+  GetResponseBody body = 2;
+  bytes data = 3;
 }
 
 message RemoveRequest {
@@ -230,7 +295,8 @@ message RemoveRequest {
 }
 
 message RemoveRequestBody {
-  string assetHash = 2;
+  string assetId = 1;
+  uint32 version = 2;
 }
 
 message RemoveResponse {
@@ -241,13 +307,14 @@ message RemoveResponse {
 message RemoveResponseBody {
   common.ResponseStatus status = 1;
 }
+
 // 资产块信息
 message ChunkMetadata {
   // 块在资产中的索引
   uint32 index = 1;
-  // 明文块哈希值
+  // 资产块哈希值，可能是加密后的哈希值，也可能是明文的哈希值，同一个资产种，不同的两块哈希值可能一样
   string hash = 2;
-  // 明文块大小
+  // 资产块大小，可能是密文块的大小，也可能是明文块的大小
   uint64 size = 3;
   // 块的扩展信息
   string extend = 4;
@@ -258,15 +325,15 @@ message AssetMetadata {
   string owner = 1;
   // 资产版本
   uint32 version = 2;
-  // 资产ID
-  string id = 3;
+  // 资产唯一ID
+  string uid = 3;
   // 资产名称
   string name = 4;
   // 基线资产的哈希值，针对变更场景，从那个资产派生出来了
   string parentHash = 5;
   // 资产哈希值
   string hash = 6;
-  // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小，和资产哈希值一样
+  // 资产块合并的哈希值，验证数据一致性，如果资产内容小于块的大小
   string mergedHash = 7;
   // 资产描述
   string description = 8;
@@ -288,4 +355,6 @@ message AssetMetadata {
   string extend = 16;
   // 资产块信息
   repeated ChunkMetadata chunks = 17;
+  // 资产元信息的签名
+  string signature = 18;
 }

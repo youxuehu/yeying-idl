@@ -5,66 +5,73 @@ package yeying.api.identity;
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
-// 提供身份托管和维护服务，目前还不支持托管加密的身份，需要有资质，目前的托管主要是用于社交和服务发现等
-// 身份可以是和人相关的，比如个人、企业、社区，也可以是和软件相关的，比如供仓储服务、节点发现服务、以及模型服务等；
-// TODO: 接口命名，从Register改为Deposit
+// 提供身份托管和维护服务，目前还不支持托管加密的身份，需要有资质，需要补齐的能力；
+// 1、至少二要素身份认证；
+// 2、支持密钥恢复；
+// 3、服务器故障导致丢失，需要支持分散式存储；
+// 4、支持加密硬件；
+// 5、至少要两把密钥，一把由身份所有者保管，一把是服务保管；
 service Identity {
-  rpc Register(RegisterRequest) returns (RegisterResponse) {}
-  rpc Search(SearchRequest) returns (SearchResponse) {}
-  rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
+  rpc Deposit(DepositRequest) returns (DepositResponse) {}
+  rpc Query(QueryRequest) returns (QueryResponse) {}
+  rpc Cancel(CancelRequest) returns (CancelResponse) {}
 }
 
-message RegisterRequest {
+message DepositRequest {
   common.MessageHeader header = 1;
-  RegisterRequestBody body = 2;
+  DepositRequestBody body = 2;
 }
 
-message RegisterRequestBody {
-  IdentityMetadata identity = 1;
+message DepositRequestBody {
+  string cipher = 1;
+  string protocol = 2;
 }
 
-message RegisterResponse {
+message DepositResponse {
   common.MessageHeader header = 1;
+  DepositResponseBody body = 2;
+}
 
+message DepositResponseBody {
   common.ResponseStatus status = 2;
 }
 
-message SearchRequest {
+message QueryRequest {
   common.MessageHeader header = 1;
-  SearchRequestBody body = 2 ;
+  QueryRequestBody body = 2 ;
 }
 
-message SearchRequestBody {
+message QueryRequestBody {
   common.ServiceCodeEnum serviceCode = 1;
 }
 
-message SearchResponse {
+message QueryResponse {
   common.MessageHeader header = 1;
-  SearchResponseBody body = 2 ;
+  QueryResponseBody body = 2;
 }
 
-message SearchResponseBody {
+message QueryResponseBody {
   common.ResponseStatus status = 1;
-  repeated IdentityMetadata identities = 2;
+  string cipher = 2;
+  string protocol = 3;
 }
 
-message UnregisterRequest {
+message CancelRequest {
   common.MessageHeader header = 1;
+  CancelRequestBody body = 2;
 }
 
-message UnregisterResponse {
+message CancelRequestBody {
+  string did = 1;
+}
+
+message CancelResponse {
+  common.MessageHeader header = 1;
+  CancelResponseBody body = 2;
+}
+
+message CancelResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message IdentityMetadata {
-  string parent = 1;
-  string network = 2;
-  string did = 3;
-  string address = 4;
-  common.CategoryCodeEnum category = 5;
-  string code = 6; // 某种身份类别下，身份的类型，比如SOFTWARE类别下，有agent、store、spider、node等，HUMANITY类别下有personal、enterprise等
-  string name = 7;
-  string extend = 8;
-  string created = 9;
-  string checkpoint = 10;
-}
+

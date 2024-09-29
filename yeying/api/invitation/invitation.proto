@@ -23,7 +23,8 @@ message GenerateRequest {
 }
 
 message GenerateRequestBody {
-  uint32 count = 1;
+  InvitationSceneEnum scene = 1;
+  uint32 count = 2;
 }
 
 message InputRequest {
@@ -58,6 +59,6 @@ enum InvitationSceneEnum {
   // 未知编码，是一种占位符
   INVITATION_SCENE_UNKNOWN = 0;
 
-  // 注册场景
+  // 邀请码应用场景
   INVITATION_SCENE_REGISTER = 1;
 }
