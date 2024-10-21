@@ -60,12 +60,14 @@ message IdentityMetadata {
   string address = 5;
   // 身份名称
   string name = 6;
+  // 身份描述
+  string description = 7;
   // 身份编码
-  string code = 7;
+  string code = 8;
   // 身份头像
-  string avatar = 8;
+  string avatar = 9;
   // 身份创建utc时间
-  string created = 9;
+  string created = 10;
   // 身份修改utc时间
-  string checkpoint = 10;
+  string checkpoint = 11;
 }

@@ -261,7 +261,7 @@ enum ApplicationStatusEnum {
 enum ApplicationCodeEnum {
   // 未知编码，是一种占位符
   APPLICATION_CODE_UNKNOWN = 0;
-  // 节点应用
+  // 门户应用
   APPLICATION_CODE_NODE = 1;
   // 知识库应用
   APPLICATION_CODE_KNOWLEDGE = 2;

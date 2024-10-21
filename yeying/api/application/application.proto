@@ -87,32 +87,34 @@ message ApplicationMetadata {
   string did = 4;
   /* 应用哈希 */
   string hash = 5;
+  /* 应用唯一id */
+  string uid = 6;
   /* 应用版本 */
-  uint32 version = 6;
+  uint32 version = 7;
   /* 应用名称 */
-  string name = 7;
+  string name = 8;
   /* 应用编号 */
-  common.ApplicationCodeEnum code = 8;
+  common.ApplicationCodeEnum code = 9;
   /* 应用描述 */
-  string description = 9;
+  string description = 10;
   /* 应用状态 */
-  common.ApplicationStatusEnum status = 10;
+  common.ApplicationStatusEnum status = 11;
   /* 访问路径 */
-  string path = 11;
-  /* 安装包路径 */
-  string package = 12;
+  string location = 12;
+  /* 安装包存储路径 */
+  string path = 13;
   /* 应用依赖的服务编码 */
-  string services = 13;
+  string services = 14;
   /* 应用头像 */
-  string avatar = 14;
+  string avatar = 15;
   /* 应用扩展信息 */
-  string extend = 15;
+  string extend = 16;
   /* 应用的创建时间 */
-  string created = 16;
+  string created = 17;
   /* 应用的检查点 */
-  string checkpoint = 17;
+  string checkpoint = 18;
   // 签名
-  string signature = 18;
+  string signature = 19;
 }
 
 message DeleteRequest {
