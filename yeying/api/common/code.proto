@@ -157,12 +157,10 @@ enum ServiceCodeEnum {
   SERVICE_CODE_UNKNOWN = 0;
   // 网络节点服务供应商
   SERVICE_CODE_NODE = 1;
-  // 机器人服务供应商，提供各种模型和算法服务
-  SERVICE_CODE_AGENT = 2;
   // 仓储服务供应商
-  SERVICE_CODE_STORE = 3;
-  // 消息盒子
-  SERVICE_CODE_MESSAGEBOX = 4;
+  SERVICE_CODE_WAREHOUSE = 2;
+  // 机器人服务供应商，提供各种模型和算法服务
+  SERVICE_CODE_AGENT = 3;
 }
 
 enum IdentityCodeEnum {
@@ -212,12 +210,14 @@ enum DigitalFormatEnum {
   DIGITAL_FORMAT_OTHER = 10000;
 }
 
-enum ResponseContentFormatEnum {
-  RESPONSE_CONTENT_FORMAT_UNKNOWN = 0;
-  RESPONSE_CONTENT_FORMAT_URL = 1;
-  RESPONSE_CONTENT_FORMAT_BASE64 = 2;
+// 内容格式
+enum ContentFormatEnum {
+  CONTENT_FORMAT_UNKNOWN = 0;
+  CONTENT_FORMAT_URL = 1;
+  CONTENT_FORMAT_BASE64 = 2;
 }
 
+// 会话场景
 enum SessionSceneEnum {
   // 未知编码，是一种占位符
   SESSION_SCENE_UNKNOWN = 0;
@@ -229,6 +229,7 @@ enum SessionSceneEnum {
   SESSION_SCENE_TRANSLATION = 3;
 }
 
+// 会话角色
 enum SessionRoleEnum {
   // 未知编码，是一种占位符
   SESSION_ROLE_UNKNOWN = 0;
@@ -238,6 +239,7 @@ enum SessionRoleEnum {
   SESSION_ROLE_ADMIN = 2;
 }
 
+// 参与类型
 enum ParticipantTypeEnum {
   // 未知编码，是一种占位符
   PARTICIPANT_TYPE_UNKNOWN = 0;
@@ -261,13 +263,13 @@ enum ApplicationStatusEnum {
 enum ApplicationCodeEnum {
   // 未知编码，是一种占位符
   APPLICATION_CODE_UNKNOWN = 0;
-  // 门户应用
-  APPLICATION_CODE_NODE = 1;
+  // 应用商店
+  APPLICATION_CODE_STORE = 1;
   // 知识库应用
   APPLICATION_CODE_KNOWLEDGE = 2;
-  // 资产应用
-  APPLICATION_CODE_STORE = 3;
-  // 管家应用
+  // 资产仓库应用
+  APPLICATION_CODE_WAREHOUSE = 3;
+  // 智能管家应用，包括钱包
   APPLICATION_CODE_KEEPER = 4;
   // 社交应用
   APPLICATION_CODE_SOCIAL = 5;

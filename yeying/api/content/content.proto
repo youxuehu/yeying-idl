@@ -1,0 +1,20 @@
+syntax = "proto3";
+option go_package = "yeying/api/content";
+package yeying.api.content;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+// 检查内容是否合规，为了保护数据隐私，要么是tee，要么是同态
+service Content {
+  // 身份托管
+  rpc validate(ValidateRequest) returns (ValidateResponse) {}
+}
+
+message ValidateRequest {
+  common.MessageHeader header = 1;
+}
+
+message ValidateResponse {
+  common.MessageHeader header = 1;
+}

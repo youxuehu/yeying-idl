@@ -199,7 +199,7 @@ message GenerateRequestBody {
   string llmId = 1;
   string model = 2;
   string prompt = 3;
-  common.ResponseContentFormatEnum responseContentFormat = 4;
+  common.ContentFormatEnum responseContentFormat = 4;
   int32 count = 5;
   string size = 6;
   string quality = 7;
@@ -249,7 +249,7 @@ message ImagePrompt {
 }
 
 message ImageResult {
-  common.ResponseContentFormatEnum responseContentFormat = 1;
+  common.ContentFormatEnum responseContentFormat = 1;
   int32 count = 2;
   string size = 3;
   string quality = 4;

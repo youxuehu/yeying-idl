@@ -7,13 +7,25 @@ import "yeying/api/common/code.proto";
 
 // 提供身份托管和维护服务，目前还不支持托管加密的身份，需要有资质，需要补齐的能力；
 // 1、至少二要素身份认证；
+// 2、保护隐私零知识证名；
 // 2、支持密钥恢复；
 // 3、服务器故障导致丢失，需要支持分散式存储；
 // 4、支持加密硬件；
 // 5、至少要两把密钥，一把由身份所有者保管，一把是服务保管；
 service Identity {
+  // 身份托管
   rpc Deposit(DepositRequest) returns (DepositResponse) {}
+
+  // 取回身份
+  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse) {}
+
+  // 查询身份名片
   rpc Query(QueryRequest) returns (QueryResponse) {}
+
+  // 分享身份名片
+  rpc Share(ShareRequest) returns (ShareResponse) {}
+
+  // 取消托管
   rpc Cancel(CancelRequest) returns (CancelResponse) {}
 }
 
@@ -34,6 +46,22 @@ message DepositResponse {
 
 message DepositResponseBody {
   common.ResponseStatus status = 2;
+}
+
+message RetrieveRequest {
+  common.MessageHeader header = 1;
+}
+
+message RetrieveResponse {
+  common.MessageHeader header = 1;
+}
+
+message ShareRequest {
+  common.MessageHeader header = 1;
+}
+
+message ShareResponse {
+  common.MessageHeader header = 1;
 }
 
 message QueryRequest {
