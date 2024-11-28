@@ -1,0 +1,30 @@
+syntax = "proto3";
+option go_package = "yeying/api/support";
+package yeying.api.support;
+
+import "yeying/api/common/message.proto";
+
+service Support {
+  rpc SaveFaq(SaveFaqRequest) returns(SaveFaqResponse) {}
+}
+
+enum SupportCodeEnum {
+  SUPPORT_CODE_FAQ = 0; // Frequently Asked Questions, 通常包含了最常见的问题以及相应的解答，帮助客户快速找到答案
+  SUPPORT_CODE_CSR = 1; // Customer Service Representative, 通过电话、电子邮件、在线聊天等方式与客户进行沟通，并解决客户的问题和需求
+  SUPPORT_CODE_IVR = 2; // Interactive Voice Response, 使用预先录制的语音和语音识别技术，引导客户通过按键选择或语音输入，实现自助查询、转接、留言等功能，提高客户体验
+}
+
+message SaveFaqRequest {
+  common.MessageHeader header = 1;
+  SaveFaqRequestBody body = 2;
+}
+
+message SaveFaqRequestBody {
+  string email = 1;
+  string type = 2;
+  string description = 3;
+}
+
+message SaveFaqResponse {
+  common.MessageHeader header = 1;
+}

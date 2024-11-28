@@ -1,0 +1,39 @@
+syntax = "proto3";
+option go_package = "yeying/api/bulletin";
+package yeying.api.bulletin;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+service Bulletin {
+  rpc List(ListRequest) returns(ListResponse) {}
+}
+
+enum BulletinCodeEnum {
+  BULLETIN_CODE_SOLUTION = 0;
+}
+
+message ListRequest {
+  common.MessageHeader header = 1;
+  ListRequestBody body = 2;
+}
+
+message ListRequestBody {
+  BulletinCodeEnum bulletinCode = 1;
+  common.LanguageCodeEnum LanguageCode = 2;
+}
+
+message ListResponse {
+  common.MessageHeader header = 1;
+  ListResponseBody body = 2;
+}
+
+message ListResponseBody {
+  repeated SolutionMetadata solutions = 1;
+}
+
+message SolutionMetadata {
+  string name = 1;
+  string description = 2;
+  repeated string cards = 3;
+}
