@@ -17,7 +17,7 @@ usage() {
   printf "Usage: %s\n \
     -t <Specify the application type for the interface: server or client>\n \
     -m <Specify the module name, such as agent,identity,user,asset,store,certificate or multiple module with comma separated>\n \
-    -l <Specify language to generate code, such go, javascript, python and so on>\n \
+    -l <Specify language to generate code, such go,javascript,python,typescript and so on>\n \
     -g <Specify compile with grpc gateway\n \
     " "${base_name}"
   exit 1
@@ -226,6 +226,27 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
         echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
         exit 1
       fi
+    fi
+  done
+elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
+  # Project [ts-proto](https://github.com/stephenh/ts-proto) goes a different way and replaces the built-in CommonJS
+  # code generation by a generator that outputs idiomatic TypeScript.
+  installed=$(npm -g ls | grep grpc-tools)
+  if [ -z "${installed}" ]; then
+    npm install -g grpc-tools
+  fi
+
+  IFS=',' read -ra arr <<<"${module}"
+  for name in "${arr[@]}"; do
+    echo "Compile client module=${name} for nodejs"
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+    if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
+      --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) \
+      --ts_proto_out="${output_dir}" \
+      --ts_proto_opt=outputServices=grpc-js \
+      "${api_target_dir}/${name}"/*.proto; then
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
     fi
   done
 else
