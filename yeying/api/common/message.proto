@@ -51,7 +51,7 @@ message IdentityMetadata {
   // 身份父亲
   string parent = 1;
   // 身份所在网络
-  string network = 2;
+  common.NetworkTypeEnum network = 2;
   // 身份did
   string did = 3;
   // 身份版本
@@ -63,11 +63,63 @@ message IdentityMetadata {
   // 身份描述
   string description = 7;
   // 身份编码
-  string code = 8;
+  common.IdentityCodeEnum code = 8;
   // 身份头像
   string avatar = 9;
   // 身份创建utc时间
   string created = 10;
   // 身份修改utc时间
   string checkpoint = 11;
+}
+
+message BlockAddress {
+  string identifier = 1;
+  string address = 2;
+  string privateKey = 3;
+  string publicKey = 4;
+  Mnemonic mnemonic = 5;
+}
+
+message Mnemonic {
+  string phrase = 1;
+  string path = 2;
+  string locale = 3;
+  string password = 4;
+}
+
+message IdentityServiceExtend {
+  common.ServiceCodeEnum code = 1;
+  string apis = 2;
+  string proxy = 3;
+  string grpc = 4;
+  SecurityConfig securityConfig = 5;
+}
+
+message IdentityOrganizationExtend {
+  string address = 1;
+  string code = 2;
+  SecurityConfig securityConfig = 3;
+}
+
+message IdentityPersonalExtend {
+  string email = 1;
+  string telephone = 2;
+  SecurityConfig securityConfig = 3;
+}
+
+message IdentityApplicationExtend {
+  common.ApplicationCodeEnum code = 1;
+  repeated common.ServiceCodeEnum serviceCodes = 2;
+  string location = 3 ;
+  string hash = 4;
+  SecurityConfig securityConfig = 5;
+}
+
+message SecurityConfig {
+  SecurityAlgorithm algorithm = 1;
+}
+
+message SecurityAlgorithm {
+  common.CipherTypeEnum type = 1;
+  string iv = 2;
 }

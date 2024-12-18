@@ -303,3 +303,11 @@ enum StreamDataTagEnum {
   // 业务数据
   STREAM_DATA_TAG_TAIL = 2;
 }
+
+enum NetworkTypeEnum {
+  // 未知编码，是一种占位符
+  NETWORK_TYPE_UNKNOWN = 0;
+
+  // 夜莺网络
+  NETWORK_TYPE_YEYING = 2020;
+}

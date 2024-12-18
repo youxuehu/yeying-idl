@@ -5,6 +5,7 @@ package yeying.api.identity;
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
+
 // 提供身份托管和维护服务，目前还不支持托管加密的身份，需要有资质，需要补齐的能力；
 // 1、至少二要素身份认证；
 // 2、保护隐私零知识证名；
@@ -101,5 +102,3 @@ message CancelResponse {
 message CancelResponseBody {
   common.ResponseStatus status = 1;
 }
-
-

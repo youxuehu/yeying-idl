@@ -230,7 +230,7 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
   done
 elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
   # Project [ts-proto](https://github.com/stephenh/ts-proto) goes a different way and replaces the built-in CommonJS
-  # code generation by a generator that outputs idiomatic TypeScript.
+  # code generation by a generator that outputs idiomatic TypeScript. reference [sample](https://medium.com/@torsten.schlieder/grpc-with-node-b73f51c54b12)
   installed=$(npm -g ls | grep grpc-tools)
   if [ -z "${installed}" ]; then
     npm install -g grpc-tools

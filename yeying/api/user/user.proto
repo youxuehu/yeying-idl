@@ -5,10 +5,13 @@ package yeying.api.user;
 import "yeying/api/common/message.proto";
 
 service User {
+  // 添加用户
   rpc Add(AddRequest) returns(AddResponse) {}
-  // 用户元信息和状态信息
+  // 获取用户
   rpc Get(GetRequest) returns(GetResponse) {}
+  // 删除用户
   rpc Del(DelRequest) returns(DelResponse) {}
+  // 修改用户
   rpc Mod(ModRequest) returns(ModResponse) {}
 }
 
@@ -21,6 +24,7 @@ message UserMetadata {
   UserStatusEnum status = 6;
   string created = 7;
   string checkpoint = 8;
+  string signature = 9;
 }
 
 message AddRequest {
@@ -34,6 +38,7 @@ message AddRequestBody {
   string extend = 3;
   string created = 4;
   string checkpoint = 5;
+  string signature = 6;
 }
 
 message AddResponse {
@@ -51,8 +56,8 @@ message ModRequest {
 }
 
 message ModRequestBody {
-  string extend = 1;
-  string name = 2;
+  string name = 1;
+  string avatar = 2;
 }
 
 message ModResponse {
