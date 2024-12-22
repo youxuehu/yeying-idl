@@ -19,8 +19,9 @@ message ListRequest {
 }
 
 message ListRequestBody {
-  BulletinCodeEnum bulletinCode = 1;
-  common.LanguageCodeEnum LanguageCode = 2;
+  BulletinCodeEnum code = 1;
+  common.LanguageCodeEnum language = 2;
+  common.RequestPage page = 3;
 }
 
 message ListResponse {
@@ -29,11 +30,22 @@ message ListResponse {
 }
 
 message ListResponseBody {
-  repeated SolutionMetadata solutions = 1;
+  common.ResponseStatus status = 1;
+  repeated SolutionMetadata solutions = 2;
+  common.ResponsePage page = 3;
 }
 
 message SolutionMetadata {
+  common.LanguageCodeEnum language = 1;
+  string name = 2;
+  string description = 3;
+  string created = 4;
+  repeated SolutionCard cards = 5;
+  string signature = 6;
+}
+
+message SolutionCard {
   string name = 1;
-  string description = 2;
-  repeated string cards = 3;
+  string price = 2;
+  string variables = 3;
 }

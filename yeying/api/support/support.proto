@@ -5,7 +5,7 @@ package yeying.api.support;
 import "yeying/api/common/message.proto";
 
 service Support {
-  rpc SaveFaq(SaveFaqRequest) returns(SaveFaqResponse) {}
+  rpc Collect(CollectRequest) returns(CollectResponse) {}
 }
 
 enum SupportCodeEnum {
@@ -14,17 +14,32 @@ enum SupportCodeEnum {
   SUPPORT_CODE_IVR = 2; // Interactive Voice Response, 使用预先录制的语音和语音识别技术，引导客户通过按键选择或语音输入，实现自助查询、转接、留言等功能，提高客户体验
 }
 
-message SaveFaqRequest {
+message CollectRequest {
   common.MessageHeader header = 1;
-  SaveFaqRequestBody body = 2;
+  CollectRequestBody body = 2;
 }
 
-message SaveFaqRequestBody {
-  string email = 1;
-  string type = 2;
-  string description = 3;
+message CollectRequestBody {
+  SupportCodeEnum code = 1;
+  oneof data {
+    FaqMetadata faq = 3;
+  }
 }
 
-message SaveFaqResponse {
+message FaqMetadata {
+  string did  = 1;
+  string email = 2;
+  string type = 3;
+  string description = 4;
+  string created = 5;
+  string signature = 6;
+}
+
+message CollectResponse {
   common.MessageHeader header = 1;
+  CollectResponseBody body = 2;
+}
+
+message CollectResponseBody {
+  common.ResponseStatus status = 1;
 }

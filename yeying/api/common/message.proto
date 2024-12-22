@@ -30,20 +30,18 @@ message ResponseStatus {
 }
 
 message ResponsePage {
-  // 总记录数
-  int32 totalCount = 1;
-  // 总页数
-  int32 pageCount = 2;
-  // 当前页数
-  uint32 currentPage = 3;
-  // 每页记录数
+  // 总的记录数
+  uint32 total = 1;
+  // 页面索引，从1开始
+  uint32 page = 3;
+  // 页面大小
   uint32 pageSize = 4;
 }
 
 message RequestPage {
-  // 请求第几页，从1开始
-  uint32 pageIndex = 1;
-  // 每页记录数
+  // 页面索引，从1开始
+  uint32 page = 1;
+  // 页面大小
   uint32 pageSize = 2;
 }
 

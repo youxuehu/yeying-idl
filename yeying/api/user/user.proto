@@ -19,12 +19,10 @@ message UserMetadata {
   string name = 1;
   string avatar = 2;
   string did = 3;
-  UserRoleEnum role = 4;
-  string extend = 5;
-  UserStatusEnum status = 6;
-  string created = 7;
-  string checkpoint = 8;
-  string signature = 9;
+  string extend = 4;
+  string created = 5;
+  string checkpoint = 6;
+  string signature = 7;
 }
 
 message AddRequest {
@@ -33,12 +31,7 @@ message AddRequest {
 }
 
 message AddRequestBody {
-  string name = 1;
-  string avatar = 2;
-  string extend = 3;
-  string created = 4;
-  string checkpoint = 5;
-  string signature = 6;
+  UserMetadata user = 1;
 }
 
 message AddResponse {
@@ -56,8 +49,7 @@ message ModRequest {
 }
 
 message ModRequestBody {
-  string name = 1;
-  string avatar = 2;
+  UserMetadata user = 1;
 }
 
 message ModResponse {
@@ -68,6 +60,7 @@ message ModResponse {
 message ModResponseBody {
   common.ResponseStatus status = 1;
 }
+
 message DelRequest {
   common.MessageHeader header = 1;
 }
@@ -93,6 +86,8 @@ message GetResponse {
 message GetResponseBody {
   common.ResponseStatus status = 1;
   UserMetadata user = 2;
+  UserRoleEnum userRole = 3;
+  UserStatusEnum userStatus = 4;
 }
 
 enum UserStatusEnum {

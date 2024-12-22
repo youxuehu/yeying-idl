@@ -125,7 +125,7 @@ enum LanguageCodeEnum {
   LANGUAGE_CODE_EN_US = 2;
 }
 
-// 针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
+// API编码，针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
 enum ApiCodeEnum {
   // 未知编码，是一种占位符
   API_CODE_UNKNOWN = 0;
@@ -151,7 +151,7 @@ enum ApiCodeEnum {
   API_CODE_SERVICE = 10;
 }
 
-// 服务定义会不断的演化
+// 服务编码
 enum ServiceCodeEnum {
   // 未知编码，是一种占位符
   SERVICE_CODE_UNKNOWN = 0;
@@ -163,6 +163,7 @@ enum ServiceCodeEnum {
   SERVICE_CODE_AGENT = 3;
 }
 
+// 身份编码
 enum IdentityCodeEnum {
   // 未知编码，是一种占位符
   IDENTITY_CODE_UNKNOWN = 0;
@@ -249,6 +250,7 @@ enum ParticipantTypeEnum {
   PARTICIPANT_TYPE_PEOPLE = 2;
 }
 
+// 应用状态
 enum ApplicationStatusEnum {
   // 未知编码，是一种占位符
   APPLICATION_STATUS_UNKNOWN = 0;
@@ -260,6 +262,7 @@ enum ApplicationStatusEnum {
   APPLICATION_STATUS_REFUSED = 3;
 }
 
+// 应用编码
 enum ApplicationCodeEnum {
   // 未知编码，是一种占位符
   APPLICATION_CODE_UNKNOWN = 0;
@@ -279,6 +282,7 @@ enum ApplicationCodeEnum {
   APPLICATION_CODE_WORKBENCH = 7;
 }
 
+// 密码学类型
 enum CipherTypeEnum {
   // 未知编码，是一种占位符
   CIPHER_TYPE_UNKNOWN = 0;
@@ -286,6 +290,7 @@ enum CipherTypeEnum {
   CIPHER_TYPE_AES_GCM_256 = 1;
 }
 
+// 鉴权类型
 enum AuthenticateTypeEnum {
   // 未知编码，是一种占位符
   AUTHENTICATE_TYPE_UNKNOWN = 0;
@@ -295,6 +300,7 @@ enum AuthenticateTypeEnum {
   AUTHENTICATE_TYPE_TOKEN = 2;
 }
 
+// 流数据类型
 enum StreamDataTagEnum {
   // 描述数据
   STREAM_DATA_TAG_HEAD = 0;
@@ -304,6 +310,7 @@ enum StreamDataTagEnum {
   STREAM_DATA_TAG_TAIL = 2;
 }
 
+// 区块链网络类型
 enum NetworkTypeEnum {
   // 未知编码，是一种占位符
   NETWORK_TYPE_UNKNOWN = 0;

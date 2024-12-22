@@ -228,6 +228,32 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
       fi
     fi
   done
+elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
+  IFS=',' read -ra arr <<<"${module}"
+  for name in "${arr[@]}"; do
+    echo "Compile client module=${name} for browser"
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+    if [[ ${name} == "llm" ]]; then
+      echo "Compile module=${name} to text"
+      # grpcweb和grpcwebtext的本质区别是在接受服务器的流式响应时，grpcweb会转变为非流式的形式，一致性收所有消息。
+      if ! protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        --grpc-web_out=import_style=typescript,mode=grpcwebtext:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    else
+      echo "Compile module=${name} to binary"
+      if ! protoc --proto_path="${compile_dir}" \
+        --js_out=import_style=commonjs,binary:"${output_dir}" \
+        --grpc-web_out=import_style=typescript,mode=grpcweb:"${output_dir}" \
+        "${api_target_dir}/${name}"/*.proto; then
+        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+        exit 1
+      fi
+    fi
+  done
 elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
   # Project [ts-proto](https://github.com/stephenh/ts-proto) goes a different way and replaces the built-in CommonJS
   # code generation by a generator that outputs idiomatic TypeScript. reference [sample](https://medium.com/@torsten.schlieder/grpc-with-node-b73f51c54b12)
