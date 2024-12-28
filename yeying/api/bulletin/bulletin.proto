@@ -36,12 +36,14 @@ message ListResponseBody {
 }
 
 message SolutionMetadata {
-  common.LanguageCodeEnum language = 1;
-  string name = 2;
-  string description = 3;
-  string created = 4;
-  repeated SolutionCard cards = 5;
-  string signature = 6;
+  string publisher = 1;
+  common.LanguageCodeEnum language = 2;
+  string uid = 3;
+  string name = 4;
+  string description = 5;
+  string created = 6;
+  repeated SolutionCard cards = 7;
+  string signature = 8;
 }
 
 message SolutionCard {

@@ -20,11 +20,17 @@ service Service {
 }
 
 message WhoamiRequest {
-
+  common.MessageHeader header = 1;
 }
 
 message WhoamiResponse {
-  ServiceMetadata service = 1;
+  common.MessageHeader header = 1;
+  WhoamiResponseBody body = 2;
+}
+
+message WhoamiResponseBody {
+  common.ResponseStatus status = 1;
+  ServiceMetadata service = 2;
 }
 
 message RegisterRequest {
@@ -87,7 +93,7 @@ message ServiceMetadata {
   /* 服务所有者 */
   string owner = 1;
   /* 服务所在网络 */
-  string network = 2;
+  uint32 network = 2;
   /* 服务所在网络地址 */
   string address = 3;
   /* 服务身份 */

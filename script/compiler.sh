@@ -1,4 +1,11 @@
 #!/bin/sh
+# protoc[https://github.com/protocolbuffers/protobuf/releases]
+# protoc-gen-ts_proto[https://github.com/stephenh/ts-proto]
+#
+# grpc_tools_node_protoc[https://github.com/grpc/grpc-node/tree/master/packages/grpc-tools]封装了protoc，以及各种生成客户端和
+# 服务端代码的插件:
+# 1. protoc-gen-js
+# 2.
 
 # before running the script on macos, you should install protobuf with command `brew install protobuf`
 base_name="${0##*/}"
@@ -168,18 +175,16 @@ elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
     fi
   done
 elif [ "${app_type}" == "browser" ] && [ "${language}" == "javascript" ]; then
+  installed=$(npm -g ls | grep grpc-tools)
+  if [ -z "${installed}" ]; then
+    npm install -g grpc-tools
+  fi
+
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for browser"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
-    if [[ ${name} == "common" ]]; then
-      if ! protoc --proto_path="${compile_dir}" \
-        --js_out=import_style=commonjs,binary:"${output_dir}" \
-        "${api_target_dir}/${name}"/*.proto; then
-        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-        exit 1
-      fi
-    elif [[ ${name} == "llm" ]]; then
+    if [[ ${name} == "llm" ]]; then
       echo "Compile module=${name} to text"
       # grpcweb和grpcwebtext的本质区别是在接受服务器的流式响应时，grpcweb会转变为非流式的形式，一致性收所有消息。
       if ! protoc --proto_path="${compile_dir}" \
@@ -210,22 +215,13 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for nodejs"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
-    if [[ ${name} == "common" ]]; then
-      if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
-        --js_out=import_style=commonjs,binary:"${output_dir}" \
-        "${api_target_dir}/${name}"/*.proto; then
-        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-        exit 1
-      fi
-    else
-      if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
-        --js_out=import_style=commonjs,binary:"${output_dir}" \
-        --grpc_out=grpc_js:"${output_dir}" \
-        --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
-        "${api_target_dir}/${name}"/*.proto; then
-        echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
-        exit 1
-      fi
+    if ! protoc --proto_path="${compile_dir}" \
+      --js_out=import_style=commonjs,binary:"${output_dir}" \
+      --grpc_out=grpc_js:"${output_dir}" \
+      --plugin=protoc-gen-grpc=$(which grpc_tools_node_protoc_plugin) \
+      "${api_target_dir}/${name}"/*.proto; then
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
     fi
   done
 elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
@@ -257,16 +253,16 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
 elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
   # Project [ts-proto](https://github.com/stephenh/ts-proto) goes a different way and replaces the built-in CommonJS
   # code generation by a generator that outputs idiomatic TypeScript. reference [sample](https://medium.com/@torsten.schlieder/grpc-with-node-b73f51c54b12)
-  installed=$(npm -g ls | grep grpc-tools)
+  installed=$(npm -g ls | grep ts-proto)
   if [ -z "${installed}" ]; then
-    npm install -g grpc-tools
+    npm install -g ts-proto
   fi
 
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for nodejs"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
-    if ! grpc_tools_node_protoc --proto_path="${compile_dir}" \
+    if ! protoc --proto_path="${compile_dir}" \
       --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) \
       --ts_proto_out="${output_dir}" \
       --ts_proto_opt=outputServices=grpc-js \
