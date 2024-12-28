@@ -1,0 +1,45 @@
+syntax = "proto3";
+option go_package = "yeying/api/support";
+package yeying.api.support;
+
+import "yeying/api/common/message.proto";
+
+service Support {
+  rpc Collect(CollectRequest) returns(CollectResponse) {}
+}
+
+enum SupportCodeEnum {
+  SUPPORT_CODE_FAQ = 0; // Frequently Asked Questions, 通常包含了最常见的问题以及相应的解答，帮助客户快速找到答案
+  SUPPORT_CODE_CSR = 1; // Customer Service Representative, 通过电话、电子邮件、在线聊天等方式与客户进行沟通，并解决客户的问题和需求
+  SUPPORT_CODE_IVR = 2; // Interactive Voice Response, 使用预先录制的语音和语音识别技术，引导客户通过按键选择或语音输入，实现自助查询、转接、留言等功能，提高客户体验
+}
+
+message CollectRequest {
+  common.MessageHeader header = 1;
+  CollectRequestBody body = 2;
+}
+
+message CollectRequestBody {
+  SupportCodeEnum code = 1;
+  oneof data {
+    FaqMetadata faq = 3;
+  }
+}
+
+message FaqMetadata {
+  string did  = 1;
+  string email = 2;
+  string type = 3;
+  string description = 4;
+  string created = 5;
+  string signature = 6;
+}
+
+message CollectResponse {
+  common.MessageHeader header = 1;
+  CollectResponseBody body = 2;
+}
+
+message CollectResponseBody {
+  common.ResponseStatus status = 1;
+}
