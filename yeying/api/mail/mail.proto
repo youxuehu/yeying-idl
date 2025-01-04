@@ -7,19 +7,20 @@ import "yeying/api/common/code.proto";
 /**
 定义一个邮件服务
  */
-service MailService {
-  rpc MailSend(MailSendRequest) returns (MailSendResponse) {}
+service Mail {
+  rpc Send(SendRequest) returns (SendResponse) {}
+  rpc Verify(VerifyRequest) returns (VerifyResponse) {}
 }
 
 /**
 邮件请求
  */
-message MailSendRequest {
+message SendRequest {
   common.MessageHeader header = 1;
-  MailSendRequestBody body = 2;
+  SendRequestBody body = 2;
 }
 
-message MailSendRequestBody {
+message SendRequestBody {
   // 收件箱
   string toMail = 1;
 }
@@ -27,12 +28,37 @@ message MailSendRequestBody {
 /**
 邮件相应
  */
-message MailSendResponse {
+message SendResponse {
   common.MessageHeader header = 1;
-  MailSendResponseBody body = 2;
+  SendResponseBody body = 2;
 }
 
-message MailSendResponseBody {
+message SendResponseBody {
   common.ResponseStatus status = 1;
-  string message = 2;
+}
+
+/**
+验证码验证请求体
+ */
+message VerifyRequest {
+  common.MessageHeader header = 1;
+  VerifyRequestBody body = 2;
+}
+
+message VerifyRequestBody {
+  // 收件箱
+  string toMail = 1;
+  string code = 2;
+}
+
+/**
+验证码验证响应体
+ */
+message VerifyResponse {
+  common.MessageHeader header = 1;
+  VerifyResponseBody body = 2;
+}
+
+message VerifyResponseBody {
+  common.ResponseStatus status = 1;
 }
