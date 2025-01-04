@@ -102,18 +102,18 @@ message ServiceMetadata {
   uint32 version = 5;
   /* 服务名称 */
   string name = 6;
+  /* 服务名称 */
+  string description = 7;
   /* 服务编码 */
-  common.ServiceCodeEnum code = 7;
+  common.ServiceCodeEnum code = 8;
   /* 服务apis */
-  repeated common.ApiCodeEnum apis = 8;
+  repeated common.ApiCodeEnum apis = 9;
   /* 服务代理 */
-  string proxy = 9;
+  string proxy = 10;
   /* 服务grpc地址 */
-  string grpc = 10;
+  string grpc = 11;
   /* 服务头像 */
-  string avatar = 11;
-  /* 服务扩展 */
-  string extend = 12;
+  string avatar = 12;
   /* 服务创建时间点 */
   string created = 13;
   /* 服务修改时间点 */

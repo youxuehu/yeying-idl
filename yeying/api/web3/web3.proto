@@ -31,13 +31,18 @@ message Identity {
   IdentityMetadata metadata = 1;
   string blockAddress = 2;
   SecurityConfig securityConfig = 3;
+  Registry registry = 4;
+  string signature = 5;
   oneof extend {
-    IdentityPersonalExtend personalExtend = 4;
-    IdentityServiceExtend serviceExtend = 5;
-    IdentityOrganizationExtend organizationExtend = 6;
-    IdentityApplicationExtend applicationExtend = 7;
+    IdentityPersonalExtend personalExtend = 6;
+    IdentityServiceExtend serviceExtend = 7;
+    IdentityOrganizationExtend organizationExtend = 8;
+    IdentityApplicationExtend applicationExtend = 9;
   }
-  string signature = 8;
+}
+
+message Registry {
+  repeated string nodes = 1;
 }
 
 message IdentityMetadata {
