@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # protoc[https://github.com/protocolbuffers/protobuf/releases]
 # protoc-gen-ts_proto[https://github.com/stephenh/ts-proto]
 #
