@@ -1,0 +1,38 @@
+syntax = "proto3";
+option go_package = "yeying/api/mail";
+package yeying.api.mail;
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+/**
+定义一个邮件服务
+ */
+service MailService {
+  rpc MailSend(MailSendRequest) returns (MailSendResponse) {}
+}
+
+/**
+邮件请求
+ */
+message MailSendRequest {
+  common.MessageHeader header = 1;
+  MailSendRequestBody body = 2;
+}
+
+message MailSendRequestBody {
+  // 收件箱
+  string toMail = 1;
+}
+
+/**
+邮件相应
+ */
+message MailSendResponse {
+  common.MessageHeader header = 1;
+  MailSendResponseBody body = 2;
+}
+
+message MailSendResponseBody {
+  common.ResponseStatus status = 1;
+  string message = 2;
+}
