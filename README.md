@@ -1,6 +1,9 @@
 # yeying-idl
 管理了夜莺社区所有的proto文件，protoc是一个用于定义和生成数据结构的工具套件，主要用于序列化和反序列化数据，参考[规范](https://protobuf.dev/programming-guides/style/)
 
+# how to write proto3 file?
+[Programming Guide](https://protobuf.com.cn/support/version-support/)
+
 # 支持的模块
 ## common
 定义了通用消息和类型的接口

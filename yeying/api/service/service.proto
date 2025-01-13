@@ -57,8 +57,11 @@ message SearchRequest {
 }
 
 message SearchRequestBody {
+  SearchCondition condition = 1;
+}
+
+message SearchCondition {
   common.ServiceCodeEnum code = 1;
-  string owner = 2;
 }
 
 message SearchResponse {

@@ -1,0 +1,148 @@
+syntax = "proto3";
+option go_package = "yeying/api/asset";
+package yeying.api.asset;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+/**
+站在存储供应商的角度，数据和资产是有区别，数据有可能是有价值，也可能没有价值，但是存储供应商是没有感知，只有用户能够感知到。当用户和存储供应商之间签
+约了以后，用户明确告知存储供应商数据是有价值的，并愿意支付一定的报酬，存储供应商才会认为数据是资产，这种资产可以在不同的存储供应商之间流通。在签约之
+前，数据存储在临时存储区不能流通，只是某个存储供应商和用户之间临时的约定，所以也不会有版本的概念
+ */
+service Block {
+  /**
+   * 前端浏览器不支持client stream，按块上传接口，以块的形式放在临时存储区，资产签约时，这个块就会被挪到数据区，持久化存储。
+   * 每个资产id只会保存一个块，确保业务层面始终存储和获取最新的块，也就是会覆盖之前的资产块，如果需要形成版本，就需要及时和存储供应商之间完成签约
+   * 形成版本。
+   */
+  rpc Put(PutRequest) returns (PutResponse) {}
+
+  /**
+   * 按块流式上传，1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
+   */
+  rpc StreamPut(stream StreamPutRequest) returns (PutResponse) {}
+
+  /**
+   * 前端浏览器不支持server stream，提供一个非流式的下载接口
+   */
+  rpc Get(GetRequest) returns (GetResponse) {}
+
+  /**
+   * 分块出库数字内容
+   */
+  rpc StreamGet(GetRequest) returns (stream StreamGetResponse) {}
+}
+
+// 先发送内容，然后发送的chunk元信息，
+message StreamPutRequest {
+  common.StreamDataTagEnum dataTag = 1;
+  oneof data {
+    StreamPutRequestHead head = 2;
+    StreamPutRequestBody body = 3;
+    StreamPutRequestTail tail = 4;
+  }
+}
+
+message StreamPutRequestHead {
+  common.MessageHeader header = 1;
+  StreamPutHeadBody body = 2;
+}
+
+message StreamPutHeadBody {
+  string hash = 1;
+}
+
+message StreamPutRequestBody {
+  bytes data = 1;
+}
+
+message StreamPutRequestTail {
+  common.MessageHeader header = 1;
+  StreamPutTailBody body = 2;
+}
+
+message StreamPutTailBody {
+  BlockMetadata block = 1;
+}
+
+message PutRequestBody {
+  // 资产块
+  BlockMetadata block = 1;
+}
+
+message PutRequest {
+  common.MessageHeader header = 1;
+  PutRequestBody body = 2;
+  // 资产块内容
+  bytes data = 3;
+}
+
+message PutResponse {
+  common.MessageHeader header = 1;
+  PutResponseBody body = 2;
+}
+
+message PutResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message GetRequest {
+  common.MessageHeader header = 1;
+  GetRequestBody body = 2;
+}
+
+message GetRequestBody {
+  string Hash = 1;
+}
+
+message StreamGetResponse {
+  common.StreamDataTagEnum dataTag = 1;
+  oneof data {
+    StreamGetResponseHead head = 2;
+    StreamGetResponseBody body = 3;
+    StreamGetResponseTail tail = 4;
+  }
+}
+
+message StreamGetResponseHead {
+  common.MessageHeader header = 1;
+  StreamGetHeadBody body = 2;
+}
+
+message StreamGetHeadBody {
+  common.ResponseStatus status = 1;
+  BlockMetadata block = 2;
+}
+
+message StreamGetResponseBody {
+  bytes data = 1;
+}
+
+message StreamGetResponseTail {
+  common.MessageHeader header = 1;
+  StreamGetTailBody body = 2;
+}
+
+message StreamGetTailBody {
+  common.ResponseStatus status = 1;
+}
+
+message GetResponseBody {
+  common.ResponseStatus status = 1;
+  BlockMetadata block = 2;
+}
+
+message GetResponse {
+  common.MessageHeader header = 1;
+  GetResponseBody body = 2;
+  bytes data = 3;
+}
+
+message BlockMetadata {
+  string owner = 1;
+  string hash = 2;
+  uint64 size = 3;
+  string created = 4;
+  string signature = 5;
+}
