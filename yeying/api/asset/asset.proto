@@ -61,8 +61,12 @@ message SearchRequestBody {
 }
 
 message SearchCondition {
+  // 内容格式
   common.DigitalFormatEnum format = 1;
+  // 内容哈希值
   string contentHash = 2;
+  // 回收站里搜索
+  bool trash = 3;
 }
 
 message SearchResponse {
@@ -102,7 +106,6 @@ message VersionRequest {
 message VersionRequestBody {
   // 资产ID
   string uid = 1;
-  // 返回的资产按照版本从到小排列
   uint32 page = 2;
   uint32 pageSize = 3;
 }
@@ -114,6 +117,7 @@ message VersionResponse {
 
 message VersionResponseBody {
   common.ResponseStatus status = 1;
+  // 返回的资产按照版本从大到小排列
   repeated AssetMetadata assets = 2;
 }
 
@@ -126,6 +130,7 @@ message DetailRequestBody {
   // 资产哈希值
   string uid = 1;
   uint32 version = 2;
+  bool trash = 3;
 }
 
 message DetailResponse {

@@ -175,9 +175,9 @@ elif [ "${app_type}" == "server" ] && [ "${language}" == "python" ]; then
     fi
   done
 elif [ "${app_type}" == "browser" ] && [ "${language}" == "javascript" ]; then
-  installed=$(npm -g ls | grep grpc-tools)
+  installed=$(npm -g ls | grep protoc-gen-js)
   if [ -z "${installed}" ]; then
-    npm install -g grpc-tools
+    npm install -g protoc-gen-js
   fi
 
   IFS=',' read -ra arr <<<"${module}"
@@ -225,6 +225,11 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "javascript" ]; then
     fi
   done
 elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
+  installed=$(npm -g ls | grep protoc-gen-js)
+  if [ -z "${installed}" ]; then
+    npm install -g protoc-gen-js
+  fi
+
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for browser"

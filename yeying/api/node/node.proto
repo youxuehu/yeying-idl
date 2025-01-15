@@ -1,0 +1,31 @@
+syntax = "proto3";
+option go_package = "yeying/api/node";
+package yeying.api.node;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+/**
+ * 节点提供服务登记、注销和查询的服务。每个服务都有一个身份，实际向节点登记的是身份信息。构建自己的服务，除了事先开发服务意外，需要以下几件事：
+ * 1、创建服务身份
+ * 2、使用身份启动服务
+ * 3、选择节点登记服务
+ * 4、应用绑定该服务
+ */
+service Node {
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {}
+}
+
+message WhoamiRequest {
+  common.MessageHeader header = 1;
+}
+
+message WhoamiResponse {
+  common.MessageHeader header = 1;
+  WhoamiResponseBody body = 2;
+}
+
+message WhoamiResponseBody {
+  common.ResponseStatus status = 1;
+  ServiceMetadata service = 2;
+}
