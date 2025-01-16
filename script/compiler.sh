@@ -180,6 +180,11 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "javascript" ]; then
     npm install -g protoc-gen-js
   fi
 
+  installed=$(npm -g ls | grep protoc-gen-grpc-web)
+  if [ -z "${installed}" ]; then
+    npm install -g protoc-gen-grpc-web
+  fi
+
   IFS=',' read -ra arr <<<"${module}"
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for browser"
@@ -228,6 +233,11 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
   installed=$(npm -g ls | grep protoc-gen-js)
   if [ -z "${installed}" ]; then
     npm install -g protoc-gen-js
+  fi
+
+  installed=$(npm -g ls | grep protoc-gen-grpc-web)
+  if [ -z "${installed}" ]; then
+    npm install -g protoc-gen-grpc-web
   fi
 
   IFS=',' read -ra arr <<<"${module}"
