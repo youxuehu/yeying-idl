@@ -44,3 +44,36 @@ message RequestPage {
   // 页面大小
   uint32 pageSize = 2;
 }
+
+message ServiceMetadata {
+  /* 服务所有者 */
+  string owner = 1;
+  /* 服务所在网络 */
+  uint32 network = 2;
+  /* 服务所在网络地址 */
+  string address = 3;
+  /* 服务身份 */
+  string did = 4;
+  /* 服务版本 */
+  uint32 version = 5;
+  /* 服务名称 */
+  string name = 6;
+  /* 服务名称 */
+  string description = 7;
+  /* 服务编码 */
+  common.ServiceCodeEnum code = 8;
+  /* 服务apis */
+  repeated common.ApiCodeEnum apis = 9;
+  /* 服务代理 */
+  string proxy = 10;
+  /* 服务grpc地址 */
+  string grpc = 11;
+  /* 服务头像 */
+  string avatar = 12;
+  /* 服务创建时间点 */
+  string created = 13;
+  /* 服务修改时间点 */
+  string checkpoint = 14;
+  // 签名
+  string signature = 15;
+}

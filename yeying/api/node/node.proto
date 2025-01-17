@@ -3,7 +3,6 @@ option go_package = "yeying/api/node";
 package yeying.api.node;
 
 import "yeying/api/common/message.proto";
-import "yeying/api/common/code.proto";
 
 /**
  * 节点提供服务登记、注销和查询的服务。每个服务都有一个身份，实际向节点登记的是身份信息。构建自己的服务，除了事先开发服务意外，需要以下几件事：
@@ -13,7 +12,21 @@ import "yeying/api/common/code.proto";
  * 4、应用绑定该服务
  */
 service Node {
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
   rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {}
+}
+
+message HealthCheckRequest {
+  common.MessageHeader header = 1;
+}
+
+message HealthCheckResponse {
+  common.MessageHeader header = 1;
+  HealthCheckResponseBody body = 2;
+}
+
+message HealthCheckResponseBody {
+  common.ResponseStatus status = 1;
 }
 
 message WhoamiRequest {
@@ -27,5 +40,9 @@ message WhoamiResponse {
 
 message WhoamiResponseBody {
   common.ResponseStatus status = 1;
-  ServiceMetadata service = 2;
+  NodeMetadata node = 2;
+}
+
+message NodeMetadata {
+  common.ServiceMetadata service = 1;
 }

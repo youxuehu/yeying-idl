@@ -2,7 +2,6 @@ syntax = "proto3";
 option go_package = "yeying/api/mail";
 package yeying.api.mail;
 import "yeying/api/common/message.proto";
-import "yeying/api/common/code.proto";
 
 /**
 定义一个邮件服务

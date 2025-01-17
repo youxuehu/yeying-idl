@@ -13,24 +13,9 @@ import "yeying/api/common/code.proto";
  * 4、应用绑定该服务
  */
 service Service {
-  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {}
   rpc Register(RegisterRequest) returns (RegisterResponse) {}
   rpc Search(SearchRequest) returns (SearchResponse) {}
   rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
-}
-
-message WhoamiRequest {
-  common.MessageHeader header = 1;
-}
-
-message WhoamiResponse {
-  common.MessageHeader header = 1;
-  WhoamiResponseBody body = 2;
-}
-
-message WhoamiResponseBody {
-  common.ResponseStatus status = 1;
-  ServiceMetadata service = 2;
 }
 
 message RegisterRequest {
@@ -39,7 +24,7 @@ message RegisterRequest {
 }
 
 message RegisterRequestBody {
-  ServiceMetadata service = 1;
+  common.ServiceMetadata service = 1;
 }
 
 message RegisterResponse {
@@ -71,7 +56,7 @@ message SearchResponse {
 
 message SearchResponseBody {
   common.ResponseStatus status = 1;
-  repeated ServiceMetadata services = 2;
+  repeated common.ServiceMetadata services = 2;
 }
 
 message UnregisterRequest {
@@ -92,35 +77,3 @@ message UnregisterResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message ServiceMetadata {
-  /* 服务所有者 */
-  string owner = 1;
-  /* 服务所在网络 */
-  uint32 network = 2;
-  /* 服务所在网络地址 */
-  string address = 3;
-  /* 服务身份 */
-  string did = 4;
-  /* 服务版本 */
-  uint32 version = 5;
-  /* 服务名称 */
-  string name = 6;
-  /* 服务名称 */
-  string description = 7;
-  /* 服务编码 */
-  common.ServiceCodeEnum code = 8;
-  /* 服务apis */
-  repeated common.ApiCodeEnum apis = 9;
-  /* 服务代理 */
-  string proxy = 10;
-  /* 服务grpc地址 */
-  string grpc = 11;
-  /* 服务头像 */
-  string avatar = 12;
-  /* 服务创建时间点 */
-  string created = 13;
-  /* 服务修改时间点 */
-  string checkpoint = 14;
-  // 签名
-  string signature = 15;
-}

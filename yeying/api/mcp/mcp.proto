@@ -1,0 +1,7 @@
+syntax = "proto3";
+option go_package = "yeying/api/mcp";
+package yeying.api.mcp;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+

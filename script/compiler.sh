@@ -235,9 +235,9 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
     npm install -g protoc-gen-js
   fi
 
-  installed=$(npm -g ls | grep protoc-gen-grpc-web)
+  installed=$(npm -g ls | grep grpc-web)
   if [ -z "${installed}" ]; then
-    npm install -g protoc-gen-grpc-web
+    npm install -g grpc-web
   fi
 
   IFS=',' read -ra arr <<<"${module}"
