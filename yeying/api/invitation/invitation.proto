@@ -5,16 +5,29 @@ package yeying.api.invitation;
 import "yeying/api/common/message.proto";
 
 service Invitation {
-  rpc Input(InputRequest) returns(InputResponse) {}
+  // 生成邀请码
   rpc Generate(GenerateRequest) returns(GenerateResponse) {}
+  // 验证邀请码
+  rpc Verify(VerifyRequest) returns(VerifyResponse) {}
 }
 
 message InvitationMetadata {
-  string scene = 1;
+  /* 使用场景 */
+  InvitationSceneEnum scene = 1;
+  /* 邀请码 */
   string code = 2;
-  string expiredTime = 3;
-  string inviter = 4;
-  string invitee = 5;
+  /* 创建时间 */
+  string created = 3;
+  /* 有效截止日期 */
+  string expired = 4;
+  /* 使用时间 */
+  string used = 5;
+  // 邀请者
+  string inviter = 6;
+  // 受邀者
+  string invitee = 7;
+  // 邀请者签名
+  string signature = 8;
 }
 
 message GenerateRequest {
@@ -27,21 +40,21 @@ message GenerateRequestBody {
   uint32 count = 2;
 }
 
-message InputRequest {
+message VerifyRequest {
   common.MessageHeader header = 1;
-  InputRequestBody body = 2;
+  VerifyRequestBody body = 2;
 }
 
-message InputRequestBody {
+message VerifyRequestBody {
   string code = 1;
 }
 
-message InputResponse {
+message VerifyResponse {
   common.MessageHeader header = 1;
-  InputResponseBody body = 2;
+  VerifyResponseBody body = 2;
 }
 
-message InputResponseBody {
+message VerifyResponseBody {
   common.ResponseStatus status = 1;
 }
 
@@ -59,6 +72,6 @@ enum InvitationSceneEnum {
   // 未知编码，是一种占位符
   INVITATION_SCENE_UNKNOWN = 0;
 
-  // 邀请码应用场景
-  INVITATION_SCENE_REGISTER = 1;
+  // 用户邀请码，成为某个服务的用户，但是这个服务并不开放，只允许受邀使用
+  INVITATION_SCENE_USER = 1;
 }

@@ -10,19 +10,29 @@ service User {
   // 获取用户
   rpc Get(GetRequest) returns(GetResponse) {}
   // 删除用户
-  rpc Del(DelRequest) returns(DelResponse) {}
-  // 修改用户
-  rpc Mod(ModRequest) returns(ModResponse) {}
+  rpc Delete(DeleteRequest) returns(DeleteResponse) {}
+  // 修改用户信息
+  rpc Update(UpdateRequest) returns(UpdateResponse) {}
+  // 用户状态信息
+  rpc State(StateRequest) returns(StateResponse) {}
 }
 
 message UserMetadata {
-  string name = 1;
-  string avatar = 2;
-  string did = 3;
-  string extend = 4;
-  string created = 5;
-  string checkpoint = 6;
-  string signature = 7;
+  string did = 1;
+  string name = 2;
+  string avatar = 3;
+  string created = 4;
+  string checkpoint = 5;
+  string signature = 6;
+}
+
+message StateMetadata {
+  string did = 1;
+  UserRoleEnum role = 2;
+  UserStatusEnum status = 3;
+  string created = 4;
+  string checkpoint = 5;
+  string signature = 6;
 }
 
 message AddRequest {
@@ -43,34 +53,34 @@ message AddResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message ModRequest {
+message UpdateRequest {
   common.MessageHeader header = 1;
-  ModRequestBody body = 2;
+  UpdateRequestBody body = 2;
 }
 
-message ModRequestBody {
+message UpdateRequestBody {
   UserMetadata user = 1;
 }
 
-message ModResponse {
+message UpdateResponse {
   common.MessageHeader header = 1;
-  ModResponseBody body = 2;
+  UpdateResponseBody body = 2;
 }
 
-message ModResponseBody {
+message UpdateResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message DelRequest {
+message DeleteRequest {
   common.MessageHeader header = 1;
 }
 
-message DelResponse {
+message DeleteResponse {
   common.MessageHeader header = 1;
-  DelResponseBody body = 2;
+  DeleteResponseBody body = 2;
 }
 
-message DelResponseBody {
+message DeleteResponseBody {
   common.ResponseStatus status = 1;
 }
 
@@ -86,8 +96,20 @@ message GetResponse {
 message GetResponseBody {
   common.ResponseStatus status = 1;
   UserMetadata user = 2;
-  UserRoleEnum userRole = 3;
-  UserStatusEnum userStatus = 4;
+}
+
+message StateRequest {
+  common.MessageHeader header = 1;
+}
+
+message StateResponse {
+  common.MessageHeader header = 1;
+  StateResponseBody body = 2;
+}
+
+message StateResponseBody {
+  common.ResponseStatus status = 1;
+  StateMetadata state = 2;
 }
 
 enum UserStatusEnum {

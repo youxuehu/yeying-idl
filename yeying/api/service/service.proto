@@ -43,10 +43,12 @@ message SearchRequest {
 
 message SearchRequestBody {
   SearchCondition condition = 1;
+  common.RequestPage page = 2;
 }
 
 message SearchCondition {
   common.ServiceCodeEnum code = 1;
+  string owner = 2;
 }
 
 message SearchResponse {
