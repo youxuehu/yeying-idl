@@ -26,7 +26,7 @@ message UserMetadata {
   string signature = 6;
 }
 
-message StateMetadata {
+message UserState {
   string did = 1;
   UserRoleEnum role = 2;
   UserStatusEnum status = 3;
@@ -109,7 +109,7 @@ message StateResponse {
 
 message StateResponseBody {
   common.ResponseStatus status = 1;
-  StateMetadata state = 2;
+  UserState userState = 2;
 }
 
 enum UserStatusEnum {

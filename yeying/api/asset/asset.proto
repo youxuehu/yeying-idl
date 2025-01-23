@@ -106,8 +106,7 @@ message VersionRequest {
 message VersionRequestBody {
   // 资产ID
   string uid = 1;
-  uint32 page = 2;
-  uint32 pageSize = 3;
+  common.RequestPage page = 2;
 }
 
 message VersionResponse {

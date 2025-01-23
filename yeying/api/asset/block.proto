@@ -93,7 +93,7 @@ message GetRequest {
 }
 
 message GetRequestBody {
-  string Hash = 1;
+  string hash = 1;
 }
 
 message StreamGetResponse {
