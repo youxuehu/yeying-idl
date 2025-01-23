@@ -16,126 +16,126 @@ service Block {
    * 每个资产id只会保存一个块，确保业务层面始终存储和获取最新的块，也就是会覆盖之前的资产块，如果需要形成版本，就需要及时和存储供应商之间完成签约
    * 形成版本。
    */
-  rpc Put(PutRequest) returns (PutResponse) {}
+  rpc Put(PutBlockRequest) returns (PutBlockResponse) {}
 
   /**
    * 按块流式上传，1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
    */
-  rpc StreamPut(stream StreamPutRequest) returns (PutResponse) {}
+  rpc StreamPut(stream StreamPutBlockRequest) returns (PutBlockResponse) {}
 
   /**
    * 前端浏览器不支持server stream，提供一个非流式的下载接口
    */
-  rpc Get(GetRequest) returns (GetResponse) {}
+  rpc Get(GetBlockRequest) returns (GetBlockResponse) {}
 
   /**
    * 分块出库数字内容
    */
-  rpc StreamGet(GetRequest) returns (stream StreamGetResponse) {}
+  rpc StreamGet(GetBlockRequest) returns (stream StreamGetBlockResponse) {}
 }
 
 // 先发送内容，然后发送的chunk元信息，
-message StreamPutRequest {
+message StreamPutBlockRequest {
   common.StreamDataTagEnum dataTag = 1;
   oneof data {
-    StreamPutRequestHead head = 2;
-    StreamPutRequestBody body = 3;
-    StreamPutRequestTail tail = 4;
+    StreamPutBlockRequestHead head = 2;
+    StreamPutBlockRequestBody body = 3;
+    StreamPutBlockRequestTail tail = 4;
   }
 }
 
-message StreamPutRequestHead {
+message StreamPutBlockRequestHead {
   common.MessageHeader header = 1;
-  StreamPutHeadBody body = 2;
+  StreamPutBlockHeadBody body = 2;
 }
 
-message StreamPutHeadBody {
+message StreamPutBlockHeadBody {
   string hash = 1;
 }
 
-message StreamPutRequestBody {
+message StreamPutBlockRequestBody {
   bytes data = 1;
 }
 
-message StreamPutRequestTail {
+message StreamPutBlockRequestTail {
   common.MessageHeader header = 1;
-  StreamPutTailBody body = 2;
+  StreamPutBlockTailBody body = 2;
 }
 
-message StreamPutTailBody {
+message StreamPutBlockTailBody {
   BlockMetadata block = 1;
 }
 
-message PutRequestBody {
+message PutBlockRequestBody {
   // 资产块
   BlockMetadata block = 1;
 }
 
-message PutRequest {
+message PutBlockRequest {
   common.MessageHeader header = 1;
-  PutRequestBody body = 2;
+  PutBlockRequestBody body = 2;
   // 资产块内容
   bytes data = 3;
 }
 
-message PutResponse {
+message PutBlockResponse {
   common.MessageHeader header = 1;
-  PutResponseBody body = 2;
+  PutBlockResponseBody body = 2;
 }
 
-message PutResponseBody {
+message PutBlockResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message GetRequest {
+message GetBlockRequest {
   common.MessageHeader header = 1;
-  GetRequestBody body = 2;
+  GetBlockRequestBody body = 2;
 }
 
-message GetRequestBody {
+message GetBlockRequestBody {
   string hash = 1;
 }
 
-message StreamGetResponse {
+message StreamGetBlockResponse {
   common.StreamDataTagEnum dataTag = 1;
   oneof data {
-    StreamGetResponseHead head = 2;
-    StreamGetResponseBody body = 3;
-    StreamGetResponseTail tail = 4;
+    StreamGetBlockResponseHead head = 2;
+    StreamGetBlockResponseBody body = 3;
+    StreamGetBlockResponseTail tail = 4;
   }
 }
 
-message StreamGetResponseHead {
+message StreamGetBlockResponseHead {
   common.MessageHeader header = 1;
-  StreamGetHeadBody body = 2;
+  StreamGetBlockHeadBody body = 2;
 }
 
-message StreamGetHeadBody {
+message StreamGetBlockHeadBody {
   common.ResponseStatus status = 1;
   BlockMetadata block = 2;
 }
 
-message StreamGetResponseBody {
+message StreamGetBlockResponseBody {
   bytes data = 1;
 }
 
-message StreamGetResponseTail {
+message StreamGetBlockResponseTail {
   common.MessageHeader header = 1;
-  StreamGetTailBody body = 2;
+  StreamGetBlockTailBody body = 2;
 }
 
-message StreamGetTailBody {
+message StreamGetBlockTailBody {
   common.ResponseStatus status = 1;
 }
 
-message GetResponseBody {
+message GetBlockResponseBody {
   common.ResponseStatus status = 1;
   BlockMetadata block = 2;
 }
 
-message GetResponse {
+message GetBlockResponse {
   common.MessageHeader header = 1;
-  GetResponseBody body = 2;
+  GetBlockResponseBody body = 2;
   bytes data = 3;
 }
 

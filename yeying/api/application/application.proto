@@ -8,37 +8,36 @@ import "yeying/api/common/code.proto";
 /**
  * 节点自带的应用和后面发布的应用，夜莺社区提供一个节点和一组组网协议。当然其他的社团或者个人，也可以基于源代码，发布自己的节点和一组组网协议，当然
  * 也可以加入到夜莺社区的网络。
- * TODO: 一种是节点自带的应用，另一种通过节点发布的应用，需要考虑如何统一起来，做合规审计以及管理。
  */
 service Application {
   /* 搜索应用 */
-  rpc Search(SearchRequest) returns (SearchResponse) {}
+  rpc Search(SearchApplicationRequest) returns (SearchApplicationResponse) {}
 
   /* 应用审计 */
-  rpc Audit(AuditRequest) returns (AuditResponse) {}
+  rpc Audit(AuditApplicationRequest) returns (AuditApplicationResponse) {}
 
   /* 创建应用 */
-  rpc Create(CreateRequest) returns (CreateResponse) {}
+  rpc Create(CreateApplicationRequest) returns (CreateApplicationResponse) {}
 
   /* 应用详情 */
-  rpc Detail(DetailRequest) returns (DetailResponse) {}
+  rpc Detail(ApplicationDetailRequest) returns (ApplicationDetailResponse) {}
 
   /* 下架应用 */
-  rpc Offline(OfflineRequest) returns (OfflineResponse) {}
+  rpc Offline(OfflineApplicationRequest) returns (OfflineApplicationResponse) {}
 
   /* 上架应用 */
-  rpc Online(OnlineRequest) returns (OnlineResponse) {}
+  rpc Online(OnlineApplicationRequest) returns (OnlineApplicationResponse) {}
 
   /* 删除应用 */
-  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+  rpc Delete(DeleteApplicationRequest) returns (DeleteApplicationResponse) {}
 }
 
-message SearchRequest {
+message SearchApplicationRequest {
   common.MessageHeader header = 1;
-  SearchRequestBody body = 2;
+  SearchApplicationRequestBody body = 2;
 }
 
-message SearchRequestBody {
+message SearchApplicationRequestBody {
   SearchCondition condition = 1;
   common.RequestPage page = 2;
 }
@@ -49,91 +48,91 @@ message SearchCondition {
   string owner = 3;
 }
 
-message SearchResponse {
+message SearchApplicationResponse {
   common.MessageHeader header = 1;
-  SearchResponseBody body = 2;
+  SearchApplicationResponseBody body = 2;
 }
 
-message SearchResponseBody {
+message SearchApplicationResponseBody {
   common.ResponseStatus status = 1;
   repeated ApplicationMetadata applications = 2;
   common.ResponsePage page = 3;
 }
 
-message CreateRequest {
+message CreateApplicationRequest {
   common.MessageHeader header = 1;
-  CreateRequestBody body = 2;
+  CreateApplicationRequestBody body = 2;
 }
 
-message CreateRequestBody {
+message CreateApplicationRequestBody {
   ApplicationMetadata application = 1;
 }
 
-message CreateResponse {
+message CreateApplicationResponse {
   common.MessageHeader header = 1;
-  CreateResponseBody body = 2;
+  CreateApplicationResponseBody body = 2;
 }
 
-message CreateResponseBody {
+message CreateApplicationResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message DetailRequest {
+message ApplicationDetailRequest {
   common.MessageHeader header = 1;
-  DetailRequestBody body = 2;
+  ApplicationDetailRequestBody body = 2;
 }
 
-message DetailRequestBody {
+message ApplicationDetailRequestBody {
   string did = 1;
   uint32 version = 2;
 }
 
-message DetailResponse {
+message ApplicationDetailResponse {
   common.MessageHeader header = 1;
-  DetailResponseBody body = 2;
+  ApplicationDetailResponseBody body = 2;
 }
 
-message DetailResponseBody {
+message ApplicationDetailResponseBody {
   common.ResponseStatus status = 1;
   common.ApplicationStatusEnum appStatus =3;
   ApplicationMetadata application = 2;
 }
 
-message OfflineRequest {
+message OfflineApplicationRequest {
   common.MessageHeader header = 1;
-  OfflineRequestBody body = 2;
+  OfflineApplicationRequestBody body = 2;
 }
 
-message OfflineRequestBody {
+message OfflineApplicationRequestBody {
   string did = 1;
   uint32 version = 2;
 }
 
-message OfflineResponse {
+message OfflineApplicationResponse {
   common.MessageHeader header = 1;
-  OfflineResponseBody body = 2;
+  OfflineApplicationResponseBody body = 2;
 }
 
-message OfflineResponseBody {
+message OfflineApplicationResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message OnlineRequest {
+message OnlineApplicationRequest {
   common.MessageHeader header = 1;
-  OnlineRequestBody body = 2;
+  OnlineApplicationRequestBody body = 2;
 }
 
-message OnlineRequestBody {
+message OnlineApplicationRequestBody {
   string did = 1;
   uint32 version = 2;
 }
 
-message OnlineResponse {
+message OnlineApplicationResponse {
   common.MessageHeader header = 1;
-  OnlineResponseBody body = 2;
+  OnlineApplicationResponseBody body = 2;
 }
 
-message OnlineResponseBody {
+message OnlineApplicationResponseBody {
   common.ResponseStatus status = 1;
 }
 
@@ -188,34 +187,34 @@ message ApplicationMetadata {
   string signature = 16;
 }
 
-message DeleteRequest {
+message DeleteApplicationRequest {
   common.MessageHeader header = 1;
-  DeleteRequestBody body = 2;
+  DeleteApplicationRequestBody body = 2;
 }
 
-message DeleteRequestBody {
+message DeleteApplicationRequestBody {
   string did = 1;
   uint32 version = 2;
 }
 
-message DeleteResponse {
+message DeleteApplicationResponse {
   common.MessageHeader header = 1;
-  DeleteResponseBody body = 2;
+  DeleteApplicationResponseBody body = 2;
 }
 
-message DeleteResponseBody {
+message DeleteApplicationResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message AuditRequest {
+message AuditApplicationRequest {
   common.MessageHeader header = 1;
-  AuditRequestBody body = 2;
+  AuditApplicationRequestBody body = 2;
 }
 
-message AuditRequestBody {
+message AuditApplicationRequestBody {
   ApplicationComment comment = 1;
 }
 
-message AuditResponse {
+message AuditApplicationResponse {
   common.ResponseStatus status = 1;
 }

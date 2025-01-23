@@ -6,15 +6,15 @@ import "yeying/api/common/message.proto";
 
 service User {
   // 添加用户
-  rpc Add(AddRequest) returns(AddResponse) {}
+  rpc Add(AddUserRequest) returns(AddUserResponse) {}
   // 获取用户
-  rpc Get(GetRequest) returns(GetResponse) {}
+  rpc Get(GetUserRequest) returns(GetUserResponse) {}
   // 删除用户
-  rpc Delete(DeleteRequest) returns(DeleteResponse) {}
+  rpc Delete(DeleteUserRequest) returns(DeleteUserResponse) {}
   // 修改用户信息
-  rpc Update(UpdateRequest) returns(UpdateResponse) {}
+  rpc Update(UpdateUserRequest) returns(UpdateUserResponse) {}
   // 用户状态信息
-  rpc State(StateRequest) returns(StateResponse) {}
+  rpc State(UserStateRequest) returns(UserStateResponse) {}
 }
 
 message UserMetadata {
@@ -35,79 +35,79 @@ message UserState {
   string signature = 6;
 }
 
-message AddRequest {
+message AddUserRequest {
   common.MessageHeader header = 1;
-  AddRequestBody body = 2;
+  AddUserRequestBody body = 2;
 }
 
-message AddRequestBody {
+message AddUserRequestBody {
   UserMetadata user = 1;
 }
 
-message AddResponse {
+message AddUserResponse {
   common.MessageHeader header = 1;
-  AddResponseBody body = 2;
+  AddUserResponseBody body = 2;
 }
 
-message AddResponseBody {
+message AddUserResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message UpdateRequest {
+message UpdateUserRequest {
   common.MessageHeader header = 1;
-  UpdateRequestBody body = 2;
+  UpdateUserRequestBody body = 2;
 }
 
-message UpdateRequestBody {
+message UpdateUserRequestBody {
   UserMetadata user = 1;
 }
 
-message UpdateResponse {
+message UpdateUserResponse {
   common.MessageHeader header = 1;
-  UpdateResponseBody body = 2;
+  UpdateUserResponseBody body = 2;
 }
 
-message UpdateResponseBody {
+message UpdateUserResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message DeleteRequest {
+message DeleteUserRequest {
   common.MessageHeader header = 1;
 }
 
-message DeleteResponse {
+message DeleteUserResponse {
   common.MessageHeader header = 1;
-  DeleteResponseBody body = 2;
+  DeleteUserResponseBody body = 2;
 }
 
-message DeleteResponseBody {
+message DeleteUserResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message GetRequest {
+message GetUserRequest {
   common.MessageHeader header = 1;
 }
 
-message GetResponse {
+message GetUserResponse {
   common.MessageHeader header = 1;
-  GetResponseBody body = 2;
+  GetUserResponseBody body = 2;
 }
 
-message GetResponseBody {
+message GetUserResponseBody {
   common.ResponseStatus status = 1;
   UserMetadata user = 2;
 }
 
-message StateRequest {
+message UserStateRequest {
   common.MessageHeader header = 1;
 }
 
-message StateResponse {
+message UserStateResponse {
   common.MessageHeader header = 1;
-  StateResponseBody body = 2;
+  UserStateResponseBody body = 2;
 }
 
-message StateResponseBody {
+message UserStateResponseBody {
   common.ResponseStatus status = 1;
   UserState userState = 2;
 }

@@ -13,69 +13,69 @@ import "yeying/api/common/code.proto";
  * 4、应用绑定该服务
  */
 service Service {
-  rpc Register(RegisterRequest) returns (RegisterResponse) {}
-  rpc Search(SearchRequest) returns (SearchResponse) {}
-  rpc Unregister(UnregisterRequest) returns (UnregisterResponse) {}
+  rpc Register(RegisterServiceRequest) returns (RegisterServiceResponse) {}
+  rpc Search(SearchServiceRequest) returns (SearchServiceResponse) {}
+  rpc Unregister(UnregisterServiceRequest) returns (UnregisterServiceResponse) {}
 }
 
-message RegisterRequest {
+message RegisterServiceRequest {
   common.MessageHeader header = 1;
-  RegisterRequestBody body = 2;
+  RegisterServiceRequestBody body = 2;
 }
 
-message RegisterRequestBody {
+message RegisterServiceRequestBody {
   common.ServiceMetadata service = 1;
 }
 
-message RegisterResponse {
+message RegisterServiceResponse {
   common.MessageHeader header = 1;
-  RegisterResponseBody body = 2;
+  RegisterServiceResponseBody body = 2;
 }
 
-message RegisterResponseBody {
+message RegisterServiceResponseBody {
   common.ResponseStatus status = 2;
 }
 
-message SearchRequest {
+message SearchServiceRequest {
   common.MessageHeader header = 1;
-  SearchRequestBody body = 2 ;
+  SearchServiceRequestBody body = 2 ;
 }
 
-message SearchRequestBody {
-  SearchCondition condition = 1;
+message SearchServiceRequestBody {
+  SearchServiceCondition condition = 1;
   common.RequestPage page = 2;
 }
 
-message SearchCondition {
+message SearchServiceCondition {
   common.ServiceCodeEnum code = 1;
   string owner = 2;
 }
 
-message SearchResponse {
+message SearchServiceResponse {
   common.MessageHeader header = 1;
-  SearchResponseBody body = 2;
+  SearchServiceResponseBody body = 2;
 }
 
-message SearchResponseBody {
+message SearchServiceResponseBody {
   common.ResponseStatus status = 1;
   repeated common.ServiceMetadata services = 2;
 }
 
-message UnregisterRequest {
+message UnregisterServiceRequest {
   common.MessageHeader header = 1;
-  UnregisterRequestBody body = 2;
+  UnregisterServiceRequestBody body = 2;
 }
 
-message UnregisterRequestBody {
+message UnregisterServiceRequestBody {
   string did = 1;
 }
 
-message UnregisterResponse {
+message UnregisterServiceResponse {
   common.MessageHeader header = 1;
-  UnregisterResponseBody body = 2;
+  UnregisterServiceResponseBody body = 2;
 }
 
-message UnregisterResponseBody {
+message UnregisterServiceResponseBody {
   common.ResponseStatus status = 1;
 }
 

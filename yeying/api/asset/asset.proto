@@ -23,18 +23,18 @@ service Asset {
   /**
    * 检索数字内容，基于数字内容的元信息检索，比如哈希值、时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
-  rpc Search(SearchRequest) returns (SearchResponse) {}
+  rpc Search(SearchAssetRequest) returns (SearchAssetResponse) {}
 
   /**
    * 以事务的形式和存储供应商签订协议并入库，当所有资产块入库成功后，资产的信息发送到后端服务签字确认，涵盖了新的资产和新的版本入库；
    * 1、根据规则，自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
    */
-  rpc Sign(SignRequest) returns (SignResponse) {}
+  rpc Sign(SignAssetRequest) returns (SignAssetResponse) {}
 
   /**
    * 查看某个资产的版本
    */
-  rpc Version(VersionRequest) returns (VersionResponse) {}
+  rpc Version(AssetVersionRequest) returns (AssetVersionResponse) {}
 
   /**
    * 获得资产详细信息，提供该接口是为了更灵活处理资产信息，资产信息的复杂主要是几个方面：
@@ -42,25 +42,25 @@ service Asset {
    * 2、多版本，资产描述信息也会很大
    * 3、分散存储，如果资产过大，可能会被存储到不同的供应商
    */
-  rpc Detail(DetailRequest) returns (DetailResponse) {}
+  rpc Detail(AssetDetailRequest) returns (AssetDetailResponse) {}
 
   /**
    * 从当前仓储网络移除掉数字内容；
    */
-  rpc Remove(RemoveRequest) returns (RemoveResponse) {}
+  rpc Remove(RemoveAssetRequest) returns (RemoveAssetResponse) {}
 }
 
-message SearchRequest {
+message SearchAssetRequest {
   common.MessageHeader header = 1;
-  SearchRequestBody body = 2;
+  SearchAssetRequestBody body = 2;
 }
 
-message SearchRequestBody {
-  SearchCondition condition = 1;
+message SearchAssetRequestBody {
+  SearchAssetCondition condition = 1;
   common.RequestPage page = 2;
 }
 
-message SearchCondition {
+message SearchAssetCondition {
   // 内容格式
   common.DigitalFormatEnum format = 1;
   // 内容哈希值
@@ -69,96 +69,97 @@ message SearchCondition {
   bool trash = 3;
 }
 
-message SearchResponse {
+message SearchAssetResponse {
   common.MessageHeader header = 1;
-  SearchResponseBody body = 2;
+  SearchAssetResponseBody body = 2;
 }
 
-message SearchResponseBody {
+message SearchAssetResponseBody {
   common.ResponseStatus status = 1;
   repeated AssetMetadata assets = 2;
 }
 
-message SignRequest {
+message SignAssetRequest {
   common.MessageHeader header = 1;
-  SignRequestBody body = 2;
+  SignAssetRequestBody body = 2;
 }
 
 // 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
-message SignRequestBody {
+message SignAssetRequestBody {
   // 资产信息
   AssetMetadata asset = 1;
 }
 
-message SignResponse {
+message SignAssetResponse {
   common.MessageHeader header = 1;
-  SignResponseBody body = 2;
+  SignAssetResponseBody body = 2;
 }
 
-message SignResponseBody {
+message SignAssetResponseBody {
   common.ResponseStatus status = 1;
 }
-message VersionRequest {
+
+message AssetVersionRequest {
   common.MessageHeader header = 1;
-  VersionRequestBody body = 2;
+  AssetVersionRequestBody body = 2;
 }
 
-message VersionRequestBody {
+message AssetVersionRequestBody {
   // 资产ID
   string uid = 1;
   common.RequestPage page = 2;
 }
 
-message VersionResponse {
+message AssetVersionResponse {
   common.MessageHeader header = 1;
-  VersionResponseBody body = 2;
+  AssetVersionResponseBody body = 2;
 }
 
-message VersionResponseBody {
+message AssetVersionResponseBody {
   common.ResponseStatus status = 1;
   // 返回的资产按照版本从大到小排列
   repeated AssetMetadata assets = 2;
 }
 
-message DetailRequest {
+message AssetDetailRequest {
   common.MessageHeader header = 1;
-  DetailRequestBody body = 2;
+  AssetDetailRequestBody body = 2;
 }
 
-message DetailRequestBody {
+message AssetDetailRequestBody {
   // 资产哈希值
   string uid = 1;
   uint32 version = 2;
   bool trash = 3;
 }
 
-message DetailResponse {
+message AssetDetailResponse {
   common.MessageHeader header = 1;
-  DetailResponseBody body = 2;
+  AssetDetailResponseBody body = 2;
 }
 
-message DetailResponseBody {
+message AssetDetailResponseBody {
   common.ResponseStatus status = 1;
   AssetMetadata asset = 2;
 }
 
-message RemoveRequest {
+message RemoveAssetRequest {
   common.MessageHeader header = 1;
-  RemoveRequestBody body = 2;
+  RemoveAssetRequestBody body = 2;
 }
 
-message RemoveRequestBody {
+message RemoveAssetRequestBody {
   string uid = 1;
   uint32 version = 2;
   bool hard = 3;
 }
 
-message RemoveResponse {
+message RemoveAssetResponse {
   common.MessageHeader header = 1;
-  RemoveResponseBody body = 2;
+  RemoveAssetResponseBody body = 2;
 }
 
-message RemoveResponseBody {
+message RemoveAssetResponseBody {
   common.ResponseStatus status = 1;
 }
 

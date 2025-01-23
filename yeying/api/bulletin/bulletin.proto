@@ -6,30 +6,30 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 service Bulletin {
-  rpc List(ListRequest) returns(ListResponse) {}
+  rpc List(BulletinListRequest) returns(BulletinListResponse) {}
 }
 
 enum BulletinCodeEnum {
   BULLETIN_CODE_SOLUTION = 0;
 }
 
-message ListRequest {
+message BulletinListRequest {
   common.MessageHeader header = 1;
-  ListRequestBody body = 2;
+  BulletinListRequestBody body = 2;
 }
 
-message ListRequestBody {
+message BulletinListRequestBody {
   BulletinCodeEnum code = 1;
   common.LanguageCodeEnum language = 2;
   common.RequestPage page = 3;
 }
 
-message ListResponse {
+message BulletinListResponse {
   common.MessageHeader header = 1;
-  ListResponseBody body = 2;
+  BulletinListResponseBody body = 2;
 }
 
-message ListResponseBody {
+message BulletinListResponseBody {
   common.ResponseStatus status = 1;
   repeated SolutionMetadata solutions = 2;
   common.ResponsePage page = 3;

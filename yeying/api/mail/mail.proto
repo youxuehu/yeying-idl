@@ -7,19 +7,19 @@ import "yeying/api/common/message.proto";
 定义一个邮件服务
  */
 service Mail {
-  rpc Send(SendRequest) returns (SendResponse) {}
-  rpc Verify(VerifyRequest) returns (VerifyResponse) {}
+  rpc Send(SendMailRequest) returns (SendMailResponse) {}
+  rpc Verify(VerifyMailRequest) returns (VerifyMailResponse) {}
 }
 
 /**
 邮件请求
  */
-message SendRequest {
+message SendMailRequest {
   common.MessageHeader header = 1;
-  SendRequestBody body = 2;
+  SendMailRequestBody body = 2;
 }
 
-message SendRequestBody {
+message SendMailRequestBody {
   // 收件箱
   string toMail = 1;
 }
@@ -27,24 +27,24 @@ message SendRequestBody {
 /**
 邮件相应
  */
-message SendResponse {
+message SendMailResponse {
   common.MessageHeader header = 1;
-  SendResponseBody body = 2;
+  SendMailResponseBody body = 2;
 }
 
-message SendResponseBody {
+message SendMailResponseBody {
   common.ResponseStatus status = 1;
 }
 
 /**
 验证码验证请求体
  */
-message VerifyRequest {
+message VerifyMailRequest {
   common.MessageHeader header = 1;
-  VerifyRequestBody body = 2;
+  VerifyMailRequestBody body = 2;
 }
 
-message VerifyRequestBody {
+message VerifyMailRequestBody {
   // 收件箱
   string toMail = 1;
   string code = 2;
@@ -53,11 +53,11 @@ message VerifyRequestBody {
 /**
 验证码验证响应体
  */
-message VerifyResponse {
+message VerifyMailResponse {
   common.MessageHeader header = 1;
-  VerifyResponseBody body = 2;
+  VerifyMailResponseBody body = 2;
 }
 
-message VerifyResponseBody {
+message VerifyMailResponseBody {
   common.ResponseStatus status = 1;
 }
