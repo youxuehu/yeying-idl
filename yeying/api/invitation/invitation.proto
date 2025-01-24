@@ -5,10 +5,12 @@ package yeying.api.invitation;
 import "yeying/api/common/message.proto";
 
 service Invitation {
-  // 生成邀请码
-  rpc Generate(GenerateRequest) returns(GenerateResponse) {}
-  // 验证邀请码
-  rpc Verify(VerifyRequest) returns(VerifyResponse) {}
+  // 创建邀请码，通常是服务所有者才有权限创建
+  rpc Create(CreateInvitationRequest) returns(CreateInvitationResponse) {}
+  // 搜索邀请码
+  rpc Search(SearchInvitationRequest) returns(SearchInvitationResponse) {}
+  // 查询邀请码详情
+  rpc Detail(InvitationDetailRequest) returns(InvitationDetailResponse) {}
 }
 
 message InvitationMetadata {
@@ -20,58 +22,89 @@ message InvitationMetadata {
   string created = 3;
   /* 有效截止日期 */
   string expired = 4;
-  /* 使用时间 */
-  string used = 5;
-  // 邀请者
-  string inviter = 6;
-  // 受邀者
-  string invitee = 7;
+  // 邀请者身份ID
+  string inviter = 5;
+  // 受邀者身份ID，可以不填，表示邀请码可以给任何身份使用
+  string invitee = 6;
   // 邀请者签名
-  string signature = 8;
+  string signature = 7;
 }
 
-message GenerateRequest {
+// 邀请码被使用的状态记录
+message InvitationUseState {
+  /* 邀请码 */
+  string code = 1;
+  /* 使用时间 */
+  string usedAt = 2;
+  /* 使用者身份ID */
+  string user = 3;
+  /* 受邀者签名 */
+  string signature = 4;
+}
+
+message CreateInvitationRequest {
   common.MessageHeader header = 1;
-  GenerateRequestBody body = 2;
+  CreateInvitationRequestBody body = 2;
 }
 
-message GenerateRequestBody {
-  InvitationSceneEnum scene = 1;
-  uint32 count = 2;
+message CreateInvitationRequestBody {
+  InvitationMetadata invitation = 2;
 }
 
-message VerifyRequest {
+message CreateInvitationResponse {
   common.MessageHeader header = 1;
-  VerifyRequestBody body = 2;
+  CreateInvitationResponseBody body = 2;
 }
 
-message VerifyRequestBody {
+message CreateInvitationResponseBody {
+  common.ResponseStatus status = 1;
+  InvitationMetadata invitation = 2;
+}
+
+message SearchInvitationRequest {
+  common.MessageHeader header = 1;
+  SearchInvitationRequestBody body = 2;
+}
+
+message SearchInvitationRequestBody {
+  common.RequestPage page = 1;
+}
+
+message SearchInvitationResponse {
+  common.MessageHeader header = 1;
+  SearchInvitationResponseBody body = 2;
+}
+
+message SearchInvitationResponseBody {
+  common.ResponseStatus status = 1;
+  repeated InvitationMetadata invitations = 2;
+  common.ResponsePage page = 3;
+}
+
+message InvitationDetailRequest {
+  common.MessageHeader header = 1;
+  InvitationDetailRequestBody body = 2;
+}
+
+message InvitationDetailRequestBody {
   string code = 1;
 }
 
-message VerifyResponse {
+message InvitationDetailResponse {
   common.MessageHeader header = 1;
-  VerifyResponseBody body = 2;
+  InvitationDetailResponseBody body = 2;
 }
 
-message VerifyResponseBody {
+message InvitationDetailResponseBody {
   common.ResponseStatus status = 1;
-}
-
-message GenerateResponse {
-  common.MessageHeader header = 1;
-  GenerateResponseBody body = 2;
-}
-
-message GenerateResponseBody {
-  common.ResponseStatus status = 1;
-  repeated InvitationMetadata invitations = 2;
+  InvitationMetadata invitation = 2;
+  InvitationUseState state = 3;
 }
 
 enum InvitationSceneEnum {
   // 未知编码，是一种占位符
   INVITATION_SCENE_UNKNOWN = 0;
 
-  // 用户邀请码，成为某个服务的用户，但是这个服务并不开放，只允许受邀使用
+  // 用户邀请码，成为某个服务的用户，用于不完全开放的服务，只允许受邀使用该服务
   INVITATION_SCENE_USER = 1;
 }
