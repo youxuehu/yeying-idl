@@ -161,12 +161,14 @@ enum ApiCodeEnum {
 enum ServiceCodeEnum {
   // 未知编码，是一种占位符
   SERVICE_CODE_UNKNOWN = 0;
-  // 网络节点服务供应商
+  // 网络节点供应商
   SERVICE_CODE_NODE = 1;
   // 仓储服务供应商
   SERVICE_CODE_WAREHOUSE = 2;
-  // 机器人服务供应商，提供各种模型和算法服务
+  // 智能体供应商
   SERVICE_CODE_AGENT = 3;
+  // 模型服务供应商
+  SERVICE_CODE_MCP = 4;
 }
 
 // 图片格式

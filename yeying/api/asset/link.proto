@@ -1,0 +1,115 @@
+syntax = "proto3";
+option go_package = "yeying/api/asset";
+package yeying.api.asset;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+
+service Link {
+  // 创建资产分享链接
+  rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {}
+  // 搜索资产分享链接
+  rpc Search(SearchLinkRequest) returns (SearchLinkResponse) {}
+  // 更新资产分享链接，实现变更、取消等功能
+  rpc Update(UpdateLinkRequest) returns (UpdateLinkResponse) {}
+  // 获得分享链接明细，包括谁下载
+  rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {}
+}
+
+message CreateLinkRequest {
+  common.MessageHeader header = 1;
+  CreateLinkRequestBody body = 2;
+}
+
+message CreateLinkRequestBody {
+  LinkMetadata link = 1;
+}
+
+message CreateLinkResponse {
+  common.MessageHeader header = 1;
+  CreateLinkResponseBody body = 2;
+}
+
+message CreateLinkResponseBody {
+  common.ResponseStatus status = 1;
+  LinkMetadata link = 2;
+}
+
+message SearchLinkRequest {
+  common.MessageHeader header = 1;
+  SearchLinkRequestBody body = 2;
+}
+
+message SearchLinkRequestBody {
+  common.RequestPage page = 1;
+}
+
+message SearchLinkResponse {
+  common.MessageHeader header = 1;
+  SearchLinkResponseBody body = 2;
+}
+
+message SearchLinkResponseBody {
+  common.ResponseStatus status = 1;
+  common.ResponsePage page = 2;
+  repeated LinkMetadata links = 3;
+}
+
+message UpdateLinkRequest {
+  common.MessageHeader header = 1;
+  UpdateLinkRequestBody body = 2;
+}
+
+message UpdateLinkRequestBody {
+  LinkMetadata link = 1;
+}
+
+message UpdateLinkResponse {
+  common.MessageHeader header = 1;
+  UpdateLinkResponseBody body = 2;
+}
+
+message UpdateLinkResponseBody {
+  common.ResponseStatus status = 1;
+  LinkMetadata link = 2;
+}
+
+message LinkDetailRequest {
+  common.MessageHeader header = 1;
+  UpdateLinkRequestBody body = 2;
+}
+
+message LinkDetailRequestBody {
+  LinkMetadata link = 1;
+}
+
+message LinkDetailResponse {
+  common.MessageHeader header = 1;
+  LinkDetailResponseBody body = 2;
+}
+
+message LinkDetailResponseBody {
+  common.ResponseStatus status = 1;
+  LinkMetadata link = 2;
+}
+
+message LinkMetadata {
+  // 链接唯一id
+  string uid = 1;
+  // 资产所有者身份ID
+  string owner = 2;
+  // 资产使用者身份ID，如果不指定，说明可以分享给所有人
+  repeated string users = 3;
+  // 资产ID
+  string assetId = 4;
+  // 资产版本
+  uint32 version = 5;
+  // 资产令牌
+  string token = 6;
+  // 分享链接有效截止时间
+  string expiredAt = 7;
+  // 分享链接创建时间
+  string createAt = 8;
+  // 资产所有签名
+  string signature = 9;
+}
