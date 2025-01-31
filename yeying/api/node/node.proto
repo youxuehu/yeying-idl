@@ -3,6 +3,7 @@ option go_package = "yeying/api/node";
 package yeying.api.node;
 
 import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
 
 /**
  * 节点提供服务登记、注销和查询的服务。每个服务都有一个身份，实际向节点登记的是身份信息。构建自己的服务，除了事先开发服务意外，需要以下几件事：
@@ -44,5 +45,34 @@ message WhoamiResponseBody {
 }
 
 message NodeMetadata {
-  common.ServiceMetadata service = 1;
+  /* 服务所有者 */
+  string owner = 1;
+  /* 服务所在网络 */
+  uint32 network = 2;
+  /* 服务所在网络地址 */
+  string address = 3;
+  /* 服务身份 */
+  string did = 4;
+  /* 服务版本 */
+  uint32 version = 5;
+  /* 服务名称 */
+  string name = 6;
+  /* 服务名称 */
+  string description = 7;
+  /* 服务编码 */
+  common.ServiceCodeEnum code = 8;
+  /* 服务apis */
+  repeated common.ApiCodeEnum apis = 9;
+  /* 服务代理 */
+  string proxy = 10;
+  /* 服务grpc地址 */
+  string grpc = 11;
+  /* 服务头像 */
+  string avatar = 12;
+  /* 服务创建时间点 */
+  string created = 13;
+  /* 服务修改时间点 */
+  string checkpoint = 14;
+  // 签名
+  string signature = 15;
 }

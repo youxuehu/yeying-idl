@@ -42,6 +42,7 @@ message SearchLinkRequest {
 
 message SearchLinkRequestBody {
   common.RequestPage page = 1;
+  string owner = 2;
 }
 
 message SearchLinkResponse {
@@ -100,16 +101,14 @@ message LinkMetadata {
   string owner = 2;
   // 资产使用者身份ID，如果不指定，说明可以分享给所有人
   repeated string users = 3;
-  // 资产ID
-  string assetId = 4;
-  // 资产版本
-  uint32 version = 5;
+  // 资产内容哈希
+  string hash = 4;
   // 资产令牌
-  string token = 6;
+  string token = 5;
   // 分享链接有效截止时间
-  string expiredAt = 7;
+  string expiredAt = 6;
   // 分享链接创建时间
-  string createAt = 8;
+  string createdAt = 7;
   // 资产所有签名
-  string signature = 9;
+  string signature = 8;
 }
