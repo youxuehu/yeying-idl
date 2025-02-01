@@ -19,9 +19,9 @@ message InvitationMetadata {
   /* 邀请码 */
   string code = 2;
   /* 创建时间 */
-  string created = 3;
+  string createdAt = 3;
   /* 有效截止日期 */
-  string expired = 4;
+  string expiredAt = 4;
   // 邀请者身份ID
   string inviter = 5;
   // 受邀者身份ID，可以不填，表示邀请码可以给任何身份使用

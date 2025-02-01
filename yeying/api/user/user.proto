@@ -21,8 +21,8 @@ message UserMetadata {
   string did = 1;
   string name = 2;
   string avatar = 3;
-  string created = 4;
-  string checkpoint = 5;
+  string createdAt = 4;
+  string updatedAt = 5;
   string signature = 6;
 }
 
@@ -30,8 +30,8 @@ message UserState {
   string did = 1;
   UserRoleEnum role = 2;
   UserStatusEnum status = 3;
-  string created = 4;
-  string checkpoint = 5;
+  string createdAt = 4;
+  string updatedAt = 5;
   string signature = 6;
 }
 

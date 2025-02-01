@@ -180,9 +180,9 @@ message ApplicationMetadata {
   /* 应用扩展信息 */
   string extend = 13;
   /* 应用创建时间 */
-  string created = 14;
-  /* 应用的检查点 */
-  string checkpoint = 15;
+  string createdAt = 14;
+  /* 应用更新时间 */
+  string updatedAt = 15;
   // 签名
   string signature = 16;
 }

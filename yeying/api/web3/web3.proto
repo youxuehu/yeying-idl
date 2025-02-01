@@ -65,9 +65,9 @@ message IdentityMetadata {
   // 身份头像
   string avatar = 9;
   // 身份创建utc时间
-  string created = 10;
+  string createdAt = 10;
   // 身份修改utc时间
-  string checkpoint = 11;
+  string updatedAt = 11;
 }
 
 message BlockAddress {

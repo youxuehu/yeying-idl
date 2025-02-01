@@ -143,6 +143,6 @@ message BlockMetadata {
   string owner = 1;
   string hash = 2;
   uint64 size = 3;
-  string created = 4;
+  string createdAt = 4;
   string signature = 5;
 }

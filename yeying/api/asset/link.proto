@@ -3,7 +3,6 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
-import "yeying/api/common/code.proto";
 
 service Link {
   // 创建资产分享链接

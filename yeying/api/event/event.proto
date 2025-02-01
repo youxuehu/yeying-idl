@@ -62,8 +62,8 @@ message EventMetadata {
   repeated string consumers = 4;
   EventSignature signature = 5;
   string extend = 6;
-  string created = 7;
-  string processed = 8;
+  string createdAt = 7;
+  string processedAt = 8;
   oneof content {
     NotifyContent notifyContent = 9;
     ApplyContent applyContent = 10;
@@ -83,8 +83,8 @@ message SignatureObject {
   repeated string  consumers = 4;
   bytes signature = 5;
   string extend = 6;
-  string created = 7;
-  string processed = 8;
+  string createdAt = 7;
+  string processedAt = 8;
   bytes opinion = 9;
   bytes content = 10;
 }

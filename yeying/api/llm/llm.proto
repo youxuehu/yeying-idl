@@ -107,8 +107,8 @@ message AddLlmRequestBody {
   LlmCodeEnum code = 3;
   string key = 4;
   string extend = 5;
-  string created = 6;
-  string checkpoint = 7;
+  string createdAt = 6;
+  string updatedAt = 7;
 }
 
 message AddLlmResponse {
@@ -127,8 +127,8 @@ message LlmMetadata {
   LlmCodeEnum code = 4;
   LlmStatusEnum status = 5;
   string extend = 6;
-  string created = 7;
-  string checkpoint = 8;
+  string createdAt = 7;
+  string updatedAt = 8;
 }
 
 message CompleteRequest {
@@ -151,7 +151,7 @@ message Prompt {
 message Answer {
   string model = 1;
   string id = 2;
-  int64 created = 3;
+  int64 createdAt = 3;
   repeated Choice choices = 4;
 }
 

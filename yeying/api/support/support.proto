@@ -31,7 +31,7 @@ message FaqMetadata {
   string email = 2;
   string type = 3;
   string description = 4;
-  string created = 5;
+  string createdAt = 5;
   string signature = 6;
 }
 

@@ -197,17 +197,17 @@ message AssetMetadata {
   // 明文资产的大小
   uint64 size = 10;
   // 资产创建时间
-  string created = 11;
+  string createdAt = 11;
   // 资产更新时间点
-  string checkpoint = 12;
+  string updatedAt = 12;
   // 资产删除时间
-  string deleted = 13;
-  // 资产内容分成多少块
-  uint32 total = 14;
-  // 资产块的大小
-  uint32 block = 15;
+  string deletedAt = 13;
+  // 资产块数量
+  uint32 chunkCount = 14;
+  // 资产块大小
+  uint32 chunkSize = 15;
   // 是否加密
-  bool encrypted = 16;
+  bool isEncrypted = 16;
   // 资产扩展信息
   string extend = 17;
   // 资产块信息

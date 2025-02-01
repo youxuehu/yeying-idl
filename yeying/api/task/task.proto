@@ -11,7 +11,6 @@ import "yeying/api/common/message.proto";
 
 service Task {
   rpc Create(CreateTaskRequest) returns(CreateTaskResponse) {}
-  rpc Fetch(FetchTaskRequest) returns(FetchTaskResponse) {}
 }
 
 message CreateTaskRequest {
@@ -34,7 +33,7 @@ message TaskMetadata {
   // 任务结束者, 比如yes or no类型的任务，需要做个选者，以结束任务
   string terminator = 5;
   // 创建时间
-  string created = 6;
+  string createdAt = 6;
   // 任务内容
   string content = 7;
 }

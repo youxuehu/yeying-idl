@@ -48,7 +48,7 @@ message NodeMetadata {
   /* 服务所有者 */
   string owner = 1;
   /* 服务所在网络 */
-  uint32 network = 2;
+  string network = 2;
   /* 服务所在网络地址 */
   string address = 3;
   /* 服务身份 */
@@ -70,9 +70,9 @@ message NodeMetadata {
   /* 服务头像 */
   string avatar = 12;
   /* 服务创建时间点 */
-  string created = 13;
+  string createdAt = 13;
   /* 服务修改时间点 */
-  string checkpoint = 14;
+  string updatedAt = 14;
   // 签名
   string signature = 15;
 }

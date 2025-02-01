@@ -41,7 +41,7 @@ message SolutionMetadata {
   string uid = 3;
   string name = 4;
   string description = 5;
-  string created = 6;
+  string createdAt = 6;
   repeated SolutionCard cards = 7;
   string signature = 8;
 }
