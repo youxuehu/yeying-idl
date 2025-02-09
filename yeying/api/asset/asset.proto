@@ -6,6 +6,9 @@ import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 
 /**
+
+整个资产仓库基于分布式数字身份和资产内容哈希驱动，并能够在不同资产仓库间转移
+
 开放的分散式仓库网络的接口设计，参考了现实世界中的仓库，逻辑如下：
 1、数字资产有两个标识，一个是数字资产的身份标识，可以是分布式数字身份，也可以是用户自定义的身份ID，另一个是数字资产内容的哈希值；
 2、数字资产入库，发送到指定存储网络中的节点，可以指定副本数量，一方面保证内容不会因为单个节点故障而丢失，另外也保证内容的可访问性；
@@ -13,10 +16,22 @@ import "yeying/api/common/code.proto";
 4、授权数字资产，所有者和使用者立交易关系，确保使用者根据指定的策略访问数据，仓库会统计数字资产的使用情况，比如统计内容取（浏览）的次数评估内容热度
 ，或者统计内容存的次数（收藏）评估内容质量，目的是更好的分配存储资源；
 
-分散式存储网络的使用场景：
+仓库使用场景：
 1、创作场景，知识产权证明
 2、代码包分发场景，比如软件包，模型包等
 3、数字资产，类似nft等
+
+资产定位逻辑：
+
+采用三元组唯一定位，(用户身份、命名空间、哈希值)
+命名空间的定位逻辑：某个用户下面是唯一的，命名空间所有者，可以指定多个参与者，用于存储完成某项工作生成资产数据，这些资产数据属于命名空间所有者
+资产的定位逻辑：每个命名空间是隔离的，同一个所有者，同一个命名空间，资产哈希值必须唯一
+资产块的定位逻辑：每个命名空间是隔离的，用一个所有者，同一个命名空间，资产块是唯一的，资产块维持一个引用计数，其逻辑如下：
+ - 当有一个新资产放入命名空间，则引用计数加1；
+ - 当有一个老资产移出命名空间，则引用计数减1；
+当某个资产块的引用计数为0，表示没有和资产仓库服务签约，只是临时存储，通常分块上传完成以后就会立即签约，但是考虑委托第三方服务生成的数据直接放到命名
+空间，第三方服务没有命名空间所有者的私钥，无法和资产仓库完成签约，只能先上传，事后由命名空间所有者完成签名；
+
  */
 service Asset {
   /**
@@ -31,9 +46,9 @@ service Asset {
   rpc Sign(SignAssetRequest) returns (SignAssetResponse) {}
 
   /**
-   * 查看某个资产的版本
+   * 更新资产元信息
    */
-  rpc Version(AssetVersionRequest) returns (AssetVersionResponse) {}
+  rpc Update(UpdateAssetRequest) returns (UpdateAssetResponse) {}
 
   /**
    * 获得资产详细信息，提供该接口是为了更灵活处理资产信息，资产信息的复杂主要是几个方面：
@@ -44,9 +59,9 @@ service Asset {
   rpc Detail(AssetDetailRequest) returns (AssetDetailResponse) {}
 
   /**
-   * 从当前仓储网络移除掉数字内容；
+   * 删除资产，不回立即删除，而是放入回收站；资产支持多版本，在删除的时候，采取头或者尾部删除，不能从中间删除，确保版本的链条能够正常工作；
    */
-  rpc Remove(RemoveAssetRequest) returns (RemoveAssetResponse) {}
+  rpc Delete(DeleteAssetRequest) returns (DeleteAssetResponse) {}
 }
 
 message SearchAssetRequest {
@@ -60,12 +75,9 @@ message SearchAssetRequestBody {
 }
 
 message SearchAssetCondition {
-  // 资产内容格式
-  common.DigitalFormatEnum format = 1;
-  // 内容哈希值
-  string contentHash = 2;
-  // 是否在回收站里搜索
-  bool trash = 3;
+  common.DigitalFormatEnum format = 1; // 资产内容格式
+  string hash = 2; // 内容哈希值
+  string namespaceId = 3; // 命名空间ID
 }
 
 message SearchAssetResponse {
@@ -83,10 +95,8 @@ message SignAssetRequest {
   SignAssetRequestBody body = 2;
 }
 
-// 版本统一由后端服务器来生成或者变更，和仓库签约的资产版本，必须是最新的版本号
 message SignAssetRequestBody {
-  // 资产信息
-  AssetMetadata asset = 1;
+  AssetMetadata asset = 1; // 资产元信息, 资产版本统一由客户端生成，服务端验证版本的有效性，必须是最新的版本号
 }
 
 message SignAssetResponse {
@@ -96,28 +106,26 @@ message SignAssetResponse {
 
 message SignAssetResponseBody {
   common.ResponseStatus status = 1;
+  AssetMetadata asset = 2;
 }
 
-message AssetVersionRequest {
+message UpdateAssetRequest {
   common.MessageHeader header = 1;
-  AssetVersionRequestBody body = 2;
+  UpdateAssetRequestBody body = 2;
 }
 
-message AssetVersionRequestBody {
-  // 资产ID
-  string uid = 1;
-  common.RequestPage page = 2;
+message UpdateAssetRequestBody {
+  AssetMetadata asset = 1;
 }
 
-message AssetVersionResponse {
+message UpdateAssetResponse {
   common.MessageHeader header = 1;
-  AssetVersionResponseBody body = 2;
+  UpdateAssetResponseBody body = 2;
 }
 
-message AssetVersionResponseBody {
+message UpdateAssetResponseBody {
   common.ResponseStatus status = 1;
-  // 返回的资产按照版本从大到小排列
-  repeated AssetMetadata assets = 2;
+  AssetMetadata assets = 2;
 }
 
 message AssetDetailRequest {
@@ -126,10 +134,8 @@ message AssetDetailRequest {
 }
 
 message AssetDetailRequestBody {
-  // 资产哈希值
-  string uid = 1;
-  uint32 version = 2;
-  bool trash = 3;
+  string hash = 1; // 资产唯一ID
+  string namespaceId = 2;
 }
 
 message AssetDetailResponse {
@@ -142,54 +148,43 @@ message AssetDetailResponseBody {
   AssetMetadata asset = 2;
 }
 
-message RemoveAssetRequest {
+message DeleteAssetRequest {
   common.MessageHeader header = 1;
-  RemoveAssetRequestBody body = 2;
+  DeleteAssetRequestBody body = 2;
 }
 
-message RemoveAssetRequestBody {
-  string uid = 1;
-  uint32 version = 2;
-  bool hard = 3;
+message DeleteAssetRequestBody {
+  string hash = 1; // 资产哈希值
+  string namespaceId = 2;
 }
 
-message RemoveAssetResponse {
+message DeleteAssetResponse {
   common.MessageHeader header = 1;
-  RemoveAssetResponseBody body = 2;
+  DeleteAssetResponseBody body = 2;
 }
 
-message RemoveAssetResponseBody {
+message DeleteAssetResponseBody {
   common.ResponseStatus status = 1;
 }
 
-
-
-// 资产块信息
-message ChunkMetadata {
-  // 块在资产中的索引
-  uint32 index = 1;
-  // 资产块哈希值，可能是加密后的哈希值，也可能是明文的哈希值，同一个资产种，不同的两块哈希值可能一样
-  string hash = 2;
-  // 资产块大小，可能是密文块的大小，也可能是明文块的大小
-  uint64 size = 3;
-}
-
 // 资产定义
+// 同一个所有者在使用两个应用时产生了相同的资产，也就是资产内容的哈希值一样，那么可能存在这样一种情况，一个应用不再使用这个资产要求删除，但是另一个
+// 还需要使用不能删除，如何解决这个问题：在用户层面设置一个项目空间的概念，在项目空间里面保证哈希值唯一即可。
 message AssetMetadata {
+  // 资产命名空间
+  string namespaceId = 1;
   // 资产所有者
-  string owner = 1;
-  // 资产版本
-  uint32 version = 2;
-  // 资产唯一ID
-  string uid = 3;
-  // 资产名称
-  string name = 4;
-  // 上一个版本的资产内容哈希值
-  string parentHash = 5;
+  string owner = 2;
+  // 父资产内容哈希值
+  string parentHash = 3;
   // 资产内容哈希值
-  string contentHash = 6;
-  // 资产块哈希值合并后计算的哈希值，验证数据一致性，如果资产内容小于块的大小
-  string mergedHash = 7;
+  string hash = 4;
+  // 资产版本
+  uint32 version = 5;
+  // 资产名称
+  string name = 6;
+  // 所有资产块的哈希值
+  repeated string chunks = 7;
   // 资产描述
   string description = 8;
   // 资产类型
@@ -200,18 +195,12 @@ message AssetMetadata {
   string createdAt = 11;
   // 资产更新时间点
   string updatedAt = 12;
-  // 资产删除时间
-  string deletedAt = 13;
   // 资产块数量
-  uint32 chunkCount = 14;
+  uint32 chunkCount = 13;
   // 资产块大小
-  uint32 chunkSize = 15;
+  uint32 chunkSize = 14;
   // 是否加密
-  bool isEncrypted = 16;
-  // 资产扩展信息
-  string extend = 17;
-  // 资产块信息
-  repeated ChunkMetadata chunks = 18;
+  bool isEncrypted = 15;
   // 资产元信息的签名
-  string signature = 19;
+  string signature = 16;
 }

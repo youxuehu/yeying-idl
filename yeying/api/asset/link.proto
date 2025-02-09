@@ -9,10 +9,12 @@ service Link {
   rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {}
   // 搜索资产分享链接
   rpc Search(SearchLinkRequest) returns (SearchLinkResponse) {}
+  // 获得分享链接明细
+  rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {}
+  // 分享链接的访问信息
+  rpc Visitor(LinkVisitorRequest) returns (LinkVisitorResponse) {}
   // 更新资产分享链接，实现变更、取消等功能
   rpc Update(UpdateLinkRequest) returns (UpdateLinkResponse) {}
-  // 获得分享链接明细，包括谁下载
-  rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {}
 }
 
 message CreateLinkRequest {
@@ -31,7 +33,8 @@ message CreateLinkResponse {
 
 message CreateLinkResponseBody {
   common.ResponseStatus status = 1;
-  LinkMetadata link = 2;
+  UrlMetadata url = 2;
+  LinkMetadata link = 3;
 }
 
 message SearchLinkRequest {
@@ -41,7 +44,11 @@ message SearchLinkRequest {
 
 message SearchLinkRequestBody {
   common.RequestPage page = 1;
-  string owner = 2;
+  SearchLinkCondition condition = 2;
+}
+
+message SearchLinkCondition {
+  string hash = 1;
 }
 
 message SearchLinkResponse {
@@ -71,16 +78,17 @@ message UpdateLinkResponse {
 
 message UpdateLinkResponseBody {
   common.ResponseStatus status = 1;
-  LinkMetadata link = 2;
+  UrlMetadata url = 2;
+  LinkMetadata link = 3;
 }
 
 message LinkDetailRequest {
   common.MessageHeader header = 1;
-  UpdateLinkRequestBody body = 2;
+  LinkDetailRequestBody body = 2;
 }
 
 message LinkDetailRequestBody {
-  LinkMetadata link = 1;
+  string uid = 1;
 }
 
 message LinkDetailResponse {
@@ -90,24 +98,63 @@ message LinkDetailResponse {
 
 message LinkDetailResponseBody {
   common.ResponseStatus status = 1;
-  LinkMetadata link = 2;
+  UrlMetadata url = 2;
+  LinkMetadata link = 3;
+}
+
+message LinkVisitorRequest {
+  common.MessageHeader header = 1;
+  LinkVisitorRequestBody body = 2;
+}
+
+message LinkVisitorRequestBody {
+  string uid = 1;
+  common.RequestPage page = 2;
+}
+
+message LinkVisitorResponse {
+  common.MessageHeader header = 1;
+  LinkVisitorResponseBody body = 2;
+}
+
+message LinkVisitorResponseBody {
+  common.ResponseStatus status = 1;
+  common.ResponsePage page = 2;
+  repeated VisitorMetadata visitors = 3;
 }
 
 message LinkMetadata {
-  // 链接唯一id
-  string uid = 1;
-  // 资产所有者身份ID
-  string owner = 2;
-  // 资产使用者身份ID，如果不指定，说明可以分享给所有人
-  repeated string users = 3;
-  // 资产内容哈希
-  string hash = 4;
-  // 资产令牌
-  string token = 5;
-  // 分享链接有效截止时间
-  string expiredAt = 6;
-  // 分享链接创建时间
-  string createdAt = 7;
-  // 资产所有签名
-  string signature = 8;
+  string owner = 1; // 分享链接所有者
+  string uid = 2; // 分享链接唯一ID
+  LinkStatusEnum status = 3; // 分享链接状态
+  string visitors = 4; // 指定分享链接的访问者身份ID，多个访问者使用逗号隔开，如果不指定，说明任何身份都可以访问
+  string namespaceId = 5;
+  string hash = 6; // 资产内容哈希
+  string password = 7; // 访问口令
+  string expiredAt = 8; // 分享链接有效截止时间
+  string createdAt = 9; // 分享链接创建时间
+  string signature = 10; // 资产所有者签名
+}
+
+enum LinkStatusEnum {
+  LINK_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
+  LINK_STATUS_PUBLIC = 1; // 完全公开的，无需验证身份，直接访问
+  LINK_STATUS_AUTHENTICATED = 2; // 需要验证身份，包括访问需要的身份DID、下载时间和签名
+  LINK_STATUS_TERMINATED = 3; // 提前终止分享链接
+}
+
+message UrlMetadata {
+  string serviceDid = 1;  // 服务Did
+  string linkId = 2;      // 分享链接ID
+  string token = 3;       // 访问令牌
+  string url = 4;         // 分享链接
+  string createdAt = 5;   // 创建时间
+  string signature = 6;   // 服务签名
+}
+
+message VisitorMetadata {
+  string linkId = 1;     // 分享链接ID
+  string did = 2;        // 访问者身份ID
+  string createdAt = 3;  // 访问时间
+  string signature = 4;  // 访问者签名
 }

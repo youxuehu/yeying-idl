@@ -293,14 +293,3 @@ enum AuthenticateTypeEnum {
   // 基于token的认证
   AUTHENTICATE_TYPE_TOKEN = 2;
 }
-
-// 流数据类型
-enum StreamDataTagEnum {
-  // 描述数据
-  STREAM_DATA_TAG_HEAD = 0;
-  // 业务数据
-  STREAM_DATA_TAG_BODY = 1;
-  // 业务数据
-  STREAM_DATA_TAG_TAIL = 2;
-}
-

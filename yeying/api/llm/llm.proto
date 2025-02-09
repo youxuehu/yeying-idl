@@ -160,7 +160,6 @@ message Answer {
 // 数据通常是本次消息的业务数据
 // 尾部通常是消息描述
 message CompleteResponse {
-  common.StreamDataTagEnum contentTag = 1;
   oneof data {
     CompleteResponseHead head = 2;
     CompleteResponseBody body = 3;
@@ -207,7 +206,6 @@ message GenerateRequestBody {
 }
 
 message GenerateResponse {
-  common.StreamDataTagEnum contentTag = 1;
   oneof data {
     GenerateResponseHead head = 2;
     GenerateResponseBody body = 3;

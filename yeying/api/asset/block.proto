@@ -3,7 +3,6 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
-import "yeying/api/common/code.proto";
 
 /**
 站在存储供应商的角度，数据和资产是有区别，数据有可能是有价值，也可能没有价值，但是存储供应商是没有感知，只有用户能够感知到。当用户和存储供应商之间签
@@ -21,7 +20,12 @@ service Block {
   /**
    * 按块流式上传，1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
    */
-  rpc StreamPut(stream StreamPutBlockRequest) returns (PutBlockResponse) {}
+  rpc StreamPut(stream StreamPutBlockRequest) returns (stream StreamPutBlockResponse) {}
+
+  /**
+   * 检查该用户的资产块是否已经存在，如果存在则返回资产块元信息，如果不存在但是块哈希已存在则创建该用户的资产块
+   */
+  rpc Confirm(ConfirmBlockRequest) returns (ConfirmBlockResponse) {}
 
   /**
    * 前端浏览器不支持server stream，提供一个非流式的下载接口
@@ -31,26 +35,44 @@ service Block {
   /**
    * 分块出库数字内容
    */
-  rpc StreamGet(GetBlockRequest) returns (stream StreamGetBlockResponse) {}
+  rpc StreamGet(stream StreamGetBlockRequest) returns (stream StreamGetBlockResponse) {}
+}
+
+message ConfirmBlockRequest {
+  common.MessageHeader header = 1;
+  ConfirmBlockRequestBody body = 2;
+}
+
+message ConfirmBlockRequestBody {
+  BlockMetadata block = 1;
+}
+
+message ConfirmBlockResponse {
+  common.MessageHeader header = 1;
+  ConfirmBlockResponseBody body = 2;
+}
+
+message ConfirmBlockResponseBody {
+  common.ResponseStatus status = 1;
+  BlockMetadata block = 2;
 }
 
 // 先发送内容，然后发送的chunk元信息，
 message StreamPutBlockRequest {
-  common.StreamDataTagEnum dataTag = 1;
   oneof data {
     StreamPutBlockRequestHead head = 2;
     StreamPutBlockRequestBody body = 3;
-    StreamPutBlockRequestTail tail = 4;
+    StreamPutBlockRequestTail Tail = 4;
   }
 }
 
 message StreamPutBlockRequestHead {
   common.MessageHeader header = 1;
-  StreamPutBlockHeadBody body = 2;
+  StreamPutBlockRequestHeadBody body = 2;
 }
 
-message StreamPutBlockHeadBody {
-  string hash = 1;
+message StreamPutBlockRequestHeadBody {
+  BlockMetadata block = 1;
 }
 
 message StreamPutBlockRequestBody {
@@ -59,16 +81,32 @@ message StreamPutBlockRequestBody {
 
 message StreamPutBlockRequestTail {
   common.MessageHeader header = 1;
-  StreamPutBlockTailBody body = 2;
 }
 
-message StreamPutBlockTailBody {
-  BlockMetadata block = 1;
+message StreamPutBlockResponse {
+  oneof data {
+    StreamPutBlockResponseHead head = 1;
+    StreamPutBlockResponseTail tail = 2;
+  }
 }
 
-message PutBlockRequestBody {
-  // 资产块
-  BlockMetadata block = 1;
+message StreamPutBlockResponseHead {
+  common.MessageHeader header = 1;
+  StreamPutBlockResponseHeadBody body = 2;
+}
+
+message StreamPutBlockResponseHeadBody {
+  common.ResponseStatus status = 1;
+  BlockMetadata block = 2;
+}
+
+message StreamPutBlockResponseTail {
+  common.MessageHeader header = 1;
+  StreamPutBlockResponseTailBody body = 2;
+}
+
+message StreamPutBlockResponseTailBody {
+  common.ResponseStatus status = 1;
 }
 
 message PutBlockRequest {
@@ -78,6 +116,11 @@ message PutBlockRequest {
   bytes data = 3;
 }
 
+message PutBlockRequestBody {
+  // 资产块
+  BlockMetadata block = 1;
+}
+
 message PutBlockResponse {
   common.MessageHeader header = 1;
   PutBlockResponseBody body = 2;
@@ -85,6 +128,7 @@ message PutBlockResponse {
 
 message PutBlockResponseBody {
   common.ResponseStatus status = 1;
+  BlockMetadata block = 2;
 }
 
 message GetBlockRequest {
@@ -93,11 +137,32 @@ message GetBlockRequest {
 }
 
 message GetBlockRequestBody {
-  string hash = 1;
+  string namespaceId = 1;
+  string hash = 2;
+}
+
+message StreamGetBlockRequest {
+  oneof data {
+    StreamGetBlockRequestHead head = 2;
+    StreamGetBlockRequestBody body = 3;
+  }
+}
+
+message StreamGetBlockRequestHead {
+  common.MessageHeader header = 1;
+  StreamGetBlockRequestHeadBody body = 2;
+}
+
+message StreamGetBlockRequestHeadBody {
+  string namespaceId = 1;
+  string hash = 2;
+}
+
+message StreamGetBlockRequestBody {
+  common.MessageHeader header = 1;
 }
 
 message StreamGetBlockResponse {
-  common.StreamDataTagEnum dataTag = 1;
   oneof data {
     StreamGetBlockResponseHead head = 2;
     StreamGetBlockResponseBody body = 3;
@@ -107,10 +172,10 @@ message StreamGetBlockResponse {
 
 message StreamGetBlockResponseHead {
   common.MessageHeader header = 1;
-  StreamGetBlockHeadBody body = 2;
+  StreamGetBlockResponseHeadBody body = 2;
 }
 
-message StreamGetBlockHeadBody {
+message StreamGetBlockResponseHeadBody {
   common.ResponseStatus status = 1;
   BlockMetadata block = 2;
 }
@@ -121,10 +186,10 @@ message StreamGetBlockResponseBody {
 
 message StreamGetBlockResponseTail {
   common.MessageHeader header = 1;
-  StreamGetBlockTailBody body = 2;
+  StreamGetBlockResponseTailBody body = 2;
 }
 
-message StreamGetBlockTailBody {
+message StreamGetBlockResponseTailBody {
   common.ResponseStatus status = 1;
 }
 
@@ -140,9 +205,11 @@ message GetBlockResponse {
 }
 
 message BlockMetadata {
-  string owner = 1;
-  string hash = 2;
-  uint64 size = 3;
-  string createdAt = 4;
-  string signature = 5;
+  string namespaceId = 1;
+  string uploader = 2;
+  string owner = 3;
+  string hash = 4;
+  uint64 size = 5;
+  string createdAt = 6;
+  string signature = 7;
 }

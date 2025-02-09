@@ -8,13 +8,11 @@ service User {
   // 添加用户
   rpc Add(AddUserRequest) returns(AddUserResponse) {}
   // 获取用户
-  rpc Get(GetUserRequest) returns(GetUserResponse) {}
+  rpc Detail(UserDetailRequest) returns(UserDetailResponse) {}
   // 删除用户
   rpc Delete(DeleteUserRequest) returns(DeleteUserResponse) {}
   // 修改用户信息
   rpc Update(UpdateUserRequest) returns(UpdateUserResponse) {}
-  // 用户状态信息
-  rpc State(UserStateRequest) returns(UserStateResponse) {}
 }
 
 message UserMetadata {
@@ -51,6 +49,7 @@ message AddUserResponse {
 
 message AddUserResponseBody {
   common.ResponseStatus status = 1;
+  UserMetadata user = 2;
 }
 
 message UpdateUserRequest {
@@ -84,32 +83,19 @@ message DeleteUserResponseBody {
   common.ResponseStatus status = 1;
 }
 
-message GetUserRequest {
+message UserDetailRequest {
   common.MessageHeader header = 1;
 }
 
-message GetUserResponse {
+message UserDetailResponse {
   common.MessageHeader header = 1;
-  GetUserResponseBody body = 2;
+  UserDetailResponseBody body = 2;
 }
 
-message GetUserResponseBody {
+message UserDetailResponseBody {
   common.ResponseStatus status = 1;
   UserMetadata user = 2;
-}
-
-message UserStateRequest {
-  common.MessageHeader header = 1;
-}
-
-message UserStateResponse {
-  common.MessageHeader header = 1;
-  UserStateResponseBody body = 2;
-}
-
-message UserStateResponseBody {
-  common.ResponseStatus status = 1;
-  UserState userState = 2;
+  UserState userState = 3;
 }
 
 enum UserStatusEnum {

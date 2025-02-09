@@ -1,0 +1,142 @@
+syntax = "proto3";
+option go_package = "yeying/api/asset";
+package yeying.api.asset;
+
+import "yeying/api/common/message.proto";
+
+// 命名空间，用于隔离和资产治理的目的，确保用一个用户在使用不同的应用时产生的资产信息互补干扰。同时也方便用户管理资产。
+service Namespace {
+  // 搜索命名空间
+  rpc Search(SearchNamespaceRequest) returns (SearchNamespaceResponse) {}
+
+  // 创建命名空间
+  rpc Create(CreateNamespaceRequest) returns (CreateNamespaceResponse) {}
+
+  // 命名空间详情
+  rpc Detail(NamespaceDetailRequest) returns (NamespaceDetailResponse) {}
+
+  // 更新命名空间
+  rpc Update(UpdateNamespaceRequest) returns (UpdateNamespaceResponse) {}
+
+  // 删除命名空间
+  rpc Delete(DeleteNamespaceRequest) returns (DeleteNamespaceResponse) {}
+}
+
+message SearchNamespaceRequest {
+  common.MessageHeader header = 1;
+  SearchNamespaceRequestBody body = 2;
+}
+
+message SearchNamespaceRequestBody {
+  SearchNamespaceCondition condition = 1;
+  common.RequestPage page = 2;
+}
+
+message SearchNamespaceCondition {
+  string name = 2;
+}
+
+message NamespaceDetailRequest {
+  common.MessageHeader header = 1;
+  NamespaceDetailRequestBody body = 2;
+}
+
+message NamespaceDetailRequestBody {
+  string uid = 1;
+}
+
+message NamespaceDetailResponse {
+  common.MessageHeader header = 1;
+  NamespaceDetailResponseBody body = 2;
+}
+
+message NamespaceDetailResponseBody {
+  common.ResponseStatus status = 1;
+  NamespaceMetadata namespace = 2;
+}
+
+message SearchNamespaceResponse {
+  common.MessageHeader header = 1;
+  SearchNamespaceResponseBody body = 2;
+}
+
+message SearchNamespaceResponseBody {
+  common.ResponseStatus status = 1;
+  repeated NamespaceMetadata namespaces = 2;
+}
+
+message CreateNamespaceRequest {
+  common.MessageHeader header = 1;
+  CreateNamespaceRequestBody body = 2;
+}
+
+message CreateNamespaceRequestBody {
+  NamespaceMetadata namespace = 1;
+}
+
+message CreateNamespaceResponse {
+  common.MessageHeader header = 1;
+  CreateNamespaceResponseBody body = 2;
+}
+
+message CreateNamespaceResponseBody {
+  common.ResponseStatus status = 1;
+  NamespaceMetadata namespace = 2;
+}
+
+message UpdateNamespaceRequest {
+  common.MessageHeader header = 1;
+  UpdateNamespaceRequestBody body = 2;
+}
+
+message UpdateNamespaceRequestBody {
+  NamespaceMetadata namespace = 1;
+}
+
+message UpdateNamespaceResponse {
+  common.MessageHeader header = 1;
+  UpdateNamespaceResponseBody body = 2;
+}
+
+message UpdateNamespaceResponseBody {
+  common.ResponseStatus status = 1;
+  NamespaceMetadata namespace = 2;
+}
+
+message DeleteNamespaceRequest {
+  common.MessageHeader header = 1;
+  DeleteNamespaceRequestBody body = 2;
+}
+
+message DeleteNamespaceRequestBody {
+  string uid = 1;
+}
+
+message DeleteNamespaceResponse {
+  common.MessageHeader header = 1;
+  DeleteNamespaceResponseBody body = 2;
+}
+
+message DeleteNamespaceResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+// 命名空间定义
+message NamespaceMetadata {
+  // 空间所有者
+  string owner = 1;
+  // 空间参与者
+  string participants = 2;
+  // 空间唯一ID
+  string uid = 3;
+  // 空间名称
+  string name = 4;
+  // 空间描述
+  string description = 5;
+  // 空间创建时间
+  string createdAt = 6;
+  // 空间更新时间
+  string updatedAt = 7;
+  // 空间信息签名
+  string signature = 8;
+}

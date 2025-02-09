@@ -1,0 +1,47 @@
+syntax = "proto3";
+option go_package = "yeying/api/config";
+package yeying.api.config;
+
+import "yeying/api/common/message.proto";
+
+service Config {
+  rpc Set(SetConfigRequest) returns (SetConfigResponse){}
+  rpc Get(GetConfigRequest) returns (GetConfigResponse){}
+}
+
+message GetConfigRequest {
+  common.MessageHeader header = 1;
+  GetConfigRequestBody body = 2;
+}
+
+message GetConfigRequestBody {
+  repeated string keys = 1;
+}
+
+message GetConfigResponse {
+  common.MessageHeader header = 1;
+  GetConfigResponseBody body = 2;
+}
+
+message GetConfigResponseBody {
+  repeated string values = 1; // 格式如下：key1=value1&key2=value2
+}
+
+message SetConfigRequest {
+  common.MessageHeader header = 1;
+  SetConfigRequestBody body = 2;
+}
+
+message SetConfigRequestBody {
+  repeated string values = 1; // 格式如下：key1=value1&key2=value2
+}
+
+message SetConfigResponse {
+  common.MessageHeader header = 1;
+  SetConfigResponseBody body = 2;
+}
+
+message SetConfigResponseBody {
+  common.ResponseStatus status = 1;
+  repeated string values = 2; // 返回成功设置的值，格式如下：key1=value1&key2=value2
+}

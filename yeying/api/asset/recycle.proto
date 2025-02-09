@@ -1,0 +1,87 @@
+syntax = "proto3";
+option go_package = "yeying/api/asset";
+package yeying.api.asset;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/asset/asset.proto";
+
+service Recycle {
+  /**
+   * 从回收站里搜索资产
+   */
+  rpc Search(SearchDeletedAssetRequest) returns (SearchDeletedAssetResponse) {}
+
+  /**
+   * 从回收站里恢复资产
+   */
+  rpc Recover(RecoverDeletedAssetRequest) returns (RecoverDeletedAssetResponse) {}
+
+  /**
+   * 从回收站里删除资产
+   */
+  rpc Remove(RemoveDeletedAssetRequest) returns (RemoveDeletedAssetResponse) {}
+}
+
+message SearchDeletedAssetRequest {
+  common.MessageHeader header = 1;
+  SearchDeletedAssetRequestBody body = 2;
+}
+
+message SearchDeletedAssetRequestBody {
+  SearchAssetCondition condition = 1;
+  common.RequestPage page = 2;
+}
+
+message SearchDeletedAssetResponse {
+  common.MessageHeader header = 1;
+  SearchDeletedAssetResponseBody body = 2;
+}
+
+message SearchDeletedAssetResponseBody {
+  common.ResponseStatus status = 1;
+  repeated DeletedAssetMetadata assets = 2;
+}
+
+message RecoverDeletedAssetRequest {
+  common.MessageHeader header = 1;
+  RecoverDeletedAssetRequestBody body = 2;
+}
+
+message RecoverDeletedAssetRequestBody {
+  string hash = 1;
+  string namespaceId = 2;
+}
+
+message RecoverDeletedAssetResponse {
+  common.MessageHeader header = 1;
+  RecoverDeletedAssetResponseBody body = 2;
+}
+
+message RecoverDeletedAssetResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message RemoveDeletedAssetRequest {
+  common.MessageHeader header = 1;
+  RemoveDeletedAssetRequestBody body = 2;
+}
+
+message RemoveDeletedAssetRequestBody {
+  string hash = 1;
+  string namespaceId = 2;
+}
+
+message RemoveDeletedAssetResponse {
+  common.MessageHeader header = 1;
+  RemoveDeletedAssetResponseBody body = 2;
+}
+
+message RemoveDeletedAssetResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message DeletedAssetMetadata {
+  asset.AssetMetadata asset = 1;
+  // 资产删除时间
+  string deletedAt = 13;
+}
