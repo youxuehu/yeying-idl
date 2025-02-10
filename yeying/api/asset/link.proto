@@ -126,9 +126,9 @@ message LinkVisitorResponseBody {
 message LinkMetadata {
   string owner = 1; // 分享链接所有者
   string uid = 2; // 分享链接唯一ID
-  LinkStatusEnum status = 3; // 分享链接状态
+  LinkTypeEnum type = 3; // 分享链接类型
   string visitors = 4; // 指定分享链接的访问者身份ID，多个访问者使用逗号隔开，如果不指定，说明任何身份都可以访问
-  string namespaceId = 5;
+  string namespaceId = 5; // 资产所在命名空间
   string hash = 6; // 资产内容哈希
   string password = 7; // 访问口令
   string expiredAt = 8; // 分享链接有效截止时间
@@ -136,11 +136,10 @@ message LinkMetadata {
   string signature = 10; // 资产所有者签名
 }
 
-enum LinkStatusEnum {
+enum LinkTypeEnum {
   LINK_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
   LINK_STATUS_PUBLIC = 1; // 完全公开的，无需验证身份，直接访问
   LINK_STATUS_AUTHENTICATED = 2; // 需要验证身份，包括访问需要的身份DID、下载时间和签名
-  LINK_STATUS_TERMINATED = 3; // 提前终止分享链接
 }
 
 message UrlMetadata {
