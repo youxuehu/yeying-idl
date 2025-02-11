@@ -87,7 +87,7 @@ message Mnemonic {
 
 message IdentityServiceExtend {
   string code = 1;
-  string apis = 2;
+  string apis = 2; // 应用输出的api编码，用逗号隔开
   string proxy = 3;
   string grpc = 4;
   string extend = 5;
@@ -107,7 +107,7 @@ message IdentityPersonalExtend {
 
 message IdentityApplicationExtend {
   string code = 1;
-  repeated string serviceCodes = 2;
+  string serviceCodes = 2; // 应用依赖的服务编码，用逗号隔开
   string location = 3 ;
   string hash = 4;
   string extend = 5;
