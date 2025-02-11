@@ -1,0 +1,103 @@
+syntax = "proto3";
+option go_package = "yeying/api/zuoyepigai/task";
+package yeying.api.zuoyepigai.task;
+import "yeying/api/common/message.proto";
+
+/**
+老师教学任务管理
+ */
+service TeachingTasks {
+  // 创建任务：由老师负创建教学任务
+  rpc Add(AddTasksRequest) returns (AddTasksResponse) {}
+  // 任务详情
+  rpc Detail(DetailTasksRequest) returns (DetailTasksResponse) {}
+  // 任务列表
+  rpc List(ListTasksRequest) returns (ListTasksResponse) {}
+  // 更新任务
+  rpc Update(UpdateTasksRequest) returns (UpdateTasksResponse) {}
+}
+
+message TeachingTasksMeta {
+  // ID 唯一标识
+  string id = 1;
+  // 任务名称
+  string name = 2;
+  // 用户ID
+  string userId = 3;
+  // 任务创建时间
+  string createdAt = 4;
+  // 任务修改时间
+  string updatedAt = 5;
+}
+// Add
+message AddTasksRequest{
+  common.MessageHeader header = 1;
+  AddTasksRequestBody body = 2;
+}
+
+message AddTasksRequestBody {
+    TeachingTasksMeta meta = 1;
+}
+
+message AddTasksResponse{
+  common.MessageHeader header = 1;
+  AddTasksResponseBody body = 2;
+}
+
+message AddTasksResponseBody {
+  common.ResponseStatus status = 1;
+  TeachingTasksMeta meta = 2;
+}
+// Detail
+message DetailTasksRequest{
+  common.MessageHeader header = 1;
+  DetailTasksRequestBody body = 2;
+}
+message DetailTasksRequestBody {
+  string id = 1;
+}
+
+message DetailTasksResponse{
+  common.MessageHeader header = 1;
+  DetailTasksResponseBody body = 2;
+}
+message DetailTasksResponseBody {
+  common.ResponseStatus status = 1;
+  TeachingTasksMeta meta = 2;
+}
+// List
+message ListTasksRequest{
+  common.MessageHeader header = 1;
+  ListTasksRequestBody body = 2;
+}
+message ListTasksRequestBody {
+  string userId = 2;
+}
+
+message ListTasksResponse{
+  common.MessageHeader header = 1;
+  ListTasksResponseBody body = 2;
+}
+message ListTasksResponseBody {
+  common.ResponseStatus status = 1;
+  repeated TeachingTasksMeta list = 2;
+}
+
+// Update
+message UpdateTasksRequest{
+  common.MessageHeader header = 1;
+  UpdateTasksRequestBody body = 2;
+}
+message UpdateTasksRequestBody {
+  TeachingTasksMeta meta = 1;
+}
+
+message UpdateTasksResponse {
+  common.MessageHeader header = 1;
+  UpdateTasksResponseBody body = 2;
+}
+
+message UpdateTasksResponseBody {
+  common.ResponseStatus status = 1;
+  TeachingTasksMeta meta = 2;
+}
