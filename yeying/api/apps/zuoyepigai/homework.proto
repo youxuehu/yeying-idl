@@ -1,0 +1,35 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+
+
+/**
+作业管理
+ */
+service Homework {
+  // 列表
+  rpc List(HomeworkListRequest) returns (HomeworkListResponse) {}
+  // 详情
+  rpc Detail(HomeworkDetailRequest) returns (HomeworkDetailResponse) {}
+}
+// 列表
+message HomeworkListRequest {
+
+}
+message HomeworkListResponse {
+  HomeworkListResponseBody body = 1;
+}
+message HomeworkListResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 详情
+message HomeworkDetailRequest {
+
+}
+message HomeworkDetailResponse {
+  HomeworkDetailResponseBody body = 1;
+}
+message HomeworkDetailResponseBody {
+  common.ResponseStatus status = 1;
+}

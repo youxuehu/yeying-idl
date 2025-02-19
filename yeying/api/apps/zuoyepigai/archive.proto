@@ -1,0 +1,39 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+
+/**
+档案管理
+ */
+service Archive {
+  // 列表
+  rpc List(ArchiveListRequest) returns (ArchiveListResponse) {}
+  // 详情
+  rpc Detail(ArchiveDetailRequest) returns (ArchiveDetailResponse) {}
+}
+// 列表
+message ArchiveListRequest {
+
+}
+message ArchiveListResponse {
+  ArchiveListResponseBody body = 1;
+}
+message ArchiveListResponseBody {
+  common.ResponseStatus status = 1;
+
+
+}
+// 详情
+message ArchiveDetailRequest {
+    ArchiveDetailRequestBody body = 1;
+}
+message ArchiveDetailRequestBody {
+  string uid = 1;
+}
+message ArchiveDetailResponse {
+  ArchiveDetailResponseBody body = 1;
+}
+message ArchiveDetailResponseBody {
+  common.ResponseStatus status = 1;
+}
