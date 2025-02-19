@@ -15,7 +15,8 @@ message GetConfigRequest {
 }
 
 message GetConfigRequestBody {
-  repeated string keys = 1;
+  string key = 1;
+  ConfigTypeEnum type = 2;
 }
 
 message GetConfigResponse {
@@ -24,7 +25,8 @@ message GetConfigResponse {
 }
 
 message GetConfigResponseBody {
-  repeated string values = 1; // 格式如下：key1=value1&key2=value2
+  common.ResponseStatus status = 1;
+  ConfigMetadata config = 2;
 }
 
 message SetConfigRequest {
@@ -33,7 +35,7 @@ message SetConfigRequest {
 }
 
 message SetConfigRequestBody {
-  repeated string values = 1; // 格式如下：key1=value1&key2=value2
+  ConfigMetadata config = 1;
 }
 
 message SetConfigResponse {
@@ -43,5 +45,25 @@ message SetConfigResponse {
 
 message SetConfigResponseBody {
   common.ResponseStatus status = 1;
-  repeated string values = 2; // 返回成功设置的值，格式如下：key1=value1&key2=value2
+  ConfigMetadata config = 2;
+}
+
+enum ConfigTypeEnum {
+  // 未知编码，是一种占位符
+  CONFIG_TYPE_UNKNOWN = 0;
+
+  // 系统配置
+  CONFIG_TYPE_SYSTEM = 1;
+
+  // 用户配置
+  CONFIG_TYPE_USER = 2;
+}
+
+message ConfigMetadata {
+  string owner = 1;
+  string key = 2;
+  string value = 3;
+  string createdAt = 4;
+  string updatedAt = 5;
+  string signature = 6;
 }
