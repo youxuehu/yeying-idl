@@ -1,0 +1,82 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+
+/**
+错题管理
+ */
+service Mistakes {
+  // 列表
+  rpc List(MistakesListRequest) returns (MistakesListResponse) {}
+  // 详情
+  rpc Detail(MistakesDetailRequest) returns (MistakesDetailResponse) {}
+  // 错误分析
+  rpc Analysis(MistakesAnalysisRequest) returns (MistakesAnalysisResponse) {}
+  // 错误订正
+  rpc MakeCorrection(MakeCorrectionRequest) returns (MakeCorrectionResponse) {}
+  // 打印错题题目
+  rpc Print(MistakesPrintRequest) returns (MistakesPrintResponse) {}
+  // 提交订正的题目，重新生成图片，提交大模型批改
+  rpc Submit(MistakesSubmitRequest) returns (MistakesSubmitResponse) {}
+}
+// 列表
+message MistakesListRequest {
+
+}
+message MistakesListResponse {
+  MistakesListResponseBody body = 1;
+}
+message MistakesListResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 详情
+message MistakesDetailRequest {
+
+}
+message MistakesDetailResponse {
+  MistakesDetailResponseBody body = 1;
+}
+message MistakesDetailResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 错误分析
+message MistakesAnalysisRequest {
+
+}
+message MistakesAnalysisResponse {
+  MistakesAnalysisResponseBody body = 1;
+}
+message MistakesAnalysisResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 错误订正
+message MakeCorrectionRequest {
+
+}
+message MakeCorrectionResponse {
+    MakeCorrectionResponseBody body = 1;
+}
+message MakeCorrectionResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 打印错题题目
+message MistakesPrintRequest {
+
+}
+message MistakesPrintResponse {
+  MistakesPrintResponseBody body = 1;
+}
+message MistakesPrintResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 提交订正的题目，重新生成图片，提交大模型批改
+message MistakesSubmitRequest {
+
+}
+message MistakesSubmitResponse {
+  MistakesSubmitResponseBody body = 1;
+}
+message MistakesSubmitResponseBody {
+  common.ResponseStatus status = 1;
+}

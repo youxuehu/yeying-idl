@@ -1,0 +1,64 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+
+/**
+作业管理
+ */
+service Assignment {
+  // 老师上传作业
+  rpc Upload(AssignmentUploadRequest) returns (AssignmentUploadResponse) {}
+  // 大模型生成答案
+  rpc BigModelGenerate(AssignmentBigModelRequest) returns (AssignmentBigModelResponse) {}
+  // 人工生成答案
+  rpc ArtificialGenerate(AssignmentArtificialRequest) returns (AssignmentArtificialResponse) {}
+  // 作业批改
+  rpc Correction(AssignmentCorrectionRequest) returns (AssignmentCorrectionResponse) {}
+
+}
+
+// 上传
+message AssignmentUploadRequest {
+
+}
+
+message AssignmentUploadResponse {
+  AssignmentUploadResponseBody body = 1;
+}
+message AssignmentUploadResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 大模型
+message AssignmentBigModelRequest {
+
+}
+
+message AssignmentBigModelResponse {
+  AssignmentBigModelResponseBody body = 1;
+}
+message AssignmentBigModelResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 人工生成
+message AssignmentArtificialRequest {
+
+}
+
+message AssignmentArtificialResponse {
+  AssignmentArtificialResponseBody body = 1;
+}
+message AssignmentArtificialResponseBody {
+  common.ResponseStatus status = 1;
+}
+// 批改
+message AssignmentCorrectionRequest {
+
+}
+
+message AssignmentCorrectionResponse {
+  AssignmentCorrectionResponseBody body = 1;
+}
+message AssignmentCorrectionResponseBody {
+  common.ResponseStatus status = 1;
+}

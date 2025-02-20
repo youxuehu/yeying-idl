@@ -1,12 +1,12 @@
 syntax = "proto3";
-option go_package = "yeying/api/zuoyepigai/task";
-package yeying.api.zuoyepigai.task;
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
 
 /**
 老师教学任务管理
  */
-service TeachingTasks {
+service Task {
   // 创建任务：由老师负创建教学任务
   rpc Add(AddTasksRequest) returns (AddTasksResponse) {}
   // 任务详情
@@ -15,89 +15,103 @@ service TeachingTasks {
   rpc List(ListTasksRequest) returns (ListTasksResponse) {}
   // 更新任务
   rpc Update(UpdateTasksRequest) returns (UpdateTasksResponse) {}
+  // 删除任务
+  rpc Delete(DeleteTasksRequest) returns (DeleteTasksResponse) {}
 }
 
-message TeachingTasksMeta {
+message TasksMeta {
   // ID 唯一标识
-  string id = 1;
+  string uid = 1;
   // 任务名称
   string name = 2;
-  // 用户ID
-  string userId = 3;
+  // 描述
+  string description = 3;
+  // 用户uId
+  string userUid = 4;
   // 任务创建时间
-  string createdAt = 4;
+  int64 createdAt = 5;
   // 任务修改时间
-  string updatedAt = 5;
+  int64 updatedAt = 6;
+  // 是否删除
+  bool isDeleted = 7;
 }
 // Add
 message AddTasksRequest{
-  common.MessageHeader header = 1;
-  AddTasksRequestBody body = 2;
+  AddTasksRequestBody body = 1;
 }
 
 message AddTasksRequestBody {
-    TeachingTasksMeta meta = 1;
+  TasksMeta meta = 1;
 }
 
 message AddTasksResponse{
-  common.MessageHeader header = 1;
-  AddTasksResponseBody body = 2;
+  AddTasksResponseBody body = 1;
 }
 
 message AddTasksResponseBody {
-  common.ResponseStatus status = 1;
-  TeachingTasksMeta meta = 2;
+  TasksMeta meta = 1;
 }
 // Detail
 message DetailTasksRequest{
-  common.MessageHeader header = 1;
-  DetailTasksRequestBody body = 2;
+  DetailTasksRequestBody body = 1;
 }
 message DetailTasksRequestBody {
-  string id = 1;
+  string uid = 1;
 }
 
 message DetailTasksResponse{
-  common.MessageHeader header = 1;
-  DetailTasksResponseBody body = 2;
+  DetailTasksResponseBody body = 1;
 }
 message DetailTasksResponseBody {
   common.ResponseStatus status = 1;
-  TeachingTasksMeta meta = 2;
+  TasksMeta meta = 2;
 }
 // List
 message ListTasksRequest{
-  common.MessageHeader header = 1;
-  ListTasksRequestBody body = 2;
+  ListTasksRequestBody body = 1;
 }
 message ListTasksRequestBody {
-  string userId = 2;
+  string userUid = 1;
 }
 
 message ListTasksResponse{
-  common.MessageHeader header = 1;
-  ListTasksResponseBody body = 2;
+  ListTasksResponseBody body = 1;
 }
 message ListTasksResponseBody {
   common.ResponseStatus status = 1;
-  repeated TeachingTasksMeta list = 2;
+  repeated TasksMeta list = 2;
 }
 
 // Update
 message UpdateTasksRequest{
-  common.MessageHeader header = 1;
-  UpdateTasksRequestBody body = 2;
+  UpdateTasksRequestBody body = 1;
 }
 message UpdateTasksRequestBody {
-  TeachingTasksMeta meta = 1;
+  TasksMeta meta = 1;
 }
 
 message UpdateTasksResponse {
-  common.MessageHeader header = 1;
-  UpdateTasksResponseBody body = 2;
+  UpdateTasksResponseBody body = 1;
 }
 
 message UpdateTasksResponseBody {
   common.ResponseStatus status = 1;
-  TeachingTasksMeta meta = 2;
+  TasksMeta meta = 2;
+}
+
+// Delete
+message DeleteTasksRequest{
+  DeleteTasksRequestBody body = 1;
+}
+message DeleteTasksRequestBody {
+  string uid = 1;
+}
+
+message DeleteTasksResponse {
+  DeleteTasksResponseBody body = 1;
+}
+
+message DeleteTasksResponseBody {
+  common.ResponseStatus status = 1;
+  TasksMeta meta = 2;
 }
