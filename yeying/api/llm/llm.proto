@@ -4,17 +4,9 @@ package yeying.api.llm;
 
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
+import "yeying/api/llm/provider.proto";
 
 service Llm {
-  // 添加llm
-  rpc AddLlm(AddLlmRequest) returns (AddLlmResponse) {}
-
-  // 删除llm
-  rpc DelLlm(DelLlmRequest) returns (DelLlmResponse) {}
-
-  // 获取llm
-  rpc GetLlm(GetLlmRequest) returns (GetLlmResponse) {}
-
   // 不同语言的文字翻译工作
   rpc Translate(TranslateRequest) returns (TranslateResponse){}
 
@@ -27,108 +19,8 @@ service Llm {
   // 文本生成图片
   rpc Generate(GenerateRequest) returns (stream GenerateResponse){}
 
-  // 文本生成语
+  // 文本生语音
   rpc Speech(SpeechRequest) returns (SpeechResponse){}
-}
-
-// 消息角色，在大模型进行推理时，涉及到多个系统组件的配合，有设定场景的，有理解意图的，有给出答案的等等。
-enum MessageRoleEnum {
-  // 未知编码，是一种占位符
-  MESSAGE_ROLE_UNKNOWN = 0;
-
-  // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
-  MESSAGE_ROLE_ASSISTANT = 1;
-
-  // 用于用户输入的对话内容，当用户想要与对话模型交互时
-  MESSAGE_ROLE_USER = 2;
-
-  // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
-  MESSAGE_ROLE_SYSTEM = 3;
-}
-
-enum LlmCodeEnum {
-  LLM_CODE_UNKNOWN = 0;
-  LLM_CODE_OPENAI = 1;
-  LLM_CODE_GEMINI = 2;
-  LLM_CODE_ZHIPUAI = 3;
-}
-
-enum LlmStatusEnum {
-  LLM_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
-  LLM_STATUS_DEACTIVATED = 1; // 供应商未激活状态
-  LLM_STATUS_ACTIVATED = 2; // 供应商激活状态
-}
-
-message DelLlmRequest {
-  common.MessageHeader header = 1;
-  DelLlmRequestBody body = 2;
-}
-
-message GetLlmRequest {
-  common.MessageHeader header = 1;
-  GetLlmRequestBody body = 2;
-}
-
-message DelLlmResponse {
-  common.MessageHeader header = 1;
-  DelLlmResponseBody body = 2;
-}
-
-message GetLlmResponse {
-  common.MessageHeader header = 1;
-  GetLlmResponseBody body = 2;
-}
-
-message GetLlmResponseBody {
-  common.ResponseStatus status = 1;
-  repeated LlmMetadata llms = 2;
-}
-
-message GetLlmRequestBody {
-  string llmId = 1;
-}
-
-message DelLlmRequestBody {
-  string llmId = 1;
-}
-
-message DelLlmResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message AddLlmRequest {
-  common.MessageHeader header = 1;
-  AddLlmRequestBody body = 2;
-}
-
-message AddLlmRequestBody {
-  string llmId = 1;
-  string name = 2;
-  LlmCodeEnum code = 3;
-  string key = 4;
-  string extend = 5;
-  string createdAt = 6;
-  string updatedAt = 7;
-}
-
-message AddLlmResponse {
-  common.MessageHeader header = 1;
-  AddLlmResponseBody body = 2;
-}
-
-message AddLlmResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message LlmMetadata {
-  string owner = 1;
-  string llmId = 2;
-  string name = 3;
-  LlmCodeEnum code = 4;
-  LlmStatusEnum status = 5;
-  string extend = 6;
-  string createdAt = 7;
-  string updatedAt = 8;
 }
 
 message CompleteRequest {

@@ -1,0 +1,150 @@
+syntax = "proto3";
+option go_package = "yeying/api/llm";
+package yeying.api.llm;
+
+import "yeying/api/common/message.proto";
+
+
+service Provider {
+  // 供应商描述列表
+  rpc ListProvider(ListProviderDescriptionRequest) returns (ListProviderDescriptionResponse) {}
+
+  // 添加供应商配置
+  rpc Add(AddProviderRequest) returns (AddProviderResponse) {}
+
+  // 删除供应商
+  rpc Delete(DeleteProviderRequest) returns (DeleteProviderResponse) {}
+}
+
+message ProviderDescription {
+  string name = 1;
+  string description = 2;
+  repeated ModelTypeEnum supportedModelTypes = 3;
+  string icon = 4;
+}
+
+message ProviderMetadata {
+  string uid = 1;
+  string owner = 2;
+  string name = 3;
+  string config = 4;
+  string quotaType = 5;
+  uint64 quotaLimit = 6;
+  uint64 quotaUsed = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
+  string signature = 10;
+}
+
+message ModelMetadata {
+  string name = 1;
+  ModelTypeEnum type = 2;
+  repeated ModelFeatureEnum features = 3;
+}
+
+enum ModelTypeEnum {
+  MODEL_TYPE_UNKNOWN = 0;
+  MODEL_TYPE_LLM = 1; // 文本生成模型
+  MODEL_TYPE_TEXT_EMBEDDING = 2; // 文本 Embedding 模型
+  MODEL_TYPE_RERANK = 3;// Rerank 模型
+  MODEL_TYPE_SPEECH2TEXT = 4; // 语音转文字
+  MODEL_TYPE_TTS = 5; // 文字转语音
+  MODEL_TYPE_MODERATION = 6; // 审查
+  MODEL_TYPE_TEXT2IMAGE = 7; // 文生图
+}
+
+enum ModelFeatureEnum {
+  MODEL_FEATURE_AGENT_THOUGHT = 0; // 推理，一般超过 70B 有思维链能力。
+  MODEL_FEATURE_VISION = 2; // 视觉，即：图像理解。
+  MODEL_FEATURE_TOOL_CALL = 3; // 工具调用
+  MODEL_FEATURE_MULTI_TOOL_CALL = 4; // 多工具调用
+  MODEL_FEATURE_STREAM_TOOL_CALL = 5; // 流式工具调用
+}
+
+// 消息角色，在大模型进行推理时，涉及到多个系统组件的配合，有设定场景的，有理解意图的，有给出答案的等等。
+enum MessageRoleEnum {
+  MESSAGE_ROLE_UNKNOWN = 0; // 未知编码，是一种占位符
+  MESSAGE_ROLE_ASSISTANT = 1; // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
+  MESSAGE_ROLE_USER = 2; // 用于用户输入的对话内容，当用户想要与对话模型交互时
+  MESSAGE_ROLE_SYSTEM = 3; // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
+}
+
+enum LlmCodeEnum {
+  LLM_CODE_UNKNOWN = 0;
+  LLM_CODE_OPENAI = 1;
+  LLM_CODE_GEMINI = 2;
+  LLM_CODE_ZHIPUAI = 3;
+}
+
+enum LlmStatusEnum {
+  LLM_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
+  LLM_STATUS_DEACTIVATED = 1; // 供应商未激活状态
+  LLM_STATUS_ACTIVATED = 2; // 供应商激活状态
+}
+
+message DeleteProviderRequest {
+  common.MessageHeader header = 1;
+  DeleteProviderRequestBody body = 2;
+}
+
+message ListProviderDescriptionRequest {
+  common.MessageHeader header = 1;
+}
+
+message ListProviderDescriptionResponse {
+  common.MessageHeader header = 1;
+  ListProviderDescriptionResponseBody body = 2;
+}
+
+message ListProviderDescriptionResponseBody {
+  common.ResponseStatus status = 1;
+  repeated ProviderDescription providers = 2;
+}
+
+message DeleteProviderResponse {
+  common.MessageHeader header = 1;
+  DeleteProviderResponseBody body = 2;
+}
+
+message DeleteProviderRequestBody {
+  string llmId = 1;
+}
+
+message DeleteProviderResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message AddProviderRequest {
+  common.MessageHeader header = 1;
+  AddProviderRequestBody body = 2;
+}
+
+message AddProviderRequestBody {
+  string llmId = 1;
+  string name = 2;
+  LlmCodeEnum code = 3;
+  string key = 4;
+  string extend = 5;
+  string createdAt = 6;
+  string updatedAt = 7;
+}
+
+message AddProviderResponse {
+  common.MessageHeader header = 1;
+  AddProviderResponseBody body = 2;
+}
+
+message AddProviderResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message LlmMetadata {
+  string owner = 1;
+  string llmId = 2;
+  string name = 3;
+  LlmCodeEnum code = 4;
+  LlmStatusEnum status = 5;
+  string extend = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+}

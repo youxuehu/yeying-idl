@@ -25,12 +25,13 @@ message UserMetadata {
 }
 
 message UserState {
-  string did = 1;
-  UserRoleEnum role = 2;
-  UserStatusEnum status = 3;
-  string createdAt = 4;
-  string updatedAt = 5;
-  string signature = 6;
+  string owner = 1;
+  string did = 2;
+  UserRoleEnum role = 3;
+  UserStatusEnum status = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+  string signature = 7;
 }
 
 message AddUserRequest {
@@ -68,6 +69,7 @@ message UpdateUserResponse {
 
 message UpdateUserResponseBody {
   common.ResponseStatus status = 1;
+  UserMetadata user = 2;
 }
 
 message DeleteUserRequest {
@@ -94,8 +96,12 @@ message UserDetailResponse {
 
 message UserDetailResponseBody {
   common.ResponseStatus status = 1;
-  UserMetadata user = 2;
-  UserState userState = 3;
+  UserDetail detail = 2;
+}
+
+message UserDetail {
+  UserMetadata user = 1;
+  UserState state = 2;
 }
 
 enum UserStatusEnum {
