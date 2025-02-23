@@ -22,13 +22,34 @@ service Mistakes {
 }
 // 列表
 message MistakesListRequest {
-
+  MistakesListRequestBody body = 1;
+}
+message MistakesListRequestBody {
+  // 学生ID
+  string userUid = 1;
 }
 message MistakesListResponse {
   MistakesListResponseBody body = 1;
 }
 message MistakesListResponseBody {
   common.ResponseStatus status = 1;
+  // repeated 表示 List
+  repeated MistakesMeta list = 2;
+}
+
+message MistakesMeta {
+  // 错题ID
+  string uid = 1;
+  // 错题题目
+  string question = 2;
+  // 错题答案
+  string answer = 3;
+  // 创建时间
+  int64 createdAt = 4;
+  // 修改时间
+  int64 updatedAt = 5;
+  // 是否删除
+  bool isDeleted = 6;
 }
 // 详情
 message MistakesDetailRequest {

@@ -5,113 +5,117 @@ import "yeying/api/common/message.proto";
 
 /**
 老师教学任务管理
+对应的 DB 表：zuoyepigai.teaching_tasks
  */
 service Task {
   // 创建任务：由老师负创建教学任务
-  rpc Add(AddTasksRequest) returns (AddTasksResponse) {}
+  rpc Add(AddTaskRequest) returns (AddTaskResponse) {}
   // 任务详情
-  rpc Detail(DetailTasksRequest) returns (DetailTasksResponse) {}
+  rpc Detail(DetailTaskRequest) returns (DetailTaskResponse) {}
   // 任务列表
-  rpc List(ListTasksRequest) returns (ListTasksResponse) {}
+  rpc List(ListTaskRequest) returns (ListTaskResponse) {}
   // 更新任务
-  rpc Update(UpdateTasksRequest) returns (UpdateTasksResponse) {}
+  rpc Update(UpdateTaskRequest) returns (UpdateTaskResponse) {}
   // 删除任务
-  rpc Delete(DeleteTasksRequest) returns (DeleteTasksResponse) {}
+  rpc Delete(DeleteTaskRequest) returns (DeleteTaskResponse) {}
 }
 
-message TasksMeta {
+message TaskMeta {
   // ID 唯一标识
   string uid = 1;
   // 任务名称
   string name = 2;
   // 描述
   string description = 3;
+  // 标签
+  string tag = 4;
   // 用户uId
-  string userUid = 4;
-  // 任务创建时间
-  int64 createdAt = 5;
-  // 任务修改时间
-  int64 updatedAt = 6;
+  string userUid = 5;
+  // 创建时间
+  int64 createdAt = 6;
+  // 修改时间
+  int64 updatedAt = 7;
   // 是否删除
-  bool isDeleted = 7;
+  bool isDeleted = 8;
 }
 // Add
-message AddTasksRequest{
-  AddTasksRequestBody body = 1;
+message AddTaskRequest{
+  AddTaskRequestBody body = 1;
 }
 
-message AddTasksRequestBody {
-  TasksMeta meta = 1;
+message AddTaskRequestBody {
+  TaskMeta meta = 1;
 }
 
-message AddTasksResponse{
-  AddTasksResponseBody body = 1;
+message AddTaskResponse{
+  AddTaskResponseBody body = 1;
 }
 
-message AddTasksResponseBody {
-  TasksMeta meta = 1;
+message AddTaskResponseBody {
+  TaskMeta meta = 1;
 }
 // Detail
-message DetailTasksRequest{
-  DetailTasksRequestBody body = 1;
+message DetailTaskRequest{
+  DetailTaskRequestBody body = 1;
 }
-message DetailTasksRequestBody {
+message DetailTaskRequestBody {
   string uid = 1;
 }
 
-message DetailTasksResponse{
-  DetailTasksResponseBody body = 1;
+message DetailTaskResponse{
+  DetailTaskResponseBody body = 1;
 }
-message DetailTasksResponseBody {
+message DetailTaskResponseBody {
   common.ResponseStatus status = 1;
-  TasksMeta meta = 2;
+  TaskMeta meta = 2;
 }
 // List
-message ListTasksRequest{
-  ListTasksRequestBody body = 1;
+message ListTaskRequest{
+  ListTaskRequestBody body = 1;
 }
-message ListTasksRequestBody {
+message ListTaskRequestBody {
   string userUid = 1;
 }
 
-message ListTasksResponse{
-  ListTasksResponseBody body = 1;
+message ListTaskResponse{
+  ListTaskResponseBody body = 1;
 }
-message ListTasksResponseBody {
+message ListTaskResponseBody {
   common.ResponseStatus status = 1;
-  repeated TasksMeta list = 2;
+  // repeated 表示 List
+  repeated TaskMeta list = 2;
 }
 
 // Update
-message UpdateTasksRequest{
-  UpdateTasksRequestBody body = 1;
+message UpdateTaskRequest{
+  UpdateTaskRequestBody body = 1;
 }
-message UpdateTasksRequestBody {
-  TasksMeta meta = 1;
-}
-
-message UpdateTasksResponse {
-  UpdateTasksResponseBody body = 1;
+message UpdateTaskRequestBody {
+  TaskMeta meta = 1;
 }
 
-message UpdateTasksResponseBody {
+message UpdateTaskResponse {
+  UpdateTaskResponseBody body = 1;
+}
+
+message UpdateTaskResponseBody {
   common.ResponseStatus status = 1;
-  TasksMeta meta = 2;
+  TaskMeta meta = 2;
 }
 
 // Delete
-message DeleteTasksRequest{
-  DeleteTasksRequestBody body = 1;
+message DeleteTaskRequest{
+  DeleteTaskRequestBody body = 1;
 }
-message DeleteTasksRequestBody {
+message DeleteTaskRequestBody {
   string uid = 1;
 }
 
-message DeleteTasksResponse {
-  DeleteTasksResponseBody body = 1;
+message DeleteTaskResponse {
+  DeleteTaskResponseBody body = 1;
 }
 
-message DeleteTasksResponseBody {
+message DeleteTaskResponseBody {
   common.ResponseStatus status = 1;
-  TasksMeta meta = 2;
+  TaskMeta meta = 2;
 }
