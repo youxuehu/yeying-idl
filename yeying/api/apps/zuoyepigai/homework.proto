@@ -5,8 +5,9 @@ import "yeying/api/common/message.proto";
 
 
 /**
-作业管理
- */
+  作业管理
+  对应 DB 表： zuoyepigai.school_assignment
+*/
 service Homework {
   // 列表
   rpc List(HomeworkListRequest) returns (HomeworkListResponse) {}
@@ -15,21 +16,47 @@ service Homework {
 }
 // 列表
 message HomeworkListRequest {
-
+  HomeworkListRequestBody body = 1;
+}
+message HomeworkListRequestBody {
+  // 学生ID
+  string userUid = 1;
 }
 message HomeworkListResponse {
   HomeworkListResponseBody body = 1;
 }
 message HomeworkListResponseBody {
   common.ResponseStatus status = 1;
+  // repeated 表示 List
+  repeated HomeworkMeta list = 2;
+}
+message HomeworkMeta {
+  // 主键标识
+  string uid = 1;
+  // 用户Id
+  string userUid = 2;
+  // 科目
+  string subject = 3;
+  // 试卷Uid
+  string testPaperUid = 4;
+  // 创建时间
+  int64 createdAt = 5;
+  // 修改时间
+  int64 updatedAt = 6;
+  // 是否删除
+  bool isDeleted = 7;
 }
 // 详情
 message HomeworkDetailRequest {
-
+  HomeworkDetailRequestBody body = 1;
+}
+message HomeworkDetailRequestBody {
+  string uid = 1;
 }
 message HomeworkDetailResponse {
   HomeworkDetailResponseBody body = 1;
 }
 message HomeworkDetailResponseBody {
   common.ResponseStatus status = 1;
+  HomeworkMeta meta = 2;
 }
