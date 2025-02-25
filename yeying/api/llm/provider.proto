@@ -7,39 +7,179 @@ import "yeying/api/common/message.proto";
 
 service Provider {
   // 供应商描述列表
-  rpc ListProvider(ListProviderDescriptionRequest) returns (ListProviderDescriptionResponse) {}
+  rpc Descriptions(ProviderDescriptionsRequest) returns (ProviderDescriptionsResponse) {}
 
-  // 添加供应商配置
+  // 供应商模型
+  rpc Models(ProviderModelsRequest) returns (ProviderModelsResponse) {}
+
+  // 搜索添加的供应商
+  rpc Search(SearchProviderRequest) returns (SearchProviderResponse) {}
+
+  // 供应商状态
+  rpc Detail(ProviderDetailRequest) returns (ProviderDetailResponse) {}
+
+  // 添加新供应商配置
   rpc Add(AddProviderRequest) returns (AddProviderResponse) {}
 
   // 删除供应商
   rpc Delete(DeleteProviderRequest) returns (DeleteProviderResponse) {}
 }
 
+message ProviderDescriptionsRequest {
+  common.MessageHeader header = 1;
+}
+
+message ProviderDescriptionsResponse {
+  common.MessageHeader header = 1;
+  ProviderDescriptionsResponseBody body = 2;
+}
+
+message ProviderDescriptionsResponseBody {
+  common.ResponseStatus status = 1;
+  repeated ProviderDescription descriptions = 2;
+}
+
+message ProviderModelsRequest {
+  common.MessageHeader header = 1;
+  ProviderModelsRequestBody body = 2;
+}
+
+message ProviderModelsRequestBody {
+  ProviderCodeEnum code = 1;
+  ModelTypeEnum modelType = 2;
+}
+
+message ProviderModelsResponse {
+  common.MessageHeader header = 1;
+  ProviderModelsResponseBody body = 2;
+}
+
+message ProviderModelsResponseBody {
+  common.ResponseStatus status = 1;
+  repeated ModelMetadata models = 2;
+}
+
+message DeleteProviderRequest {
+  common.MessageHeader header = 1;
+  DeleteProviderRequestBody body = 2;
+}
+
+message DeleteProviderRequestBody {
+  string uid = 1;
+}
+
+message DeleteProviderResponse {
+  common.MessageHeader header = 1;
+  DeleteProviderResponseBody body = 2;
+}
+
+message DeleteProviderResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message SearchProviderRequest {
+  common.MessageHeader header = 1;
+  SearchProviderRequestBody body = 2;
+}
+
+message SearchProviderRequestBody {
+  common.RequestPage page = 1;
+  SearchProviderCondition condition = 2;
+}
+
+message SearchProviderResponse {
+  common.MessageHeader header = 1;
+  SearchProviderResponseBody body = 2;
+}
+
+message SearchProviderResponseBody {
+  common.ResponseStatus status = 1;
+  repeated ProviderMetadata providers = 2;
+}
+
+message AddProviderRequest {
+  common.MessageHeader header = 1;
+  AddProviderRequestBody body = 2;
+}
+
+message AddProviderRequestBody {
+  ProviderMetadata provider = 1;
+}
+
+message AddProviderResponse {
+  common.MessageHeader header = 1;
+  AddProviderResponseBody body = 2;
+}
+
+message AddProviderResponseBody {
+  common.ResponseStatus status = 1;
+  ProviderMetadata provider = 2;
+}
+
+message ProviderDetailRequest {
+  common.MessageHeader header = 1;
+  ProviderDetailRequestBody body = 2;
+}
+
+message ProviderDetailRequestBody {
+  string uid = 1;
+}
+
+message ProviderDetailResponse {
+  common.MessageHeader header = 1;
+  ProviderDetailResponseBody body = 2;
+}
+
+message ProviderDetailResponseBody {
+  common.ResponseStatus status = 1;
+  ProviderDetail detail = 2;
+}
+
+message ProviderDetail {
+  ProviderMetadata provider = 1;
+  ProviderState state = 2;
+}
+
 message ProviderDescription {
-  string name = 1;
-  string description = 2;
-  repeated ModelTypeEnum supportedModelTypes = 3;
-  string icon = 4;
+  ProviderCodeEnum code = 1;
+  string name = 2;
+  string description = 3;
+  repeated ModelTypeEnum supportedModelTypes = 4;
+  string avatar = 5;
+}
+
+message SearchProviderCondition {
+  ProviderCodeEnum code = 1;
 }
 
 message ProviderMetadata {
   string uid = 1;
   string owner = 2;
   string name = 3;
-  string config = 4;
-  string quotaType = 5;
-  uint64 quotaLimit = 6;
-  uint64 quotaUsed = 7;
+  ProviderCodeEnum code = 4;
+  string config = 5;
+  QuotaTypeEnum quotaType = 6;
+  uint64 quotaLimit = 7;
   string createdAt = 8;
   string updatedAt = 9;
   string signature = 10;
 }
 
 message ModelMetadata {
-  string name = 1;
+  ProviderCodeEnum providerCode = 1;
   ModelTypeEnum type = 2;
-  repeated ModelFeatureEnum features = 3;
+  string name = 3;
+  repeated ModelFeatureEnum features = 4;
+}
+
+message ProviderState {
+  string serviceDid = 1;
+  string uid = 2;
+  ProviderStatusEnum status = 3;
+  uint64 quotaUsed = 4;
+  string createdAt = 5;
+  string updatedAt = 6;
+  string signature = 7;
 }
 
 enum ModelTypeEnum {
@@ -59,92 +199,29 @@ enum ModelFeatureEnum {
   MODEL_FEATURE_TOOL_CALL = 3; // 工具调用
   MODEL_FEATURE_MULTI_TOOL_CALL = 4; // 多工具调用
   MODEL_FEATURE_STREAM_TOOL_CALL = 5; // 流式工具调用
+  MODEL_FEATURE_DOCUMENT = 6; // 文档
+  MODEL_FEATURE_VIDEO = 7; // 视频
+  MODEL_FEATURE_AUDIO = 8; // 音频
 }
 
-// 消息角色，在大模型进行推理时，涉及到多个系统组件的配合，有设定场景的，有理解意图的，有给出答案的等等。
-enum MessageRoleEnum {
-  MESSAGE_ROLE_UNKNOWN = 0; // 未知编码，是一种占位符
-  MESSAGE_ROLE_ASSISTANT = 1; // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
-  MESSAGE_ROLE_USER = 2; // 用于用户输入的对话内容，当用户想要与对话模型交互时
-  MESSAGE_ROLE_SYSTEM = 3; // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
+enum ProviderCodeEnum {
+  PROVIDER_CODE_UNKNOWN = 0;
+  PROVIDER_CODE_OPENAI = 1; // openai
+  PROVIDER_CODE_TONGYI = 2; // tongyi
+  PROVIDER_CODE_ZHIPUAI = 3; // zhipu
+  PROVIDER_CODE_GROK = 4; // grok
+  PROVIDER_CODE_DEEPSEEK = 5; // deepseek
 }
 
-enum LlmCodeEnum {
-  LLM_CODE_UNKNOWN = 0;
-  LLM_CODE_OPENAI = 1;
-  LLM_CODE_GEMINI = 2;
-  LLM_CODE_ZHIPUAI = 3;
+enum ProviderStatusEnum {
+  PROVIDER_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
+  PROVIDER_STATUS_UNAVAILABLE = 1; // 供应商不可用
+  PROVIDER_STATUS_AVAILABLE = 2; // 供应商可用
 }
 
-enum LlmStatusEnum {
-  LLM_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
-  LLM_STATUS_DEACTIVATED = 1; // 供应商未激活状态
-  LLM_STATUS_ACTIVATED = 2; // 供应商激活状态
-}
-
-message DeleteProviderRequest {
-  common.MessageHeader header = 1;
-  DeleteProviderRequestBody body = 2;
-}
-
-message ListProviderDescriptionRequest {
-  common.MessageHeader header = 1;
-}
-
-message ListProviderDescriptionResponse {
-  common.MessageHeader header = 1;
-  ListProviderDescriptionResponseBody body = 2;
-}
-
-message ListProviderDescriptionResponseBody {
-  common.ResponseStatus status = 1;
-  repeated ProviderDescription providers = 2;
-}
-
-message DeleteProviderResponse {
-  common.MessageHeader header = 1;
-  DeleteProviderResponseBody body = 2;
-}
-
-message DeleteProviderRequestBody {
-  string llmId = 1;
-}
-
-message DeleteProviderResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message AddProviderRequest {
-  common.MessageHeader header = 1;
-  AddProviderRequestBody body = 2;
-}
-
-message AddProviderRequestBody {
-  string llmId = 1;
-  string name = 2;
-  LlmCodeEnum code = 3;
-  string key = 4;
-  string extend = 5;
-  string createdAt = 6;
-  string updatedAt = 7;
-}
-
-message AddProviderResponse {
-  common.MessageHeader header = 1;
-  AddProviderResponseBody body = 2;
-}
-
-message AddProviderResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message LlmMetadata {
-  string owner = 1;
-  string llmId = 2;
-  string name = 3;
-  LlmCodeEnum code = 4;
-  LlmStatusEnum status = 5;
-  string extend = 6;
-  string createdAt = 7;
-  string updatedAt = 8;
+enum QuotaTypeEnum {
+  QUOTA_TYPE_UNKNOWN = 0; // 未知编码，是一种占位符
+  QUOTA_TYPE_PAID = 1;
+  QUOTA_TYPE_FREE = 2;
+  QUOTA_TYPE_TRIAL = 3;
 }

@@ -4,7 +4,6 @@ package yeying.api.llm;
 
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
-import "yeying/api/llm/provider.proto";
 
 service Llm {
   // 不同语言的文字翻译工作
@@ -204,4 +203,12 @@ message SpeechRequest {
 
 message SpeechResponse {
 
+}
+
+// 消息角色，在大模型进行推理时，涉及到多个系统组件的配合，有设定场景的，有理解意图的，有给出答案的等等。
+enum MessageRoleEnum {
+  MESSAGE_ROLE_UNKNOWN = 0; // 未知编码，是一种占位符
+  MESSAGE_ROLE_ASSISTANT = 1; // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
+  MESSAGE_ROLE_USER = 2; // 用于用户输入的对话内容，当用户想要与对话模型交互时
+  MESSAGE_ROLE_SYSTEM = 3; // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
 }

@@ -1,0 +1,145 @@
+syntax = "proto3";
+option go_package = "yeying/api/session";
+package yeying.api.session;
+
+import "yeying/api/common/message.proto";
+
+service Session {
+  // 创建会话
+  rpc Create(CreateSessionRequest) returns (CreateSessionResponse) {}
+
+  // 删除会话
+  rpc Delete(DeleteSessionRequest) returns (DeleteSessionResponse) {}
+
+  // 搜索会话
+  rpc Detail(SessionDetailRequest) returns (SessionDetailResponse) {}
+
+  // 搜索会话
+  rpc Search(SearchSessionRequest) returns (SearchSessionResponse) {}
+
+  // 更新会话
+  rpc Update(UpdateSessionRequest) returns (UpdateSessionResponse) {}
+}
+
+message CreateSessionRequest {
+  common.MessageHeader header = 1;
+  CreateSessionRequestBody body = 2;
+}
+
+message CreateSessionRequestBody {
+  SessionMetadata session = 1;
+}
+
+message CreateSessionResponse {
+  common.MessageHeader header = 1;
+  CreateSessionResponseBody body = 2;
+}
+
+message CreateSessionResponseBody {
+  common.ResponseStatus status = 1;
+  SessionMetadata session = 2;
+}
+
+message SessionDetailRequest {
+  common.MessageHeader header = 1;
+  SessionDetailRequestBody body = 2;
+}
+
+message SessionDetailRequestBody {
+  string uid = 1;
+}
+
+message SessionDetailResponse {
+  common.MessageHeader header = 1;
+  SessionDetailResponseBody body = 2;
+}
+
+message SessionDetailResponseBody {
+  common.ResponseStatus status = 1;
+  SessionDetail detail = 2;
+}
+
+message SessionDetail {
+  SessionMetadata session = 1;
+}
+
+message DeleteSessionRequest {
+  common.MessageHeader header = 1;
+  DeleteSessionRequestBody body = 2;
+}
+
+message DeleteSessionRequestBody {
+  string uid = 1;
+}
+
+message DeleteSessionResponse {
+  common.MessageHeader header = 1;
+  DeleteSessionResponseBody body = 2;
+}
+
+message DeleteSessionResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message SearchSessionRequest {
+  common.MessageHeader header = 1;
+  SearchSessionRequestBody body = 2;
+}
+
+message SearchSessionRequestBody {
+  SearchSessionCondition condition = 1;
+  common.RequestPage page = 2;
+}
+
+message SearchSessionCondition {
+  string name = 1;
+  string uid = 2;
+}
+
+message SearchSessionResponse {
+  common.MessageHeader header = 1;
+  SearchSessionResponseBody body = 2;
+}
+
+message SearchSessionResponseBody {
+  common.ResponseStatus status = 1;
+  repeated SessionMetadata sessions = 2;
+}
+
+message UpdateSessionRequest {
+  common.MessageHeader header = 1;
+  UpdateSessionRequestBody body = 2;
+}
+
+message UpdateSessionRequestBody {
+  SessionMetadata session = 1;
+}
+
+message UpdateSessionResponse {
+  common.MessageHeader header = 1;
+  UpdateSessionResponseBody body = 2;
+}
+
+message UpdateSessionResponseBody {
+  common.ResponseStatus status = 1;
+  SessionMetadata session = 2;
+}
+
+message SessionMetadata {
+  /* 会话唯一ID */
+  string uid = 1;
+  /* 会话所有者 */
+  string owner = 2;
+  /* 会话名称 */
+  string name = 3;
+  /* 会话描述 */
+  string description = 4;
+  /* 会话配置 */
+  string config = 5;
+  /* 应用创建时间 */
+  string createdAt = 6;
+  /* 应用更新时间 */
+  string updatedAt = 7;
+  // 签名
+  string signature = 8;
+}
