@@ -32,7 +32,8 @@ service Assignment {
 
 // 上传
 message AssignmentUploadRequest {
-  AssignmentUploadRequestBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentUploadRequestBody body = 2;
 }
 message AssignmentUploadRequestBody {
   // 图片url
@@ -49,11 +50,14 @@ message AssignmentUploadResponseBody {
 }
 // 大模型做题
 message AssignmentBigModelRequest {
+  common.MessageHeader header = 1;
+  AssignmentBigModelRequestBody body = 2;
+}
+message AssignmentBigModelRequestBody {
   // 题目文字
   // 一题一题来做，每次只做一题，分多次做，后台提交做题任务，任务排队，任务调度
   string question = 1;
 }
-
 message AssignmentBigModelResponse {
   AssignmentBigModelResponseBody body = 1;
 }
@@ -64,7 +68,8 @@ message AssignmentBigModelResponseBody {
 }
 // 人工做题，拍照上传答案，大模型识别图片题目文字和对应的答案
 message AssignmentArtificialRequest {
-    AssignmentArtificialRequestBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentArtificialRequestBody body = 2;
 }
 message AssignmentArtificialRequestBody {
   // 答案拍照的照片url
@@ -82,7 +87,8 @@ message AssignmentArtificialResponseBody {
 // 学生加减
 // 添加学生，减少学生
 message StudentActionRequest {
-  StudentActionRequestBody body = 1;
+  common.MessageHeader header = 1;
+  StudentActionRequestBody body = 2;
 }
 message StudentActionRequestBody {
   // 教学任务ID
@@ -101,7 +107,8 @@ message StudentActionResponseBody {
 
 // 批改，题目 + 答案，调用大模型批改
 message AssignmentCorrectionRequest {
-  AssignmentCorrectionRequestBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentCorrectionRequestBody body = 2;
 }
 message AssignmentCorrectionRequestBody {
   // 根据题目 + 答案组装 prompt

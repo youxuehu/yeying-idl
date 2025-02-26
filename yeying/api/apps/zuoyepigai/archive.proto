@@ -14,7 +14,8 @@ service Archive {
 }
 // 列表
 message ArchiveListRequest {
-  ArchiveListRequestBody body = 1;
+  common.MessageHeader header = 1;
+  ArchiveListRequestBody body = 2;
 }
 message ArchiveListRequestBody {
   string userUid = 1;
@@ -47,7 +48,8 @@ message ArchiveMeta {
 }
 // 详情
 message ArchiveDetailRequest {
-    ArchiveDetailRequestBody body = 1;
+  common.MessageHeader header = 1;
+  ArchiveDetailRequestBody body = 2;
 }
 message ArchiveDetailRequestBody {
   string uid = 1;

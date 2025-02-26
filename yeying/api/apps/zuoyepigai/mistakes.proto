@@ -22,7 +22,8 @@ service Mistakes {
 }
 // 列表
 message MistakesListRequest {
-  MistakesListRequestBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesListRequestBody body = 2;
 }
 message MistakesListRequestBody {
   // 学生ID
@@ -53,7 +54,11 @@ message MistakesMeta {
 }
 // 详情
 message MistakesDetailRequest {
-
+  common.MessageHeader header = 1;
+  MistakesDetailRequestBody body = 2;
+}
+message MistakesDetailRequestBody {
+  string uid = 1;
 }
 message MistakesDetailResponse {
   MistakesDetailResponseBody body = 1;
@@ -63,7 +68,11 @@ message MistakesDetailResponseBody {
 }
 // 错误分析
 message MistakesAnalysisRequest {
-
+  common.MessageHeader header = 1;
+  MistakesAnalysisRequestBody body = 2;
+}
+message MistakesAnalysisRequestBody {
+  string qa = 1;
 }
 message MistakesAnalysisResponse {
   MistakesAnalysisResponseBody body = 1;
@@ -73,7 +82,11 @@ message MistakesAnalysisResponseBody {
 }
 // 错误订正
 message MakeCorrectionRequest {
-
+  common.MessageHeader header = 1;
+  MakeCorrectionRequestBody body = 2;
+}
+message MakeCorrectionRequestBody {
+  string qa = 1;
 }
 message MakeCorrectionResponse {
     MakeCorrectionResponseBody body = 1;
@@ -83,7 +96,11 @@ message MakeCorrectionResponseBody {
 }
 // 打印错题题目
 message MistakesPrintRequest {
-
+  common.MessageHeader header = 1;
+  MistakesPrintRequestBody body = 2;
+}
+message MistakesPrintRequestBody {
+  string qa = 1;
 }
 message MistakesPrintResponse {
   MistakesPrintResponseBody body = 1;
@@ -93,7 +110,11 @@ message MistakesPrintResponseBody {
 }
 // 提交订正的题目，重新生成图片，提交大模型批改
 message MistakesSubmitRequest {
-
+  common.MessageHeader header = 1;
+  MistakesSubmitRequestBody body = 2;
+}
+message MistakesSubmitRequestBody {
+  string qa = 1;
 }
 message MistakesSubmitResponse {
   MistakesSubmitResponseBody body = 1;
