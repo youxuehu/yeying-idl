@@ -53,7 +53,8 @@ message AddTaskResponse{
 }
 
 message AddTaskResponseBody {
-  TaskMeta meta = 1;
+  common.ResponseStatus status = 1;
+  TaskMeta meta = 2;
 }
 // Detail
 message DetailTaskRequest{
