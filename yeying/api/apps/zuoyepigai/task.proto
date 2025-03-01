@@ -28,7 +28,7 @@ message TaskMeta {
   // 描述
   string description = 3;
   // 标签
-  string tag = 4;
+  string tagUid = 4;
   // 用户uId
   string userUid = 5;
   // 创建时间
