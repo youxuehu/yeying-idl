@@ -1,0 +1,21 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+
+/**
+图片内容类型
+ */
+enum ImageContentTypeEnum {
+  /**
+  题目
+   */
+  QUESTION = 0;
+  /**
+  答案
+   */
+  ANSWER = 1;
+  /**
+  题目和答案
+   */
+  QA = 2;
+}
