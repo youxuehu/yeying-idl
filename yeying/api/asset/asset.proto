@@ -78,6 +78,7 @@ message SearchAssetCondition {
   common.DigitalFormatEnum format = 1; // 资产内容格式
   string hash = 2; // 内容哈希值
   string namespaceId = 3; // 命名空间ID
+  string name = 4; // 资产名称
 }
 
 message SearchAssetResponse {
@@ -125,7 +126,7 @@ message UpdateAssetResponse {
 
 message UpdateAssetResponseBody {
   common.ResponseStatus status = 1;
-  AssetMetadata assets = 2;
+  AssetMetadata asset = 2;
 }
 
 message AssetDetailRequest {
