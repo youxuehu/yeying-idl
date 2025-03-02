@@ -48,7 +48,8 @@ message AssignmentUploadRequestBody {
 }
 
 message AssignmentUploadResponse {
-  AssignmentUploadResponseBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentUploadResponseBody body = 2;
 }
 message AssignmentUploadResponseBody {
   common.ResponseStatus status = 1;
@@ -66,7 +67,8 @@ message AssignmentBigModelRequestBody {
   string question = 1;
 }
 message AssignmentBigModelResponse {
-  AssignmentBigModelResponseBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentBigModelResponseBody body = 2;
 }
 message AssignmentBigModelResponseBody {
   common.ResponseStatus status = 1;
@@ -83,7 +85,8 @@ message AssignmentArtificialRequestBody {
   string fileUrl = 1;
 }
 message AssignmentArtificialResponse {
-  AssignmentArtificialResponseBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentArtificialResponseBody body = 2;
 }
 message AssignmentArtificialResponseBody {
   common.ResponseStatus status = 1;
@@ -106,7 +109,8 @@ message StudentActionRequestBody {
   string action = 3;
 }
 message StudentActionResponse {
-  StudentActionResponseBody body = 1;
+  common.MessageHeader header = 1;
+  StudentActionResponseBody body = 2;
 }
 message StudentActionResponseBody {
   common.ResponseStatus status = 1;
@@ -123,7 +127,8 @@ message AssignmentCorrectionRequestBody {
   string qa = 1;
 }
 message AssignmentCorrectionResponse {
-  AssignmentCorrectionResponseBody body = 1;
+  common.MessageHeader header = 1;
+  AssignmentCorrectionResponseBody body = 2;
 }
 message AssignmentCorrectionResponseBody {
   common.ResponseStatus status = 1;

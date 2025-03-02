@@ -49,7 +49,8 @@ message AddTaskRequestBody {
 }
 
 message AddTaskResponse{
-  AddTaskResponseBody body = 1;
+  common.MessageHeader header = 1;
+  AddTaskResponseBody body = 2;
 }
 
 message AddTaskResponseBody {
@@ -66,7 +67,8 @@ message DetailTaskRequestBody {
 }
 
 message DetailTaskResponse{
-  DetailTaskResponseBody body = 1;
+  common.MessageHeader header = 1;
+  DetailTaskResponseBody body = 2;
 }
 message DetailTaskResponseBody {
   common.ResponseStatus status = 1;
@@ -82,7 +84,8 @@ message ListTaskRequestBody {
 }
 
 message ListTaskResponse{
-  ListTaskResponseBody body = 1;
+  common.MessageHeader header = 1;
+  ListTaskResponseBody body = 2;
 }
 message ListTaskResponseBody {
   common.ResponseStatus status = 1;
@@ -100,7 +103,8 @@ message UpdateTaskRequestBody {
 }
 
 message UpdateTaskResponse {
-  UpdateTaskResponseBody body = 1;
+  common.MessageHeader header = 1;
+  UpdateTaskResponseBody body = 2;
 }
 
 message UpdateTaskResponseBody {
@@ -118,7 +122,8 @@ message DeleteTaskRequestBody {
 }
 
 message DeleteTaskResponse {
-  DeleteTaskResponseBody body = 1;
+  common.MessageHeader header = 1;
+  DeleteTaskResponseBody body = 2;
 }
 
 message DeleteTaskResponseBody {

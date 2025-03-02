@@ -21,7 +21,8 @@ message ArchiveListRequestBody {
   string userUid = 1;
 }
 message ArchiveListResponse {
-  ArchiveListResponseBody body = 1;
+  common.MessageHeader header = 1;
+  ArchiveListResponseBody body = 2;
 }
 message ArchiveListResponseBody {
   common.ResponseStatus status = 1;
@@ -55,7 +56,8 @@ message ArchiveDetailRequestBody {
   string uid = 1;
 }
 message ArchiveDetailResponse {
-  ArchiveDetailResponseBody body = 1;
+  common.MessageHeader header = 1;
+  ArchiveDetailResponseBody body = 2;
 }
 message ArchiveDetailResponseBody {
   common.ResponseStatus status = 1;
