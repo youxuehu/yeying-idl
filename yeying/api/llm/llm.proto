@@ -28,10 +28,12 @@ message CompleteRequest {
 }
 
 message CompleteRequestBody {
-  string llmId = 1;
-  string model = 2;
-  bool stream = 3;
-  repeated Prompt prompts = 4;
+  string sessionId = 1;
+  string promptId = 2;
+  string providerId = 3;
+  string model = 4;
+  bool stream = 5;
+  repeated Prompt prompts = 6;
 }
 
 message Prompt {
@@ -68,7 +70,7 @@ message CompleteResponseHeadBody {
 }
 
 message CompleteResponseBody {
-  Answer answer = 2;
+  string content = 1;
 }
 
 message CompleteResponseTail {

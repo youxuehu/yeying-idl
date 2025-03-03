@@ -33,8 +33,7 @@ message CreateLinkResponse {
 
 message CreateLinkResponseBody {
   common.ResponseStatus status = 1;
-  UrlMetadata url = 2;
-  LinkMetadata link = 3;
+  LinkDetail detail = 2;
 }
 
 message SearchLinkRequest {
@@ -78,8 +77,7 @@ message UpdateLinkResponse {
 
 message UpdateLinkResponseBody {
   common.ResponseStatus status = 1;
-  UrlMetadata url = 2;
-  LinkMetadata link = 3;
+  LinkDetail detail = 2;
 }
 
 message LinkDetailRequest {
@@ -98,8 +96,12 @@ message LinkDetailResponse {
 
 message LinkDetailResponseBody {
   common.ResponseStatus status = 1;
-  UrlMetadata url = 2;
-  LinkMetadata link = 3;
+  LinkDetail detail = 2;
+}
+
+message LinkDetail {
+  UrlMetadata url = 1;
+  LinkMetadata link = 2;
 }
 
 message LinkVisitorRequest {
