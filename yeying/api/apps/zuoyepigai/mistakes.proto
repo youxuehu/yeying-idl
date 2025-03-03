@@ -30,7 +30,8 @@ message MistakesListRequestBody {
   string userUid = 1;
 }
 message MistakesListResponse {
-  MistakesListResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesListResponseBody body = 2;
 }
 message MistakesListResponseBody {
   common.ResponseStatus status = 1;
@@ -61,7 +62,8 @@ message MistakesDetailRequestBody {
   string uid = 1;
 }
 message MistakesDetailResponse {
-  MistakesDetailResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesDetailResponseBody body = 2;
 }
 message MistakesDetailResponseBody {
   common.ResponseStatus status = 1;
@@ -76,7 +78,8 @@ message MistakesAnalysisRequestBody {
   string qa = 1;
 }
 message MistakesAnalysisResponse {
-  MistakesAnalysisResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesAnalysisResponseBody body = 2;
 }
 message MistakesAnalysisResponseBody {
   common.ResponseStatus status = 1;
@@ -90,7 +93,8 @@ message MakeCorrectionRequestBody {
   string qa = 1;
 }
 message MakeCorrectionResponse {
-    MakeCorrectionResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MakeCorrectionResponseBody body = 2;
 }
 message MakeCorrectionResponseBody {
   common.ResponseStatus status = 1;
@@ -104,7 +108,8 @@ message MistakesPrintRequestBody {
   string qa = 1;
 }
 message MistakesPrintResponse {
-  MistakesPrintResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesPrintResponseBody body = 2;
 }
 message MistakesPrintResponseBody {
   common.ResponseStatus status = 1;
@@ -118,7 +123,8 @@ message MistakesSubmitRequestBody {
   string qa = 1;
 }
 message MistakesSubmitResponse {
-  MistakesSubmitResponseBody body = 1;
+  common.MessageHeader header = 1;
+  MistakesSubmitResponseBody body = 2;
 }
 message MistakesSubmitResponseBody {
   common.ResponseStatus status = 1;

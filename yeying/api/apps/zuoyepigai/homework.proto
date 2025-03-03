@@ -24,7 +24,8 @@ message HomeworkListRequestBody {
   string userUid = 1;
 }
 message HomeworkListResponse {
-  HomeworkListResponseBody body = 1;
+  common.MessageHeader header = 1;
+  HomeworkListResponseBody body = 2;
 }
 message HomeworkListResponseBody {
   common.ResponseStatus status = 1;
@@ -56,7 +57,8 @@ message HomeworkDetailRequestBody {
   string uid = 1;
 }
 message HomeworkDetailResponse {
-  HomeworkDetailResponseBody body = 1;
+  common.MessageHeader header = 1;
+  HomeworkDetailResponseBody body = 2;
 }
 message HomeworkDetailResponseBody {
   common.ResponseStatus status = 1;
