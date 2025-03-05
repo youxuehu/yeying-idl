@@ -1,0 +1,74 @@
+
+syntax = "proto3";
+package yeying.api.common;
+option go_package = "yeying/api/common";
+
+import "yeying/api/common/code.proto";
+
+message ApplicationMetadata {
+  /* 应用所有者 */
+  string owner = 1;
+  /* 身份所在网络 */
+  string network = 2;
+  /* 身份地址 */
+  string address = 3;
+  /* 应用身份 */
+  string did = 4;
+  /* 应用版本 */
+  uint32 version = 5;
+  /* 应用哈希 */
+  string hash = 6;
+  /* 应用名称 */
+  string name = 7;
+  /* 应用编号 */
+  common.ApplicationCodeEnum code = 8;
+  /* 应用描述 */
+  string description = 9;
+  /* 访问路径 */
+  string location = 10;
+  /* 应用依赖的服务编码，用,隔开 */
+  string serviceCodes = 11;
+  /* 应用头像 */
+  string avatar = 12;
+  /* 应用扩展信息 */
+  string extend = 13;
+  /* 应用创建时间 */
+  string createdAt = 14;
+  /* 应用更新时间 */
+  string updatedAt = 15;
+  // 签名
+  string signature = 16;
+}
+
+message ServiceMetadata {
+  /* 服务所有者 */
+  string owner = 1;
+  /* 服务所在网络 */
+  string network = 2;
+  /* 服务所在网络地址 */
+  string address = 3;
+  /* 服务身份 */
+  string did = 4;
+  /* 服务版本 */
+  uint32 version = 5;
+  /* 服务名称 */
+  string name = 6;
+  /* 服务描述 */
+  string description = 7;
+  /* 服务编码 */
+  common.ServiceCodeEnum code = 8;
+  /* 服务apis */
+  repeated common.ApiCodeEnum apis = 9;
+  /* 服务代理 */
+  string proxy = 10;
+  /* 服务grpc地址 */
+  string grpc = 11;
+  /* 服务头像 */
+  string avatar = 12;
+  /* 服务创建时间点 */
+  string createdAt = 13;
+  /* 服务修改时间点 */
+  string updatedAt = 14;
+  // 签名
+  string signature = 15;
+}
