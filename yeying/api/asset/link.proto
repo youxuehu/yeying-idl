@@ -139,9 +139,9 @@ message LinkMetadata {
 }
 
 enum LinkTypeEnum {
-  LINK_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
-  LINK_STATUS_PUBLIC = 1; // 完全公开的，无需验证身份，直接访问
-  LINK_STATUS_AUTHENTICATED = 2; // 需要验证身份，包括访问需要的身份DID、下载时间和签名
+  LINK_TYPE_UNKNOWN = 0; // 未知编码，是一种占位符
+  LINK_TYPE_PUBLIC = 1; // 完全公开的，无需验证身份，直接访问
+  LINK_TYPE_AUTHENTICATED = 2; // 需要验证身份，包括访问需要的身份DID、下载时间和签名
 }
 
 message UrlMetadata {
