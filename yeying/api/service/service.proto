@@ -82,6 +82,5 @@ message UnregisterServiceResponse {
 
 message UnregisterServiceResponseBody {
   common.ResponseStatus status = 1;
-  common.ServiceMetadata service = 2;
 }
 

@@ -87,7 +87,7 @@ message Mnemonic {
 
 message IdentityServiceExtend {
   string code = 1;
-  string apis = 2; // 应用输出的api编码，用逗号隔开
+  string apiCodes = 2; // 应用输出的api编码，用逗号隔开
   string proxy = 3;
   string grpc = 4;
   string extend = 5;

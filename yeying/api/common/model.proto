@@ -27,17 +27,15 @@ message ApplicationMetadata {
   /* 访问路径 */
   string location = 10;
   /* 应用依赖的服务编码，用,隔开 */
-  string serviceCodes = 11;
+  repeated common.ServiceCodeEnum serviceCodes = 11;
   /* 应用头像 */
   string avatar = 12;
-  /* 应用扩展信息 */
-  string extend = 13;
   /* 应用创建时间 */
-  string createdAt = 14;
+  string createdAt = 13;
   /* 应用更新时间 */
-  string updatedAt = 15;
+  string updatedAt = 14;
   // 签名
-  string signature = 16;
+  string signature = 15;
 }
 
 message ServiceMetadata {
@@ -58,7 +56,7 @@ message ServiceMetadata {
   /* 服务编码 */
   common.ServiceCodeEnum code = 8;
   /* 服务apis */
-  repeated common.ApiCodeEnum apis = 9;
+  repeated common.ApiCodeEnum apiCodes = 9;
   /* 服务代理 */
   string proxy = 10;
   /* 服务grpc地址 */
