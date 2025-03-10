@@ -47,6 +47,10 @@ message AssignmentUploadRequestBody {
   图片类型：题目/答案/题目和答案
    */
   zuoyepigai.ImageContentTypeEnum type = 4;
+  // 学科：语文 数学 英语
+  string subject = 5;
+  // 试卷名称
+  string testPaperName = 6;
 }
 
 message AssignmentUploadResponse {
