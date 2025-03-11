@@ -27,7 +27,7 @@ message MistakesListRequest {
 }
 message MistakesListRequestBody {
   // 学生ID
-  string userUid = 1;
+  string did = 1;
 }
 message MistakesListResponse {
   common.MessageHeader header = 1;

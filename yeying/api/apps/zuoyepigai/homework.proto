@@ -21,7 +21,7 @@ message HomeworkListRequest {
 }
 message HomeworkListRequestBody {
   // 学生ID
-  string userUid = 1;
+  string did = 1;
 }
 message HomeworkListResponse {
   common.MessageHeader header = 1;
@@ -36,7 +36,7 @@ message HomeworkMeta {
   // 主键标识
   string uid = 1;
   // 用户Id
-  string userUid = 2;
+  string did = 2;
   // 科目
   string subject = 3;
   // 试卷Uid
