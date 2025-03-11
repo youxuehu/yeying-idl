@@ -1,0 +1,128 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+
+/**
+教学任务标签管理
+对应的 DB 表：zuoyepigai.task_tag
+ */
+service TaskTag {
+  // 创建任务标签：由老师负创建教学任务标签
+  rpc Add(AddTaskTagRequest) returns (AddTaskTagResponse) {}
+  // 任务标签详情
+  rpc Detail(DetailTaskTagRequest) returns (DetailTaskTagResponse) {}
+  // 任务标签列表
+  rpc List(ListTaskTagRequest) returns (ListTaskTagResponse) {}
+  // 更新任务标签
+  rpc Update(UpdateTaskTagRequest) returns (UpdateTaskTagResponse) {}
+  // 删除任务标签
+  rpc Delete(DeleteTaskTagRequest) returns (DeleteTaskTagResponse) {}
+}
+
+message TaskTagMeta {
+  // ID 唯一标识
+  string uid = 1;
+  // tag名称
+  string name = 2;
+  // 用户uId
+  string userUid = 3;
+  // 创建时间
+  int64 createdAt = 4;
+  // 修改时间
+  int64 updatedAt = 5;
+  // 是否删除
+  bool isDeleted = 6;
+}
+// Add
+message AddTaskTagRequest{
+  common.MessageHeader header = 1;
+  AddTaskTagRequestBody body = 2;
+}
+
+message AddTaskTagRequestBody {
+  TaskTagMeta meta = 1;
+}
+
+message AddTaskTagResponse{
+  common.MessageHeader header = 1;
+  AddTaskTagResponseBody body = 2;
+}
+
+message AddTaskTagResponseBody {
+  common.ResponseStatus status = 1;
+  TaskTagMeta meta = 2;
+}
+// Detail
+message DetailTaskTagRequest{
+  common.MessageHeader header = 1;
+  DetailTaskTagRequestBody body = 2;
+}
+message DetailTaskTagRequestBody {
+  string uid = 1;
+}
+
+message DetailTaskTagResponse{
+  common.MessageHeader header = 1;
+  DetailTaskTagResponseBody body = 2;
+}
+message DetailTaskTagResponseBody {
+  common.ResponseStatus status = 1;
+  TaskTagMeta meta = 2;
+}
+// List
+message ListTaskTagRequest{
+  common.MessageHeader header = 1;
+  ListTaskTagRequestBody body = 2;
+}
+message ListTaskTagRequestBody {
+  string userUid = 1;
+}
+
+message ListTaskTagResponse{
+  common.MessageHeader header = 1;
+  ListTaskTagResponseBody body = 2;
+}
+message ListTaskTagResponseBody {
+  common.ResponseStatus status = 1;
+  // repeated 表示 List
+  repeated TaskTagMeta list = 2;
+}
+
+// Update
+message UpdateTaskTagRequest{
+  common.MessageHeader header = 1;
+  UpdateTaskTagRequestBody body = 2;
+}
+message UpdateTaskTagRequestBody {
+  TaskTagMeta meta = 1;
+}
+
+message UpdateTaskTagResponse {
+  common.MessageHeader header = 1;
+  UpdateTaskTagResponseBody body = 2;
+}
+
+message UpdateTaskTagResponseBody {
+  common.ResponseStatus status = 1;
+  TaskTagMeta meta = 2;
+}
+
+// Delete
+message DeleteTaskTagRequest{
+  common.MessageHeader header = 1;
+  DeleteTaskTagRequestBody body = 2;
+}
+message DeleteTaskTagRequestBody {
+  string uid = 1;
+}
+
+message DeleteTaskTagResponse {
+  common.MessageHeader header = 1;
+  DeleteTaskTagResponseBody body = 2;
+}
+
+message DeleteTaskTagResponseBody {
+  common.ResponseStatus status = 1;
+  TaskTagMeta meta = 2;
+}

@@ -37,14 +37,20 @@ message AssignmentUploadRequest {
   AssignmentUploadRequestBody body = 2;
 }
 message AssignmentUploadRequestBody {
-  // 上传者
+  // 上传者uid
   string userUid = 1;
   // 图片url
   string fileUrl = 2;
+  // 教学任务uid
+  string taskUid = 3;
   /**
   图片类型：题目/答案/题目和答案
    */
-  zuoyepigai.ImageContentTypeEnum type = 3;
+  zuoyepigai.ImageContentTypeEnum type = 4;
+  // 学科：语文 数学 英语
+  string subject = 5;
+  // 试卷名称
+  string testPaperName = 6;
 }
 
 message AssignmentUploadResponse {
