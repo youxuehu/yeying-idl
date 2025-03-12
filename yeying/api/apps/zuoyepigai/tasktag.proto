@@ -26,7 +26,7 @@ message TaskTagMeta {
   // tag名称
   string name = 2;
   // 用户uId
-  string userUid = 3;
+  string did = 3;
   // 创建时间
   int64 createdAt = 4;
   // 修改时间
@@ -76,7 +76,7 @@ message ListTaskTagRequest{
   ListTaskTagRequestBody body = 2;
 }
 message ListTaskTagRequestBody {
-  string userUid = 1;
+  string did = 1;
 }
 
 message ListTaskTagResponse{

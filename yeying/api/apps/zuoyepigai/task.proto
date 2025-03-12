@@ -30,7 +30,7 @@ message TaskMeta {
   // 标签
   string tagUid = 4;
   // 用户uId
-  string userUid = 5;
+  string did = 5;
   // 创建时间
   int64 createdAt = 6;
   // 修改时间
@@ -80,7 +80,7 @@ message ListTaskRequest{
   ListTaskRequestBody body = 2;
 }
 message ListTaskRequestBody {
-  string userUid = 1;
+  string did = 1;
 }
 
 message ListTaskResponse{

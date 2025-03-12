@@ -38,9 +38,9 @@ message AssignmentUploadRequest {
 }
 message AssignmentUploadRequestBody {
   // 上传者uid
-  string userUid = 1;
-  // 图片url
-  string fileUrl = 2;
+  string did = 1;
+  // list 支持批量图片url
+  repeated string fileUrl = 2;
   // 教学任务uid
   string taskUid = 3;
   /**
@@ -110,7 +110,7 @@ message StudentActionRequestBody {
   // 教学任务ID
   string taskUid = 1;
   // 学生ID
-  string studentUid = 2;
+  string did = 2;
   // 操作，添加/减少
   string action = 3;
 }
