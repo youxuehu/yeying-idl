@@ -2,6 +2,7 @@ syntax = "proto3";
 option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
+import "google/protobuf/wrappers.proto";
 
 /**
 老师教学任务管理
@@ -80,7 +81,19 @@ message ListTaskRequest{
   ListTaskRequestBody body = 2;
 }
 message ListTaskRequestBody {
+  // 查询条件
+  // 登录用户did
   string did = 1;
+  // 标签uid
+  string tagUid = 2;
+  // 任务名称，模糊查询
+  string taskName = 3;
+  // 任务描述，模糊查询
+  string description = 4;
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 5;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 6;
 }
 
 message ListTaskResponse{
