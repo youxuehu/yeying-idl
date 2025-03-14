@@ -2,6 +2,7 @@ syntax = "proto3";
 option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
+import "google/protobuf/wrappers.proto";
 
 /**
 档案管理
@@ -9,16 +10,31 @@ import "yeying/api/common/message.proto";
 service Archive {
   // 列表
   rpc List(ArchiveListRequest) returns (ArchiveListResponse) {}
-  // 详情
+  // 详情：老师调用，根据 uid 主键查询
   rpc Detail(ArchiveDetailRequest) returns (ArchiveDetailResponse) {}
+  // 详情：学生调用，根据 studentDid 调用
+  rpc DetailByStudentDid(ArchiveDetailStudentRequest) returns (ArchiveDetailStudentResponse) {}
+  // 添加
+  rpc Add(ArchiveAddRequest) returns (ArchiveAddResponse) {}
+  // 删除
+  rpc Delete(ArchiveDeleteRequest) returns (ArchiveDeleteResponse) {}
+  // 修改
+  rpc Update(ArchiveUpdateRequest) returns (ArchiveUpdateResponse) {}
 }
-// 列表
+// 列表:老师调用
 message ArchiveListRequest {
   common.MessageHeader header = 1;
   ArchiveListRequestBody body = 2;
 }
 message ArchiveListRequestBody {
-  string did = 1;
+  // 老师 did
+  string teacherDid = 1;
+  // 档案名称：模糊查询
+  string name = 2;
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 3;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 4;
 }
 message ArchiveListResponse {
   common.MessageHeader header = 1;
@@ -28,8 +44,6 @@ message ArchiveListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated ArchiveMeta list = 2;
-
-
 }
 message ArchiveMeta {
   // 主键标识ID
@@ -62,6 +76,70 @@ message ArchiveDetailResponse {
   ArchiveDetailResponseBody body = 2;
 }
 message ArchiveDetailResponseBody {
+  common.ResponseStatus status = 1;
+  ArchiveMeta meta = 2;
+}
+// 详情：根据 studentDid 查询
+message ArchiveDetailStudentRequest {
+  common.MessageHeader header = 1;
+  ArchiveDetailStudentRequestBody body = 2;
+}
+message ArchiveDetailStudentRequestBody {
+  string studentDid = 1;
+}
+message ArchiveDetailStudentResponse {
+  common.MessageHeader header = 1;
+  ArchiveDetailStudentResponseBody body = 2;
+}
+message ArchiveDetailStudentResponseBody {
+  common.ResponseStatus status = 1;
+  ArchiveMeta meta = 2;
+}
+// 添加
+message ArchiveAddRequest {
+  common.MessageHeader header = 1;
+  ArchiveAddRequestBody body = 2;
+}
+message ArchiveAddRequestBody {
+  ArchiveMeta meta = 1;
+}
+message ArchiveAddResponse {
+  common.MessageHeader header = 1;
+  ArchiveAddResponseBody body = 2;
+}
+message ArchiveAddResponseBody {
+  common.ResponseStatus status = 1;
+  ArchiveMeta meta = 2;
+}
+// 删除
+message ArchiveDeleteRequest {
+  common.MessageHeader header = 1;
+  ArchiveDeleteRequestBody body = 2;
+}
+message ArchiveDeleteRequestBody {
+  string uid = 1;
+}
+message ArchiveDeleteResponse {
+  common.MessageHeader header = 1;
+  ArchiveDeleteResponseBody body = 2;
+}
+message ArchiveDeleteResponseBody {
+  common.ResponseStatus status = 1;
+  ArchiveMeta meta = 2;
+}
+// 修改
+message ArchiveUpdateRequest {
+  common.MessageHeader header = 1;
+  ArchiveUpdateRequestBody body = 2;
+}
+message ArchiveUpdateRequestBody {
+  ArchiveMeta meta = 1;
+}
+message ArchiveUpdateResponse {
+  common.MessageHeader header = 1;
+  ArchiveUpdateResponseBody body = 2;
+}
+message ArchiveUpdateResponseBody {
   common.ResponseStatus status = 1;
   ArchiveMeta meta = 2;
 }
