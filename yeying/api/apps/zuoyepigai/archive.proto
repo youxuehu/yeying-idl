@@ -47,7 +47,7 @@ message ArchiveListResponseBody {
 }
 message ArchiveMeta {
   // 主键标识ID
-  string uId = 1;
+  string uid = 1;
   // 档案名称
   string name = 2;
   // 学生did
