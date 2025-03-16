@@ -13,6 +13,8 @@ service Link {
   rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {}
   // 分享链接的访问信息
   rpc Visitor(LinkVisitorRequest) returns (LinkVisitorResponse) {}
+  // 取消分享
+  rpc Disable(DisableLinkRequest) returns (DisableLinkResponse) {}
   // 更新资产分享链接，实现变更、取消等功能
   rpc Update(UpdateLinkRequest) returns (UpdateLinkResponse) {}
 }
@@ -59,6 +61,24 @@ message SearchLinkResponseBody {
   common.ResponseStatus status = 1;
   common.ResponsePage page = 2;
   repeated LinkMetadata links = 3;
+}
+
+message DisableLinkRequest {
+  common.MessageHeader header = 1;
+  DisableLinkRequestBody body = 2;
+}
+
+message DisableLinkRequestBody {
+  string linkId = 1;
+}
+
+message DisableLinkResponse {
+  common.MessageHeader header = 1;
+  DisableLinkResponseBody body = 2;
+}
+
+message DisableLinkResponseBody {
+  common.ResponseStatus status = 1;
 }
 
 message UpdateLinkRequest {
@@ -126,16 +146,25 @@ message LinkVisitorResponseBody {
 }
 
 message LinkMetadata {
-  string owner = 1; // 分享链接所有者
-  string uid = 2; // 分享链接唯一ID
-  LinkTypeEnum type = 3; // 分享链接类型
-  string visitors = 4; // 指定分享链接的访问者身份ID，多个访问者使用逗号隔开，如果不指定，说明任何身份都可以访问
-  string namespaceId = 5; // 资产所在命名空间
-  string hash = 6; // 资产内容哈希
-  string password = 7; // 访问口令
-  string expiredAt = 8; // 分享链接有效截止时间
-  string createdAt = 9; // 分享链接创建时间
-  string signature = 10; // 资产所有者签名
+  string owner = 1;           // 分享链接所有者
+  string uid = 2;             // 分享链接唯一ID
+  LinkTypeEnum type = 3;      // 分享链接类型
+  string visitors = 4;        // 指定分享链接的访问者身份ID，多个访问者使用逗号隔开，如果不指定，说明任何身份都可以访问
+  string namespaceId = 5;     // 资产所在命名空间
+  string name = 6;            // 分享链接的名称，默认是资产名称
+  string description = 7;     // 分享链接的描述
+  string hash = 8;            // 资产内容哈希
+  string token = 9;           // 访问口令
+  string startedAt = 10;      // 分享链接有效开始时间，不设置表示从创建时间开始
+  string expiredAt = 11;      // 分享链接有效截止时间，不设置表示永久有效
+  string createdAt = 12;      // 分享链接创建时间
+  string signature = 13;      // 资产所有者签名
+}
+
+enum UrlStatusEnum {
+  URL_STATUS_UNKNOWN = 0; // 未知编码，是一种占位符
+  URL_STATUS_ENABLE = 1; // 分享链接可用状态
+  URL_STATUS_DISABLE = 2; // 分享链接不可用状态
 }
 
 enum LinkTypeEnum {
@@ -145,12 +174,14 @@ enum LinkTypeEnum {
 }
 
 message UrlMetadata {
-  string serviceDid = 1;  // 服务Did
+  string serviceDid = 1;  // 服务DID
   string linkId = 2;      // 分享链接ID
   string token = 3;       // 访问令牌
-  string url = 4;         // 分享链接
-  string createdAt = 5;   // 创建时间
-  string signature = 6;   // 服务签名
+  string url = 4;         // 分享链接URL
+  UrlStatusEnum status = 5;  // 链接地址状态
+  string createdAt = 6;   // 创建时间
+  string updatedAt = 7;   // 创建时间
+  string signature = 8;   // 服务签名
 }
 
 message VisitorMetadata {
