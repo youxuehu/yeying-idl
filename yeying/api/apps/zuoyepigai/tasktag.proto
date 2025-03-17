@@ -20,7 +20,7 @@ service TaskTag {
   rpc Delete(DeleteTaskTagRequest) returns (DeleteTaskTagResponse) {}
 }
 
-message TaskTagMeta {
+message TaskTagMetadata {
   // ID 唯一标识
   string uid = 1;
   // tag名称
@@ -41,7 +41,7 @@ message AddTaskTagRequest{
 }
 
 message AddTaskTagRequestBody {
-  TaskTagMeta meta = 1;
+  TaskTagMetadata meta = 1;
 }
 
 message AddTaskTagResponse{
@@ -51,7 +51,7 @@ message AddTaskTagResponse{
 
 message AddTaskTagResponseBody {
   common.ResponseStatus status = 1;
-  TaskTagMeta meta = 2;
+  TaskTagMetadata meta = 2;
 }
 // Detail
 message DetailTaskTagRequest{
@@ -68,7 +68,7 @@ message DetailTaskTagResponse{
 }
 message DetailTaskTagResponseBody {
   common.ResponseStatus status = 1;
-  TaskTagMeta meta = 2;
+  TaskTagMetadata meta = 2;
 }
 // List
 message ListTaskTagRequest{
@@ -86,7 +86,7 @@ message ListTaskTagResponse{
 message ListTaskTagResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated TaskTagMeta list = 2;
+  repeated TaskTagMetadata list = 2;
 }
 
 // Update
@@ -95,7 +95,7 @@ message UpdateTaskTagRequest{
   UpdateTaskTagRequestBody body = 2;
 }
 message UpdateTaskTagRequestBody {
-  TaskTagMeta meta = 1;
+  TaskTagMetadata meta = 1;
 }
 
 message UpdateTaskTagResponse {
@@ -105,7 +105,7 @@ message UpdateTaskTagResponse {
 
 message UpdateTaskTagResponseBody {
   common.ResponseStatus status = 1;
-  TaskTagMeta meta = 2;
+  TaskTagMetadata meta = 2;
 }
 
 // Delete
@@ -124,5 +124,5 @@ message DeleteTaskTagResponse {
 
 message DeleteTaskTagResponseBody {
   common.ResponseStatus status = 1;
-  TaskTagMeta meta = 2;
+  TaskTagMetadata meta = 2;
 }

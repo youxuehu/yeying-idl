@@ -30,9 +30,9 @@ message HomeworkListResponse {
 message HomeworkListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated HomeworkMeta list = 2;
+  repeated HomeworkMetadata list = 2;
 }
-message HomeworkMeta {
+message HomeworkMetadata {
   // 主键标识
   string uid = 1;
   // 用户Id
@@ -62,5 +62,5 @@ message HomeworkDetailResponse {
 }
 message HomeworkDetailResponseBody {
   common.ResponseStatus status = 1;
-  HomeworkMeta meta = 2;
+  HomeworkMetadata meta = 2;
 }
