@@ -43,9 +43,9 @@ message ArchiveListResponse {
 message ArchiveListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated ArchiveMeta list = 2;
+  repeated ArchiveMetadata list = 2;
 }
-message ArchiveMeta {
+message ArchiveMetadata {
   // 主键标识ID
   string uid = 1;
   // 档案名称
@@ -77,7 +77,7 @@ message ArchiveDetailResponse {
 }
 message ArchiveDetailResponseBody {
   common.ResponseStatus status = 1;
-  ArchiveMeta meta = 2;
+  ArchiveMetadata meta = 2;
 }
 // 详情：根据 studentDid 查询
 message ArchiveDetailStudentRequest {
@@ -93,7 +93,7 @@ message ArchiveDetailStudentResponse {
 }
 message ArchiveDetailStudentResponseBody {
   common.ResponseStatus status = 1;
-  ArchiveMeta meta = 2;
+  ArchiveMetadata meta = 2;
 }
 // 添加
 message ArchiveAddRequest {
@@ -101,7 +101,7 @@ message ArchiveAddRequest {
   ArchiveAddRequestBody body = 2;
 }
 message ArchiveAddRequestBody {
-  ArchiveMeta meta = 1;
+  ArchiveMetadata meta = 1;
 }
 message ArchiveAddResponse {
   common.MessageHeader header = 1;
@@ -109,7 +109,7 @@ message ArchiveAddResponse {
 }
 message ArchiveAddResponseBody {
   common.ResponseStatus status = 1;
-  ArchiveMeta meta = 2;
+  ArchiveMetadata meta = 2;
 }
 // 删除
 message ArchiveDeleteRequest {
@@ -125,7 +125,7 @@ message ArchiveDeleteResponse {
 }
 message ArchiveDeleteResponseBody {
   common.ResponseStatus status = 1;
-  ArchiveMeta meta = 2;
+  ArchiveMetadata meta = 2;
 }
 // 修改
 message ArchiveUpdateRequest {
@@ -133,7 +133,7 @@ message ArchiveUpdateRequest {
   ArchiveUpdateRequestBody body = 2;
 }
 message ArchiveUpdateRequestBody {
-  ArchiveMeta meta = 1;
+  ArchiveMetadata meta = 1;
 }
 message ArchiveUpdateResponse {
   common.MessageHeader header = 1;
@@ -141,5 +141,5 @@ message ArchiveUpdateResponse {
 }
 message ArchiveUpdateResponseBody {
   common.ResponseStatus status = 1;
-  ArchiveMeta meta = 2;
+  ArchiveMetadata meta = 2;
 }

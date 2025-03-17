@@ -21,7 +21,7 @@ service Task {
   rpc Delete(DeleteTaskRequest) returns (DeleteTaskResponse) {}
 }
 
-message TaskMeta {
+message TaskMetadata {
   // ID 唯一标识
   string uid = 1;
   // 任务名称
@@ -46,7 +46,7 @@ message AddTaskRequest{
 }
 
 message AddTaskRequestBody {
-  TaskMeta meta = 1;
+  TaskMetadata meta = 1;
 }
 
 message AddTaskResponse{
@@ -56,7 +56,7 @@ message AddTaskResponse{
 
 message AddTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMeta meta = 2;
+  TaskMetadata meta = 2;
 }
 // Detail
 message DetailTaskRequest{
@@ -73,7 +73,7 @@ message DetailTaskResponse{
 }
 message DetailTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMeta meta = 2;
+  TaskMetadata meta = 2;
 }
 // List
 message ListTaskRequest{
@@ -103,7 +103,7 @@ message ListTaskResponse{
 message ListTaskResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated TaskMeta list = 2;
+  repeated TaskMetadata list = 2;
 }
 
 // Update
@@ -112,7 +112,7 @@ message UpdateTaskRequest{
   UpdateTaskRequestBody body = 2;
 }
 message UpdateTaskRequestBody {
-  TaskMeta meta = 1;
+  TaskMetadata meta = 1;
 }
 
 message UpdateTaskResponse {
@@ -122,7 +122,7 @@ message UpdateTaskResponse {
 
 message UpdateTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMeta meta = 2;
+  TaskMetadata meta = 2;
 }
 
 // Delete
@@ -141,5 +141,5 @@ message DeleteTaskResponse {
 
 message DeleteTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMeta meta = 2;
+  TaskMetadata meta = 2;
 }

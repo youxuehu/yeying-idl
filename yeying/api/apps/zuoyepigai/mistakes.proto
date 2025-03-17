@@ -36,10 +36,10 @@ message MistakesListResponse {
 message MistakesListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated MistakesMeta list = 2;
+  repeated MistakesMetadata list = 2;
 }
 
-message MistakesMeta {
+message MistakesMetadata {
   // 错题ID
   string uid = 1;
   // 错题题目
@@ -67,7 +67,7 @@ message MistakesDetailResponse {
 }
 message MistakesDetailResponseBody {
   common.ResponseStatus status = 1;
-  MistakesMeta meta = 2;
+  MistakesMetadata meta = 2;
 }
 // 错误分析
 message MistakesAnalysisRequest {
