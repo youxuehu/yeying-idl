@@ -1,0 +1,82 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+import "yeying/api/apps/zuoyepigai/imagecontent.proto";
+
+/**
+资产仓库管理
+ */
+service Warehouse {
+  /**
+  资产上传：例如上传试卷：
+   1: 上传空白试卷
+   2: 上传空白试卷 + 对应的答案
+   3: 上传已作答的试卷
+   */
+  rpc Add(AddWarehouseRequest) returns (AddWarehouseResponse) {}
+  /**
+  资产列表
+   */
+  rpc List(ListWarehouseRequest) returns (ListWarehouseResponse) {}
+}
+
+message AddWarehouseRequest {
+  common.MessageHeader header = 1;
+  AddWarehouseRequestBody body = 2;
+}
+message AddWarehouseRequestBody {
+  // 资产录入者 did
+  string did = 1;
+  // 资产 url， 先上传 asset，返回 url
+  string url = 2;
+  // 资产类型：空白试卷/空白试卷 + 答案/已作答的试卷
+  zuoyepigai.ImageContentTypeEnum type = 3;
+  // 教学任务 uid
+  string taskUid = 4;
+}
+
+message AddWarehouseResponse {
+  common.MessageHeader header = 1;
+  AddWarehouseResponseBody body = 2;
+}
+message AddWarehouseResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+message ListWarehouseRequest {
+  common.MessageHeader header = 1;
+  ListWarehouseRequestBody body = 2;
+}
+message ListWarehouseRequestBody {
+  // 资产录入者 did
+  string did = 1;
+  // 教学任务 uid
+  string taskUid = 2;
+}
+message ListWarehouseResponse {
+  common.MessageHeader header = 1;
+  ListWarehouseResponseBody body = 2;
+}
+message ListWarehouseResponseBody {
+  common.ResponseStatus status = 1;
+  repeated WarehouseMetadata list = 2;
+}
+message WarehouseMetadata {
+  // 主键 uid
+  string uid = 1;
+  // 资产提交者 did
+  string did = 2;
+  // 资产 url
+  string url = 3;
+  // 任务 uId
+  string taskUid = 4;
+  // 资产类型
+  zuoyepigai.ImageContentTypeEnum type = 5;
+  // 创建时间
+  int64 createdAt = 6;
+  // 修改时间
+  int64 updatedAt = 7;
+  // 是否删除
+  bool isDeleted = 8;
+}
