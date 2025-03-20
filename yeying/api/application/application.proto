@@ -76,6 +76,7 @@ message CreateApplicationResponse {
 
 message CreateApplicationResponseBody {
   common.ResponseStatus status = 1;
+  common.ApplicationMetadata application = 2;
 }
 
 message ApplicationDetailRequest {
