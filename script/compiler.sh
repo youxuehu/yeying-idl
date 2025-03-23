@@ -271,6 +271,30 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
       exit 1
     fi
   done
+elif [ "${app_type}" == "zuoyepigai" ] && [ "${language}" == "java" ]; then
+  # 字符串分割，解析成数组
+  IFS=',' read -ra arr <<<"${module}"
+  # 遍历数组
+  for name in "${arr[@]}"; do
+    set -x
+    echo "Compile client module=${name} for java"
+    echo "api_source_dir=${api_source_dir}"
+    echo "api_target_dir=${api_target_dir}"
+    if [ ! -d "${api_target_dir}/apps" ]; then
+      mkdir -p "${api_target_dir}/apps"
+    fi
+
+    ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+
+    if ! protoc --proto_path="${compile_dir}" \
+      --java_out="${output_dir}" \
+      --grpc-java_out="${output_dir}" \
+      "${api_target_dir}/${name}"/*.proto; then
+      echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
+      exit 1
+    fi
+    set +x
+  done
 else
   echo "not supported, app type=${app_type}, language=${language}"
   exit 1
