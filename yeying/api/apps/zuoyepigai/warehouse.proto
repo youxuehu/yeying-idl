@@ -3,6 +3,7 @@ option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
 import "yeying/api/apps/zuoyepigai/imagecontent.proto";
+import "google/protobuf/wrappers.proto";
 
 /**
 资产仓库管理
@@ -19,21 +20,42 @@ service Warehouse {
   资产列表
    */
   rpc List(ListWarehouseRequest) returns (ListWarehouseResponse) {}
+  /**
+  资产列表
+  */
+  rpc Detail(DetailWarehouseRequest) returns (DetailWarehouseResponse) {}
+}
+/**
+详情
+ */
+message DetailWarehouseRequest {
+  common.MessageHeader header = 1;
+  DetailWarehouseRequestBody body = 2;
+}
+message DetailWarehouseRequestBody {
+  /**
+  主键uid
+   */
+  string uid = 1;
+}
+message DetailWarehouseResponse {
+  common.MessageHeader header = 1;
+  DetailWarehouseResponseBody body = 2;
+}
+message DetailWarehouseResponseBody {
+  common.ResponseStatus status = 1;
+  WarehouseMetadata meta = 2;
 }
 
+/**
+添加
+ */
 message AddWarehouseRequest {
   common.MessageHeader header = 1;
   AddWarehouseRequestBody body = 2;
 }
 message AddWarehouseRequestBody {
-  // 资产录入者 did
-  string did = 1;
-  // 资产 url， 先上传 asset，返回 url
-  string url = 2;
-  // 资产类型：空白试卷/空白试卷 + 答案/已作答的试卷
-  zuoyepigai.ImageContentTypeEnum type = 3;
-  // 教学任务 uid
-  string taskUid = 4;
+  WarehouseMetadata meta = 1;
 }
 
 message AddWarehouseResponse {
@@ -42,8 +64,12 @@ message AddWarehouseResponse {
 }
 message AddWarehouseResponseBody {
   common.ResponseStatus status = 1;
+  WarehouseMetadata meta = 2;
 }
 
+/**
+列表
+ */
 message ListWarehouseRequest {
   common.MessageHeader header = 1;
   ListWarehouseRequestBody body = 2;
@@ -53,6 +79,10 @@ message ListWarehouseRequestBody {
   string did = 1;
   // 教学任务 uid
   string taskUid = 2;
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 3;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 4;
 }
 message ListWarehouseResponse {
   common.MessageHeader header = 1;
