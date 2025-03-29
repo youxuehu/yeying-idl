@@ -33,12 +33,17 @@ message CompleteRequestBody {
   string providerId = 3;
   string model = 4;
   bool stream = 5;
-  repeated Prompt prompts = 6;
+  repeated Message messages = 6;
 }
 
-message Prompt {
+message Message {
   MessageRoleEnum role = 1;
-  string content = 2;
+  Content content = 2;
+}
+
+message Content {
+  ContentTypeEnum type = 1;
+  string data = 2;
 }
 
 message Answer {
@@ -70,7 +75,7 @@ message CompleteResponseHeadBody {
 }
 
 message CompleteResponseBody {
-  string content = 1;
+  string data = 1;
 }
 
 message CompleteResponseTail {
@@ -195,7 +200,7 @@ message ConvertResponse {
 message Choice {
   int32 index = 1;
   MessageRoleEnum role = 2;
-  string content = 3;
+  Content content = 3;
   string finishReason = 4;
 }
 
@@ -213,4 +218,13 @@ enum MessageRoleEnum {
   MESSAGE_ROLE_ASSISTANT = 1; // 对话系统的回复内容，模型将会根据前面的对话历史和用户的输入生成相应的回复
   MESSAGE_ROLE_USER = 2; // 用于用户输入的对话内容，当用户想要与对话模型交互时
   MESSAGE_ROLE_SYSTEM = 3; // 用于系统级别的提示和指导，比如问候、提示用户进行某项操作或介绍对话规则等
+}
+
+enum ContentTypeEnum {
+  CONTENT_TYPE_UNKNOWN = 0;
+  CONTENT_TYPE_TEXT = 1;
+  CONTENT_TYPE_IMAGE = 2;
+  CONTENT_TYPE_AUDIO = 3;
+  CONTENT_TYPE_VIDEO = 4;
+  CONTENT_TYPE_DOCUMENT = 5;
 }
