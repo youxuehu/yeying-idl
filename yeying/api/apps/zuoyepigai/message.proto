@@ -1,0 +1,105 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+import "google/protobuf/wrappers.proto";
+
+/**
+消息盒子
+ */
+service Message {
+  // 列表
+  rpc List(MessageListRequest) returns (MessageListResponse) {}
+  // 查询消息数量
+  rpc Count(CountRequest) returns (CountResponse) {}
+  // 根据状态查询消息已读数量和未读数量
+  rpc ListBy(ListByRequest) returns (ListByResponse) {}
+  // 标记为已读
+  rpc MarkAsRead(MarkAsReadRequest) returns (MarkAsReadResponse) {}
+}
+// 列表
+message MessageListRequest {
+  common.MessageHeader header = 1;
+  MessageListRequestBody body = 2;
+}
+message MessageListRequestBody {
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 1;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 2;
+}
+message MessageListResponse {
+  common.MessageHeader header = 1;
+  MessageListResponseBody body = 2;
+}
+message MessageListResponseBody {
+  common.ResponseStatus status = 1;
+  // repeated 表示 List
+  repeated MessageMetadata list = 2;
+}
+message MessageMetadata {
+  // 主键标识ID
+  string uid = 1;
+  // 消息标题
+  string title = 2;
+  // 消息类型
+  int32 type = 3;
+  // 消息内容
+  string content = 4;
+  // 创建时间
+  int64 createdAt = 5;
+  // 修改时间
+  int64 updatedAt = 6;
+  // 是否删除
+  bool isDeleted = 7;
+}
+// 消息数量
+message CountRequest {
+  common.MessageHeader header = 1;
+  CountRequestBody body = 2;
+}
+message CountRequestBody {
+}
+message CountResponse {
+  common.MessageHeader header = 1;
+  CountResponseBody body = 2;
+}
+message CountResponseBody {
+  common.ResponseStatus status = 1;
+  CountMetadata meta = 2;
+}
+message CountMetadata {
+  string type = 1;
+  int32 count = 2;
+}
+// 根据状态查询数量列表
+message ListByRequest {
+  common.MessageHeader header = 1;
+  ListByRequestBody body = 2;
+}
+message ListByRequestBody {
+
+}
+message ListByResponse {
+  common.MessageHeader header = 1;
+  ListByResponseBody body = 2;
+}
+message ListByResponseBody {
+  common.ResponseStatus status = 1;
+  MessageMetadata meta = 2;
+}
+// 标记为已读
+message MarkAsReadRequest {
+  common.MessageHeader header = 1;
+  MarkAsReadRequestBody body = 2;
+}
+message MarkAsReadRequestBody {
+  string uid = 1;
+}
+message MarkAsReadResponse {
+  common.MessageHeader header = 1;
+  MarkAsReadResponseBody body = 2;
+}
+message MarkAsReadResponseBody {
+  common.ResponseStatus status = 1;
+}
