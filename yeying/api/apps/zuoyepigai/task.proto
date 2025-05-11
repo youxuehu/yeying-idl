@@ -33,18 +33,20 @@ message TaskMetadata {
   string tagUid = 4;
   // 用户uId
   string did = 5;
+  // 关联的学生did列表,存 json 数组: ["did1","did2"]
+  string studentDidList = 6;
   // 创建时间
-  int64 createdAt = 6;
+  int64 createdAt = 7;
   // 修改时间
-  int64 updatedAt = 7;
+  int64 updatedAt = 8;
   // 开始时间
-  int64 startTime = 8;
+  int64 startTime = 9;
   // 结束时间
-  int64 endTime = 9;
+  int64 endTime = 10;
   // 是否删除
-  bool isDeleted = 10;
+  bool isDeleted = 11;
   // 任务状态
-  zuoyepigai.TaskStatusEnum status = 11;
+  zuoyepigai.TaskStatusEnum status = 12;
 }
 // Add
 message AddTaskRequest{
@@ -81,6 +83,27 @@ message DetailTaskResponse{
 message DetailTaskResponseBody {
   common.ResponseStatus status = 1;
   TaskMetadata meta = 2;
+  // 关联学生列表
+  repeated StudentGroupMetaData studentList = 3;
+}
+
+message StudentGroupMetaData {
+  // 主键 uid
+  string uid = 1;
+  // 学生did
+  string did = 2;
+  // 分组名称
+  string groupName = 3;
+  // 创建时间
+  int64 createdAt = 4;
+  // 修改时间
+  int64 updatedAt = 5;
+  // 是否删除
+  bool isDeleted = 6;
+  // 老师did
+  string teacherDid = 7;
+  // 学生姓名
+  string studentName = 8;
 }
 // List
 message ListTaskRequest{
