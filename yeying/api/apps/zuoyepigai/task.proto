@@ -101,6 +101,12 @@ message ListTaskRequestBody {
   google.protobuf.Int32Value pageIndex = 5;
   // 每页大小
   google.protobuf.Int32Value pageSize = 6;
+  // 任务状态
+  int32 status = 7;
+  // 开始时间
+  int64 startTime = 8;
+  // 结束时间
+  int64 endTime = 9;
 }
 
 message ListTaskResponse{
