@@ -44,6 +44,8 @@ message ArchiveListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated ArchiveMetadata list = 2;
+  // 总数
+  uint32 total = 3;
 }
 message ArchiveMetadata {
   // 主键标识ID

@@ -117,6 +117,8 @@ message ListTaskResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated TaskMetadata list = 2;
+  // 总数
+  uint32 total = 3;
 }
 
 // Update

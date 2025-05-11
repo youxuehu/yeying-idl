@@ -36,6 +36,8 @@ message MessageListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated MessageMetadata list = 2;
+  // 总数
+  uint32 total = 3;
 }
 message MessageMetadata {
   // 主键标识ID

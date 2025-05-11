@@ -91,6 +91,8 @@ message ListWarehouseResponse {
 message ListWarehouseResponseBody {
   common.ResponseStatus status = 1;
   repeated WarehouseMetadata list = 2;
+  // 总数
+  uint32 total = 3;
 }
 message WarehouseMetadata {
   // 主键 uid
