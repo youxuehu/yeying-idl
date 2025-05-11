@@ -3,6 +3,7 @@ option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
 import "google/protobuf/wrappers.proto";
+import "yeying/api/apps/zuoyepigai/imagecontent.proto";
 
 /**
 老师教学任务管理
@@ -36,8 +37,14 @@ message TaskMetadata {
   int64 createdAt = 6;
   // 修改时间
   int64 updatedAt = 7;
+  // 开始时间
+  int64 startTime = 8;
+  // 结束时间
+  int64 endTime = 9;
   // 是否删除
-  bool isDeleted = 8;
+  bool isDeleted = 10;
+  // 任务状态
+  zuoyepigai.TaskStatusEnum status = 11;
 }
 // Add
 message AddTaskRequest{

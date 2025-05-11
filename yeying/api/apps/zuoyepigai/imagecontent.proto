@@ -19,3 +19,23 @@ enum ImageContentTypeEnum {
    */
   QA = 2;
 }
+
+enum TaskStatusEnum {
+  //创建、待批改（创建后用户还没有批改作业）、批改中（用户批改一部分作业）、批改完成、待订正、订正中、订正完成
+  // 创建
+  CREATED = 0;
+  // 待批改
+  WAIT_MARKING = 1;
+  // 批改中
+  MARKING = 2;
+  // 批改完成
+  FINISH_MARKING = 3;
+  // 待订正
+  WAIT_REVISE = 4;
+  // 订正中
+  REVISE = 5;
+  // 订正完成
+  FINISH_REVISE = 6;
+
+
+}
