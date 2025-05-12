@@ -1,0 +1,125 @@
+syntax = "proto3";
+option go_package = "yeying/api/apps/zuoyepigai";
+package yeying.api.apps.zuoyepigai;
+import "yeying/api/common/message.proto";
+import "google/protobuf/wrappers.proto";
+import "yeying/api/apps/zuoyepigai/meta.proto";
+
+/**
+学生组
+对应的 DB 表：zuoyepigai.student_group
+ */
+service Group {
+  // 创建学生组
+  rpc Add(AddGroupRequest) returns (AddGroupResponse) {}
+  // 学生组详情
+  rpc Detail(DetailGroupRequest) returns (DetailGroupResponse) {}
+  // 学生组列表
+  rpc List(ListGroupRequest) returns (ListGroupResponse) {}
+  // 更新学生组
+  rpc Update(UpdateGroupRequest) returns (UpdateGroupResponse) {}
+  // 删除学生组
+  rpc Delete(DeleteGroupRequest) returns (DeleteGroupResponse) {}
+}
+// Add
+message AddGroupRequest{
+  common.MessageHeader header = 1;
+  AddGroupRequestBody body = 2;
+}
+
+message AddGroupRequestBody {
+  zuoyepigai.GroupMetaData meta = 1;
+}
+
+message AddGroupResponse{
+  common.MessageHeader header = 1;
+  AddGroupResponseBody body = 2;
+}
+
+message AddGroupResponseBody {
+  common.ResponseStatus status = 1;
+  zuoyepigai.GroupMetaData meta = 2;
+}
+// Detail
+message DetailGroupRequest{
+  common.MessageHeader header = 1;
+  DetailGroupRequestBody body = 2;
+}
+message DetailGroupRequestBody {
+  string uid = 1;
+}
+
+message DetailGroupResponse{
+  common.MessageHeader header = 1;
+  DetailGroupResponseBody body = 2;
+}
+message DetailGroupResponseBody {
+  common.ResponseStatus status = 1;
+  zuoyepigai.GroupMetaData meta = 2;
+  // 关联学生列表
+  repeated GroupMetaData studentList = 3;
+}
+// List
+message ListGroupRequest{
+  common.MessageHeader header = 1;
+  ListGroupRequestBody body = 2;
+}
+message ListGroupRequestBody {
+  // 查询条件
+  // 登录用户did
+  string teacherDid = 1;
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 2;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 3;
+}
+
+message ListGroupResponse{
+  common.MessageHeader header = 1;
+  ListGroupResponseBody body = 2;
+}
+message ListGroupResponseBody {
+  common.ResponseStatus status = 1;
+  // repeated 表示 List
+  repeated zuoyepigai.GroupMetaData list = 2;
+  // 总数
+  uint64 total = 3;
+}
+
+// Update
+message UpdateGroupRequest{
+  common.MessageHeader header = 1;
+  UpdateGroupRequestBody body = 2;
+}
+message UpdateGroupRequestBody {
+  zuoyepigai.GroupMetaData meta = 1;
+}
+
+message UpdateGroupResponse {
+  common.MessageHeader header = 1;
+  UpdateGroupResponseBody body = 2;
+}
+
+message UpdateGroupResponseBody {
+  common.ResponseStatus status = 1;
+  zuoyepigai.GroupMetaData meta = 2;
+}
+
+// Delete
+message DeleteGroupRequest{
+  common.MessageHeader header = 1;
+  DeleteGroupRequestBody body = 2;
+}
+message DeleteGroupRequestBody {
+  string uid = 1;
+}
+
+message DeleteGroupResponse {
+  common.MessageHeader header = 1;
+  DeleteGroupResponseBody body = 2;
+}
+
+message DeleteGroupResponseBody {
+  common.ResponseStatus status = 1;
+  zuoyepigai.GroupMetaData meta = 2;
+}

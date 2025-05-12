@@ -2,7 +2,7 @@ syntax = "proto3";
 option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
-
+import "yeying/api/apps/zuoyepigai/meta.proto";
 
 /**
   作业管理
@@ -32,22 +32,7 @@ message HomeworkListResponseBody {
   // repeated 表示 List
   repeated HomeworkMetadata list = 2;
 }
-message HomeworkMetadata {
-  // 主键标识
-  string uid = 1;
-  // 用户Id
-  string did = 2;
-  // 科目
-  string subject = 3;
-  // 试卷Uid
-  string testPaperUid = 4;
-  // 创建时间
-  int64 createdAt = 5;
-  // 修改时间
-  int64 updatedAt = 6;
-  // 是否删除
-  bool isDeleted = 7;
-}
+
 // 详情
 message HomeworkDetailRequest {
   common.MessageHeader header = 1;
