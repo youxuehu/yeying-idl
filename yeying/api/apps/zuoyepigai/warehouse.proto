@@ -2,8 +2,8 @@ syntax = "proto3";
 option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
-import "yeying/api/apps/zuoyepigai/imagecontent.proto";
 import "google/protobuf/wrappers.proto";
+import "yeying/api/apps/zuoyepigai/meta.proto";
 
 /**
 资产仓库管理
@@ -93,22 +93,4 @@ message ListWarehouseResponseBody {
   repeated WarehouseMetadata list = 2;
   // 总数
   uint64 total = 3;
-}
-message WarehouseMetadata {
-  // 主键 uid
-  string uid = 1;
-  // 资产提交者 did
-  string did = 2;
-  // 资产 url
-  string url = 3;
-  // 任务 uId
-  string taskUid = 4;
-  // 资产类型
-  zuoyepigai.ImageContentTypeEnum type = 5;
-  // 创建时间
-  int64 createdAt = 6;
-  // 修改时间
-  int64 updatedAt = 7;
-  // 是否删除
-  bool isDeleted = 8;
 }

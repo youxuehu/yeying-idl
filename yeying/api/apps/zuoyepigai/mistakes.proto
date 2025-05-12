@@ -2,6 +2,7 @@ syntax = "proto3";
 option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
+import "yeying/api/apps/zuoyepigai/meta.proto";
 
 /**
 错题管理
@@ -39,20 +40,6 @@ message MistakesListResponseBody {
   repeated MistakesMetadata list = 2;
 }
 
-message MistakesMetadata {
-  // 错题ID
-  string uid = 1;
-  // 错题题目
-  string question = 2;
-  // 错题答案
-  string answer = 3;
-  // 创建时间
-  int64 createdAt = 4;
-  // 修改时间
-  int64 updatedAt = 5;
-  // 是否删除
-  bool isDeleted = 6;
-}
 // 详情
 message MistakesDetailRequest {
   common.MessageHeader header = 1;
