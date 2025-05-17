@@ -116,6 +116,15 @@ message TaskMetadata {
   zuoyepigai.TaskStatusEnum status = 12;
 }
 
+message TagCountMeta {
+  // tag uid 主键
+  string tagUid = 1;
+  // tag 名称
+  string tagName = 2;
+  // tag 的任务数量
+  uint64 count = 3;
+}
+
 message TaskTagMetadata {
   // ID 唯一标识
   string uid = 1;
