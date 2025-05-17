@@ -15,8 +15,10 @@ service Task {
   rpc Add(AddTaskRequest) returns (AddTaskResponse) {}
   // 任务详情
   rpc Detail(DetailTaskRequest) returns (DetailTaskResponse) {}
-  // 任务列表
+  // 查询老师名下总的任务列表
   rpc List(ListTaskRequest) returns (ListTaskResponse) {}
+  // 查询老师名下创建的 tag 名下对应的任务数量
+  rpc TagCount(TagCountTaskRequest) returns (TagCountTaskResponse) {}
   // 更新任务
   rpc Update(UpdateTaskRequest) returns (UpdateTaskResponse) {}
   // 删除任务
@@ -101,6 +103,23 @@ message ListTaskResponseBody {
   uint64 total = 3;
 }
 
+// tag 名下的任务数量
+message TagCountTaskRequest {
+  common.MessageHeader header = 1;
+  TagCountTaskRequestBody body = 2;
+}
+message TagCountTaskRequestBody {
+  // 登录用户did
+  string did = 1;
+}
+message TagCountTaskResponse {
+  common.ResponseStatus status = 1;
+  TagCountTaskResponseBody body = 2;
+}
+message TagCountTaskResponseBody {
+  common.ResponseStatus status = 1;
+  repeated TagCountMeta meta = 2;
+}
 // Update
 message UpdateTaskRequest{
   common.MessageHeader header = 1;
