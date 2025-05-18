@@ -147,8 +147,8 @@ message WarehouseMetadata {
   // 资产文件 url
   string url = 3;
   // 试卷上传，支持多张图片，是个 json 数组
-  // 格式：["url1","url2"]
-  string urlJsonArray = 4;
+  // 格式：[{"index":1,"url":"url1"},{"index":2,"url":"url2"}]
+  repeated UrlMetaData urlMetaData = 4;
   // 任务 uId
   string taskUid = 5;
   // 资产类型
@@ -161,4 +161,8 @@ message WarehouseMetadata {
   bool isDeleted = 9;
   // 试卷拍照图片序号，表示教学任务对应试卷的序号，从 1 开始
   uint32 urlIndex = 10;
+}
+message UrlMetaData {
+  uint32 index = 1;
+  string url = 2;
 }
