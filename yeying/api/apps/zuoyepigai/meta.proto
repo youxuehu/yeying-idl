@@ -144,16 +144,21 @@ message WarehouseMetadata {
   string uid = 1;
   // 资产提交者 did
   string did = 2;
-  // 资产 url
+  // 资产文件 url
   string url = 3;
+  // 试卷上传，支持多张图片，是个 json 数组
+  // 格式：["url1","url2"]
+  string urlJsonArray = 4;
   // 任务 uId
-  string taskUid = 4;
+  string taskUid = 5;
   // 资产类型
-  zuoyepigai.ImageContentTypeEnum type = 5;
+  zuoyepigai.ImageContentTypeEnum type = 6;
   // 创建时间
-  int64 createdAt = 6;
+  int64 createdAt = 7;
   // 修改时间
-  int64 updatedAt = 7;
+  int64 updatedAt = 8;
   // 是否删除
-  bool isDeleted = 8;
+  bool isDeleted = 9;
+  // 试卷拍照图片序号，表示教学任务对应试卷的序号，从 1 开始
+  uint32 urlIndex = 10;
 }

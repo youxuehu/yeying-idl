@@ -113,7 +113,7 @@ message TagCountTaskRequestBody {
   string did = 1;
 }
 message TagCountTaskResponse {
-  common.ResponseStatus status = 1;
+  common.MessageHeader header = 1;
   TagCountTaskResponseBody body = 2;
 }
 message TagCountTaskResponseBody {
