@@ -244,6 +244,7 @@ elif [ "${app_type}" == "browser" ] && [ "${language}" == "typescript" ]; then
     if ! protoc --proto_path="${compile_dir}" \
       --es_out="${output_dir}" \
       --es_opt=target=ts \
+      --es_opt=json_types=true \
       "${api_target_dir}/${name}"/*.proto; then
       echo "Fail to compile module=${name} for type=${app_type}, language=${language}"
       exit 1
