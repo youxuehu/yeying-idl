@@ -40,6 +40,12 @@ message ArchiveMetadata {
   int64 updatedAt = 7;
   // 是否删除
   bool isDeleted = 8;
+  // 手机
+  string telephone = 9;
+  // 邮箱
+  string email = 10;
+  // 状态
+  string status = 11;
 }
 
 message HomeworkMetadata {

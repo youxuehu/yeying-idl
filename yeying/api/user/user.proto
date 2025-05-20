@@ -1,7 +1,7 @@
 syntax = "proto3";
 option go_package = "yeying/api/user";
 package yeying.api.user;
-
+import "google/protobuf/wrappers.proto";
 import "yeying/api/common/message.proto";
 
 service User {
@@ -9,12 +9,53 @@ service User {
   rpc Add(AddUserRequest) returns(AddUserResponse) {}
   // 获取用户
   rpc Detail(UserDetailRequest) returns(UserDetailResponse) {}
+  // 用户列表
+  rpc List(UserListRequest) returns(UserListResponse) {}
   // 删除用户
   rpc Delete(DeleteUserRequest) returns(DeleteUserResponse) {}
   // 修改用户信息
   rpc Update(UpdateUserRequest) returns(UpdateUserResponse) {}
+  // 修改用户状态，冻结/解冻
+  rpc UpdateStatus(UpdateStatusRequest) returns(UpdateStatusResponse) {}
 }
 
+message UpdateStatusRequest {
+  common.MessageHeader header = 1;
+  UpdateStatusRequestBody body = 2;
+}
+message UpdateStatusRequestBody {
+  // 用户did
+  string did = 1;
+  // 用户状态，冻结/正常
+  UserStatusEnum status = 2;
+}
+message UpdateStatusResponse {
+  common.MessageHeader header = 1;
+  UpdateStatusResponseBody body = 2;
+}
+message UpdateStatusResponseBody {
+  common.ResponseStatus status = 1;
+}
+message UserListRequest {
+  common.MessageHeader header = 1;
+  UserListRequestBody body = 2;
+}
+message UserListRequestBody {
+  // 当前页
+  google.protobuf.Int32Value pageIndex = 3;
+  // 每页大小
+  google.protobuf.Int32Value pageSize = 4;
+}
+message UserListResponse {
+  common.MessageHeader header = 1;
+  UserListResponseBody body = 2;
+}
+message UserListResponseBody {
+  common.ResponseStatus status = 1;
+  repeated  UserDetail list = 2;
+  // 总数
+  uint64 total = 3;
+}
 message UserMetadata {
   string did = 1;
   string name = 2;
@@ -22,6 +63,8 @@ message UserMetadata {
   string createdAt = 4;
   string updatedAt = 5;
   string signature = 6;
+  string telephone = 7;
+  string email = 8;
 }
 
 message UserState {
