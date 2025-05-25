@@ -3,6 +3,7 @@ option go_package = "yeying/api/apps/zuoyepigai";
 package yeying.api.apps.zuoyepigai;
 import "yeying/api/common/message.proto";
 import "yeying/api/apps/zuoyepigai/imagecontent.proto";
+import "yeying/api/apps/zuoyepigai/meta.proto";
 
 /**
 作业管理
@@ -37,20 +38,20 @@ message AssignmentUploadRequest {
   AssignmentUploadRequestBody body = 2;
 }
 message AssignmentUploadRequestBody {
-  // 上传者uid
-  string did = 1;
   // list 支持批量图片url
-  repeated string fileUrl = 2;
+  // 试卷上传，支持多张图片，是个 json 数组
+  // 格式：[{"index":1,"url":"url1"},{"index":2,"url":"url2"}]
+  repeated UrlMetaData urlMetaData = 1;
   // 教学任务uid
-  string taskUid = 3;
+  string taskUid = 2;
   /**
   图片类型：题目/答案/题目和答案
    */
-  zuoyepigai.ImageContentTypeEnum type = 4;
+  zuoyepigai.ImageContentTypeEnum type = 3;
   // 学科：语文 数学 英语
-  string subject = 5;
+  string subject = 4;
   // 试卷名称
-  string testPaperName = 6;
+  string testPaperName = 5;
 }
 
 message AssignmentUploadResponse {

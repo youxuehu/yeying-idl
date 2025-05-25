@@ -68,16 +68,20 @@ message HomeworkMetadata {
 message MistakesMetadata {
   // 错题ID
   string uid = 1;
+  // 标签
+  string subject = 2;
+  // 试卷uid
+  string testPaperUid = 3;
   // 错题题目
-  string question = 2;
+  string question = 4;
   // 错题答案
-  string answer = 3;
+  string answer = 5;
   // 创建时间
-  int64 createdAt = 4;
+  int64 createdAt = 6;
   // 修改时间
-  int64 updatedAt = 5;
+  int64 updatedAt = 7;
   // 是否删除
-  bool isDeleted = 6;
+  bool isDeleted = 8;
 }
 message MessageMetadata {
   // 主键标识ID

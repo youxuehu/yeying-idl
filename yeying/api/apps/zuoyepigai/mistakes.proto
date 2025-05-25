@@ -8,6 +8,8 @@ import "yeying/api/apps/zuoyepigai/meta.proto";
 错题管理
  */
 service Mistakes {
+  // 添加错题
+  rpc Add(MistakesAddRequest) returns (MistakesAddResponse) {}
   // 列表
   rpc List(MistakesListRequest) returns (MistakesListResponse) {}
   // 详情
@@ -21,14 +23,30 @@ service Mistakes {
   // 提交订正的题目，重新生成图片，提交大模型批改
   rpc Submit(MistakesSubmitRequest) returns (MistakesSubmitResponse) {}
 }
+// Add
+message MistakesAddRequest {
+  common.MessageHeader header = 1;
+  MistakesAddRequestBody body = 2;
+}
+message MistakesAddRequestBody {
+  MistakesMetadata meta = 1;
+}
+message MistakesAddResponse {
+  common.MessageHeader header = 1;
+  MistakesAddResponseBody body = 2;
+}
+message MistakesAddResponseBody {
+  common.ResponseStatus status = 1;
+  MistakesMetadata meta = 2;
+}
 // 列表
 message MistakesListRequest {
   common.MessageHeader header = 1;
   MistakesListRequestBody body = 2;
 }
 message MistakesListRequestBody {
-  // 学生ID
-  string did = 1;
+  // 试卷uid
+  string testPaperUid = 1;
 }
 message MistakesListResponse {
   common.MessageHeader header = 1;
