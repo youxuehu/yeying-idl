@@ -1,12 +1,12 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 import "yeying/api/common/message.proto";
-import "yeying/api/apps/zuoyepigai/meta.proto";
+import "yeying/api/apps/correction/meta.proto";
 
 /**
 教学任务标签管理
-对应的 DB 表：zuoyepigai.task_tag
+对应的 DB 表：correction.task_tag
  */
 service TaskTag {
   // 创建任务标签：由老师负创建教学任务标签

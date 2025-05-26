@@ -1,13 +1,13 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 import "yeying/api/common/message.proto";
 import "google/protobuf/wrappers.proto";
-import "yeying/api/apps/zuoyepigai/meta.proto";
+import "yeying/api/apps/correction/meta.proto";
 
 /**
 学生组
-对应的 DB 表：zuoyepigai.student_group
+对应的 DB 表：correction.student_group
  */
 service Group {
   // 创建学生组
@@ -28,7 +28,7 @@ message AddGroupRequest{
 }
 
 message AddGroupRequestBody {
-  zuoyepigai.GroupMetaData meta = 1;
+  correction.GroupMetaData meta = 1;
 }
 
 message AddGroupResponse{
@@ -38,7 +38,7 @@ message AddGroupResponse{
 
 message AddGroupResponseBody {
   common.ResponseStatus status = 1;
-  zuoyepigai.GroupMetaData meta = 2;
+  correction.GroupMetaData meta = 2;
 }
 // Detail
 message DetailGroupRequest{
@@ -55,7 +55,7 @@ message DetailGroupResponse{
 }
 message DetailGroupResponseBody {
   common.ResponseStatus status = 1;
-  zuoyepigai.GroupMetaData meta = 2;
+  correction.GroupMetaData meta = 2;
   // 关联学生列表
   repeated GroupMetaData studentList = 3;
 }
@@ -81,7 +81,7 @@ message ListGroupResponse{
 message ListGroupResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated zuoyepigai.GroupMetaData list = 2;
+  repeated correction.GroupMetaData list = 2;
   // 总数
   uint64 total = 3;
 }
@@ -92,7 +92,7 @@ message UpdateGroupRequest{
   UpdateGroupRequestBody body = 2;
 }
 message UpdateGroupRequestBody {
-  zuoyepigai.GroupMetaData meta = 1;
+  correction.GroupMetaData meta = 1;
 }
 
 message UpdateGroupResponse {
@@ -102,7 +102,7 @@ message UpdateGroupResponse {
 
 message UpdateGroupResponseBody {
   common.ResponseStatus status = 1;
-  zuoyepigai.GroupMetaData meta = 2;
+  correction.GroupMetaData meta = 2;
 }
 
 // Delete
@@ -121,5 +121,5 @@ message DeleteGroupResponse {
 
 message DeleteGroupResponseBody {
   common.ResponseStatus status = 1;
-  zuoyepigai.GroupMetaData meta = 2;
+  correction.GroupMetaData meta = 2;
 }

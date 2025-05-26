@@ -1,9 +1,9 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 import "yeying/api/common/message.proto";
-import "yeying/api/apps/zuoyepigai/imagecontent.proto";
-import "yeying/api/apps/zuoyepigai/meta.proto";
+import "yeying/api/apps/correction/imagecontent.proto";
+import "yeying/api/apps/correction/meta.proto";
 
 /**
 作业管理
@@ -11,17 +11,17 @@ import "yeying/api/apps/zuoyepigai/meta.proto";
 service Assignment {
   // 老师上传作业, 图片题目识别 (OCR)，将图片上的题目转换为文字信息存储到 DB
   // 对应 DB 表：
-  // zuoyepigai.test_paper，试卷
-  // zuoyepigai.question_collection，题目
-  // zuoyepigai.answer_collection，答案
-  // zuoyepigai.warehouse，资产仓库
+  // correction.test_paper，试卷
+  // correction.question_collection，题目
+  // correction.answer_collection，答案
+  // correction.warehouse，资产仓库
   rpc Upload(AssignmentUploadRequest) returns (AssignmentUploadResponse) {}
   // 大模型生成答案 (做题)，从题库中获取题目，调用解题的大模型生成对应题目的答案，并保存到 DB
   // 对应 DB 表：
-  // zuoyepigai.test_paper，试卷
-  // zuoyepigai.question_collection，题目
-  // zuoyepigai.answer_collection，答案
-  // zuoyepigai.warehouse，资产仓库
+  // correction.test_paper，试卷
+  // correction.question_collection，题目
+  // correction.answer_collection，答案
+  // correction.warehouse，资产仓库
   rpc BigModelGenerate(AssignmentBigModelRequest) returns (AssignmentBigModelResponse) {}
   // 人工生成答案，人工做题，拍照上传生成题库答案
   rpc ArtificialGenerate(AssignmentArtificialRequest) returns (AssignmentArtificialResponse) {}
@@ -47,7 +47,7 @@ message AssignmentUploadRequestBody {
   /**
   图片类型：题目/答案/题目和答案
    */
-  zuoyepigai.ImageContentTypeEnum type = 3;
+  correction.ImageContentTypeEnum type = 3;
   // 学科：语文 数学 英语
   string subject = 4;
   // 试卷名称

@@ -1,7 +1,7 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
-import "yeying/api/apps/zuoyepigai/imagecontent.proto";
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
+import "yeying/api/apps/correction/imagecontent.proto";
 
 
 message GroupMetaData {
@@ -123,7 +123,7 @@ message TaskMetadata {
   // 是否删除
   bool isDeleted = 11;
   // 任务状态
-  zuoyepigai.TaskStatusEnum status = 12;
+  correction.TaskStatusEnum status = 12;
 }
 
 message TagCountMeta {
@@ -162,7 +162,7 @@ message WarehouseMetadata {
   // 任务 uId
   string taskUid = 5;
   // 资产类型
-  zuoyepigai.ImageContentTypeEnum type = 6;
+  correction.ImageContentTypeEnum type = 6;
   // 创建时间
   int64 createdAt = 7;
   // 修改时间
