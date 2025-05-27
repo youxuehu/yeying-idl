@@ -1,6 +1,6 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 
 /**
 图片内容类型

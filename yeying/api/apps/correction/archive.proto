@@ -1,9 +1,9 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 import "yeying/api/common/message.proto";
 import "google/protobuf/wrappers.proto";
-import "yeying/api/apps/zuoyepigai/meta.proto";
+import "yeying/api/apps/correction/meta.proto";
 
 /**
 档案管理

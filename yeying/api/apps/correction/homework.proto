@@ -1,12 +1,12 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/zuoyepigai";
-package yeying.api.apps.zuoyepigai;
+option go_package = "yeying/api/apps/correction";
+package yeying.api.apps.correction;
 import "yeying/api/common/message.proto";
-import "yeying/api/apps/zuoyepigai/meta.proto";
+import "yeying/api/apps/correction/meta.proto";
 
 /**
   作业管理
-  对应 DB 表： zuoyepigai.school_assignment
+  对应 DB 表： correction.school_assignment
 */
 service Homework {
   // 列表
