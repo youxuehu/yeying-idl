@@ -181,8 +181,14 @@ message AuditApplicationRequest {
 
 message AuditApplicationRequestBody {
   ApplicationComment comment = 1;
+  string did = 2;
+  uint32 version = 3;
 }
 
 message AuditApplicationResponse {
+  common.MessageHeader header = 1;
+  AuditApplicationResponseBody body = 2;
+}
+message AuditApplicationResponseBody {
   common.ResponseStatus status = 1;
 }
