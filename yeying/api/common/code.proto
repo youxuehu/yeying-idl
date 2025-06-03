@@ -282,6 +282,10 @@ enum ApplicationStatusEnum {
   APPLICATION_STATUS_AUDITED = 2;
   // 已拒绝
   APPLICATION_STATUS_REFUSED = 3;
+  // 已下架
+  APPLICATION_STATUS_OFFLINE = 4;
+  // 已上线
+  APPLICATION_STATUS_ONLINE = 5;
 }
 
 // 密码学类型
