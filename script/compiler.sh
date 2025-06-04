@@ -266,6 +266,8 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
     if ! protoc --proto_path="${compile_dir}" \
       --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) \
       --ts_proto_out="${output_dir}" \
+      --ts_proto_opt=esModuleInterop=true \
+      --ts_proto_opt=oneof=unions \
       --ts_proto_opt=outputServices=grpc-js \
       "${api_target_dir}/${name}"/*.proto; then
       echo "Fail to compile module=${name} for type=${app_type}, language=${language}"

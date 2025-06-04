@@ -74,3 +74,18 @@ message ServiceMetadata {
   // 状态
   int32 status = 16;
 }
+
+message StateMetadata {
+  /* 服务身份 */
+  string did = 1;
+  /* 服务版本 */
+  uint32 version = 2;
+  /* 服务版本 */
+  common.ApplicationStatusEnum status = 3;
+  /* 服务名称 */
+  string signature = 4;
+  /* 服务创建时间点 */
+  string createdAt = 5;
+  /* 服务修改时间点 */
+  string updatedAt = 6;
+}
