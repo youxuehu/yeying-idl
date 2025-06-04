@@ -36,8 +36,6 @@ message ApplicationMetadata {
   string updatedAt = 14;
   // 签名
   string signature = 15;
-  // 状态
-  int32 status = 16;
 }
 
 message ServiceMetadata {
@@ -71,8 +69,6 @@ message ServiceMetadata {
   string updatedAt = 14;
   // 签名
   string signature = 15;
-  // 状态
-  int32 status = 16;
 }
 
 message StateMetadata {
