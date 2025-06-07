@@ -179,7 +179,7 @@ message AuditMetadata {
   /**
    * 申请状态（申请中，已取消，申请通过，申请驳回）
    */
-    string status = 8;
+    AuditStatus status = 8;
 
   /**
    * 创建时间
