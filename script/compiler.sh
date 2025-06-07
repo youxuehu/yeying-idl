@@ -263,6 +263,10 @@ elif [ "${app_type}" == "nodejs" ] && [ "${language}" == "typescript" ]; then
   for name in "${arr[@]}"; do
     echo "Compile client module=${name} for nodejs"
     ln -s "${api_source_dir}/${name}" "${api_target_dir}/${name}"
+    # esModuleInterop=true
+    # 作用：解决默认导入（import foo from 'module'）与 CommonJS 模块的兼容性问题。
+    # oneof=unions
+    # 作用：为 Protocol Buffers 的 oneof 字段生成 联合类型（Discriminated Union）。
     if ! protoc --proto_path="${compile_dir}" \
       --plugin=protoc-gen-ts_proto=$(which protoc-gen-ts_proto) \
       --ts_proto_out="${output_dir}" \
