@@ -1,0 +1,193 @@
+syntax = "proto3";
+option go_package = "yeying/api/audit";
+package yeying.api.audit;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+import "yeying/api/common/model.proto";
+
+/**
+审核状态
+ */
+message AuditStatus {
+  oneof status {
+    /**
+    申请中
+     */
+    PendingStatus pending = 1;
+    /**
+    已取消
+     */
+    CanceledStatus canceled = 2;
+    /**
+    申请通过
+     */
+    PassedStatus passed = 3;
+    /**
+    申请驳回
+     */
+    RejectStatus reject = 4;
+  }
+}
+
+message PendingStatus {
+  string text = 2;
+}
+
+message CanceledStatus {
+  string text = 2;
+}
+
+message PassedStatus {
+  string text = 2;
+}
+
+message RejectStatus {
+  string text = 2;
+}
+
+/**
+审批服务
+发起应用访问申请->
+查看审批详情->
+ */
+service Audit {
+  /* 发起申请 */
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+  /* 查看申请详情 */
+  rpc Detail(DetailRequest) returns (DetailResponse) {}
+  /* 审批-通过/拒绝 */
+  rpc Audit(AuditRequest) returns (AuditResponse) {}
+  /* 发起人申请列表 */
+  rpc CreateList(CreateAuditListRequest) returns (CreateAuditListResponse) {}
+  /* 审批人审批列表 */
+  rpc AuditList(AuditListRequest) returns (AuditListResponse) {}
+}
+message CreateRequest {
+  common.MessageHeader header = 1;
+  CreateRequestBody body = 2;
+}
+message CreateRequestBody {
+  AuditMetadata meta = 1;
+}
+message CreateResponse {
+  common.MessageHeader header = 1;
+  CreateResponseBody body = 2;
+}
+message CreateResponseBody {
+  common.ResponseStatus status = 1;
+  AuditMetadata meta = 2;
+}
+message DetailRequest {
+  common.MessageHeader header = 1;
+  DetailRequestBody body = 2;
+}
+message DetailRequestBody {
+  string uid = 1;
+}
+message DetailResponse {
+  common.MessageHeader header = 1;
+  DetailResponseBody body = 2;
+}
+message DetailResponseBody {
+  common.ResponseStatus status = 1;
+  AuditMetadata meta = 2;
+}
+message AuditRequest {
+  common.MessageHeader header = 1;
+  AuditRequestBody body = 2;
+}
+message AuditRequestBody {
+  string uid = 1;
+  AuditStatus status = 2;
+}
+message AuditResponse {
+  common.MessageHeader header = 1;
+  AuditResponseBody body = 2;
+}
+message AuditResponseBody {
+  common.ResponseStatus status = 1;
+  AuditMetadata meta = 2;
+}
+message CreateAuditListRequest {
+  common.MessageHeader header = 1;
+  CreateAuditListRequestBody body = 2;
+}
+message CreateAuditListRequestBody {
+  string sourceDid = 1;
+}
+message CreateAuditListResponse {
+  common.MessageHeader header = 1;
+  CreateAuditListResponseBody body = 2;
+}
+message CreateAuditListResponseBody {
+  common.ResponseStatus status = 1;
+  repeated AuditMetadata meta = 2;
+}
+message AuditListRequest {
+  common.MessageHeader header = 1;
+  AuditListRequestBody body = 2;
+}
+message AuditListRequestBody {
+  string targetDid = 1;
+}
+message AuditListResponse {
+  common.MessageHeader header = 1;
+  AuditListResponseBody body = 2;
+}
+message AuditListResponseBody {
+  common.ResponseStatus status = 1;
+  repeated AuditMetadata meta = 2;
+}
+
+message AuditMetadata {
+  /**
+     * 主键uid
+     */
+    string uid = 1;
+
+  /**
+   * 应用名称
+   */
+    string appName = 2;
+
+  /**
+   * 申请人用户身份 did
+   */
+    string sourceDid = 3;
+
+  /**
+   * 申请人用户名称
+   */
+    string sourceName = 4;
+
+  /**
+   * 审批人用户身份 did
+   */
+    string targetDid = 5;
+
+  /**
+   * 审批人用户名称
+   */
+    string targetName = 6;
+
+  /**
+   * 申请原因
+   */
+    string reason = 7;
+
+  /**
+   * 申请状态（申请中，已取消，申请通过，申请驳回）
+   */
+    AuditStatus status = 8;
+
+  /**
+   * 创建时间
+   */
+    string createdAt = 9;
+
+  /**
+   * 修改时间
+   */
+    string updatedAt = 10;
+}
