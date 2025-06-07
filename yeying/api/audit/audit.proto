@@ -1,0 +1,123 @@
+syntax = "proto3";
+option go_package = "yeying/api/audit";
+package yeying.api.audit;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+import "yeying/api/common/model.proto";
+
+/**
+审核状态
+ */
+message AuditStatus {
+  oneof status {
+    /**
+    申请中
+     */
+    PendingStatus pending = 1;
+    /**
+    已取消
+     */
+    CanceledStatus canceled = 2;
+    /**
+    申请通过
+     */
+    PassedStatus passed = 3;
+    /**
+    申请驳回
+     */
+    RejectStatus reject = 4;
+  }
+}
+
+message PendingStatus {
+  uint32 code = 1;
+  string text = 2;
+}
+
+message CanceledStatus {
+  uint32 code = 1;
+  string text = 2;
+}
+
+message PassedStatus {
+  uint32 code = 1;
+  string text = 2;
+}
+
+message RejectStatus {
+  uint32 code = 1;
+  string text = 2;
+}
+
+/**
+审批服务
+发起应用访问申请->
+查看审批详情->
+ */
+service Audit {
+  /* 发起申请 */
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+  /* 审批-通过/拒绝 */
+  rpc Audit(AuditRequest) returns (AuditResponse) {}
+  /* 发起人申请列表 */
+  rpc CreateList(CreateAuditListRequest) returns (CreateAuditListResponse) {}
+  /* 审批人审批列表 */
+  rpc AuditList(AuditListRequest) returns (AuditListResponse) {}
+}
+message CreateRequest {
+  common.MessageHeader header = 1;
+  CreateRequestBody body = 2;
+}
+message CreateRequestBody {
+
+}
+message CreateResponse {
+  common.MessageHeader header = 1;
+  CreateResponseBody body = 2;
+}
+message CreateResponseBody {
+
+}
+message AuditRequest {
+  common.MessageHeader header = 1;
+  AuditRequestBody body = 2;
+}
+message AuditRequestBody {
+
+}
+message AuditResponse {
+  common.MessageHeader header = 1;
+  AuditResponseBody body = 2;
+}
+message AuditResponseBody {
+
+}
+message CreateAuditListRequest {
+  common.MessageHeader header = 1;
+  CreateAuditListRequestBody body = 2;
+}
+message CreateAuditListRequestBody {
+
+}
+message CreateAuditListResponse {
+  common.MessageHeader header = 1;
+  CreateAuditListResponseBody body = 2;
+}
+message CreateAuditListResponseBody {
+
+}
+message AuditListRequest {
+  common.MessageHeader header = 1;
+  AuditListRequestBody body = 2;
+}
+message AuditListRequestBody {
+
+}
+message AuditListResponse {
+  common.MessageHeader header = 1;
+  AuditListResponseBody body = 2;
+}
+message AuditListResponseBody {
+
+}
