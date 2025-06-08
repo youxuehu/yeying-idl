@@ -56,6 +56,10 @@ service Audit {
   rpc Create(CreateRequest) returns (CreateResponse) {}
   /* 查看申请详情 */
   rpc Detail(DetailRequest) returns (DetailResponse) {}
+  /* 撤销申请 */
+  rpc Cancel(CancelRequest) returns (CancelResponse) {}
+  /* 移除申请成功的应用，不需要访问了 */
+  rpc Remove(RemoveRequest) returns (RemoveResponse) {}
   /* 审批-通过/拒绝 */
   rpc Audit(AuditRequest) returns (AuditResponse) {}
   /* 发起人申请列表 */
@@ -92,6 +96,35 @@ message DetailResponse {
 message DetailResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
+}
+message CancelRequest {
+  common.MessageHeader header = 1;
+  CancelRequestBody body = 2;
+}
+message CancelRequestBody {
+  string uid = 1;
+}
+message CancelResponse {
+  common.MessageHeader header = 1;
+  CancelResponseBody body = 2;
+}
+message CancelResponseBody {
+  common.ResponseStatus status = 1;
+  AuditMetadata meta = 2;
+}
+message RemoveRequest {
+  common.MessageHeader header = 1;
+  RemoveRequestBody body = 2;
+}
+message RemoveRequestBody {
+  string uid = 1;
+}
+message RemoveResponse {
+  common.MessageHeader header = 1;
+  RemoveResponseBody body = 2;
+}
+message RemoveResponseBody {
+  common.ResponseStatus status = 1;
 }
 message AuditRequest {
   common.MessageHeader header = 1;
