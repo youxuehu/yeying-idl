@@ -59,7 +59,7 @@ service Audit {
   /* 撤销申请 */
   rpc Cancel(CancelRequest) returns (CancelResponse) {}
   /* 解绑应用-移除申请成功的应用，不需要访问了 */
-  rpc Unbind(RemoveRequest) returns (RemoveResponse) {}
+  rpc Unbind(UnbindRequest) returns (UnbindResponse) {}
   /* 审批-通过/拒绝 */
   rpc Audit(AuditRequest) returns (AuditResponse) {}
   /* 发起人申请列表 */
@@ -112,18 +112,18 @@ message CancelResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message RemoveRequest {
+message UnbindRequest {
   common.MessageHeader header = 1;
-  RemoveRequestBody body = 2;
+  UnbindRequestBody body = 2;
 }
-message RemoveRequestBody {
+message UnbindRequestBody {
   string uid = 1;
 }
-message RemoveResponse {
+message UnbindResponse {
   common.MessageHeader header = 1;
-  RemoveResponseBody body = 2;
+  UnbindResponseBody body = 2;
 }
-message RemoveResponseBody {
+message UnbindResponseBody {
   common.ResponseStatus status = 1;
 }
 message AuditRequest {
