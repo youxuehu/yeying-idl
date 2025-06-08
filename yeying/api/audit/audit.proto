@@ -58,8 +58,8 @@ service Audit {
   rpc Detail(DetailRequest) returns (DetailResponse) {}
   /* 撤销申请 */
   rpc Cancel(CancelRequest) returns (CancelResponse) {}
-  /* 移除申请成功的应用，不需要访问了 */
-  rpc Remove(RemoveRequest) returns (RemoveResponse) {}
+  /* 解绑应用-移除申请成功的应用，不需要访问了 */
+  rpc Unbind(RemoveRequest) returns (RemoveResponse) {}
   /* 审批-通过/拒绝 */
   rpc Audit(AuditRequest) returns (AuditResponse) {}
   /* 发起人申请列表 */
