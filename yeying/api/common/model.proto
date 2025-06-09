@@ -36,6 +36,8 @@ message ApplicationMetadata {
   string updatedAt = 14;
   // 签名
   string signature = 15;
+  // 代码包下载路径
+  string codePackagePath = 16;
 }
 
 message ServiceMetadata {
