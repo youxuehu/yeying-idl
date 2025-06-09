@@ -56,7 +56,7 @@ message SearchApplicationResponse {
 
 message SearchApplicationResponseBody {
   common.ResponseStatus status = 1;
-  repeated common.ApplicationMetadata applications = 2;
+  repeated common.ApplicationDetailMetadata detailMetadatas = 2;
   common.ResponsePage page = 3;
 }
 
@@ -96,8 +96,7 @@ message ApplicationDetailResponse {
 
 message ApplicationDetailResponseBody {
   common.ResponseStatus status = 1;
-  common.ApplicationMetadata application = 2;
-  common.ApplicationStatusEnum appStatus =3;
+  common.ApplicationDetailMetadata detailMetadata = 2;
 }
 
 message OfflineApplicationRequest {

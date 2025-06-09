@@ -85,3 +85,17 @@ message StateMetadata {
   /* 服务修改时间点 */
   string updatedAt = 6;
 }
+
+/**
+列表展示 && 详情展示
+ */
+message ApplicationDetailMetadata {
+  /**
+  应用元信息
+   */
+  ApplicationMetadata appMetadata = 1;
+  /**
+  应用状态元信息
+   */
+  StateMetadata stateMetadata = 2;
+}
