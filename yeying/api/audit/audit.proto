@@ -147,7 +147,8 @@ message CreateAuditListRequest {
   CreateAuditListRequestBody body = 2;
 }
 message CreateAuditListRequestBody {
-  string sourceDid = 1;
+  SearchCondition condition = 1;
+  common.RequestPage page = 2;
 }
 message CreateAuditListResponse {
   common.MessageHeader header = 1;
@@ -156,13 +157,15 @@ message CreateAuditListResponse {
 message CreateAuditListResponseBody {
   common.ResponseStatus status = 1;
   repeated AuditMetadata audits = 2;
+  common.ResponsePage page = 3;
 }
 message AuditListRequest {
   common.MessageHeader header = 1;
   AuditListRequestBody body = 2;
 }
 message AuditListRequestBody {
-  string targetDid = 1;
+  SearchCondition condition = 1;
+  common.RequestPage page = 2;
 }
 message AuditListResponse {
   common.MessageHeader header = 1;
@@ -171,8 +174,38 @@ message AuditListResponse {
 message AuditListResponseBody {
   common.ResponseStatus status = 1;
   repeated AuditMetadata audits = 2;
+  common.ResponsePage page = 3;
 }
-
+/**
+我的申请列表查询条件
+我的审批列表查询条件
+ */
+message SearchCondition {
+  /**
+  申请人 did
+   */
+  string sourceDid = 1;
+  /**
+  应用/服务名称
+   */
+  string name = 2;
+  /**
+  申请时间-开始时间
+   */
+  string startTime = 3;
+  /**
+  申请时间-结束时间
+   */
+  string endTime = 4;
+  /**
+  申请类型[应用/服务]
+   */
+  common.AuditTypeEnum type = 5;
+  /**
+  审批人 did
+   */
+  string targetDid = 6;
+}
 message AuditMetadata {
   /**
      * 主键uid
