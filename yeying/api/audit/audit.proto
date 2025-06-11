@@ -256,4 +256,8 @@ message AuditMetadata {
    * 修改时间
    */
     string updatedAt = 10;
+  /**
+  申请类型[应用/服务]
+  */
+  common.AuditTypeEnum type = 11;
 }
