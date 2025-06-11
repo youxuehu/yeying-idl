@@ -277,6 +277,8 @@ enum AuditTypeEnum {
   APPLICATION = 0;
   // 服务
   SERVICE = 1;
+  // 未知
+  UNKNOWN = 2;
 }
 
 // 应用状态
