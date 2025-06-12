@@ -274,11 +274,11 @@ enum ParticipantTypeEnum {
 
 enum AuditTypeEnum {
   // 应用
-  APPLICATION = 0;
+  AUDIT_TYPE_APPLICATION = 0;
   // 服务
-  SERVICE = 1;
+  AUDIT_TYPE_SERVICE = 1;
   // 未知
-  UNKNOWN = 2;
+  AUDIT_TYPE_UNKNOWN = 2;
 }
 
 // 应用状态
