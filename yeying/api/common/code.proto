@@ -272,6 +272,15 @@ enum ParticipantTypeEnum {
   PARTICIPANT_TYPE_PEOPLE = 2;
 }
 
+enum AuditTypeEnum {
+  // 应用
+  APPLICATION = 0;
+  // 服务
+  SERVICE = 1;
+  // 未知
+  UNKNOWN = 2;
+}
+
 // 应用状态
 enum ApplicationStatusEnum {
   // 未知编码，是一种占位符
