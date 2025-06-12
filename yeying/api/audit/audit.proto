@@ -147,7 +147,7 @@ message CreateAuditListRequest {
   CreateAuditListRequestBody body = 2;
 }
 message CreateAuditListRequestBody {
-  SearchCondition condition = 1;
+  AuditSearchCondition condition = 1;
   common.RequestPage page = 2;
 }
 message CreateAuditListResponse {
@@ -164,7 +164,7 @@ message AuditListRequest {
   AuditListRequestBody body = 2;
 }
 message AuditListRequestBody {
-  SearchCondition condition = 1;
+  AuditSearchCondition condition = 1;
   common.RequestPage page = 2;
 }
 message AuditListResponse {
@@ -180,7 +180,7 @@ message AuditListResponseBody {
 我的申请列表查询条件
 我的审批列表查询条件
  */
-message SearchCondition {
+message AuditSearchCondition {
   /**
   申请人 did
    */
