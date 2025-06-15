@@ -46,7 +46,14 @@ message SearchApplicationRequestBody {
 message SearchCondition {
   common.ApplicationCodeEnum code = 1;
   common.ApplicationStatusEnum status = 2;
+  /**
+  应用所有者
+   */
   string owner = 3;
+  /**
+  应用名称
+   */
+  string name = 4;
 }
 
 message SearchApplicationResponse {
