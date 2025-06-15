@@ -7,38 +7,76 @@ import "yeying/api/common/code.proto";
 import "yeying/api/common/model.proto";
 
 /**
- * 节点提供服务登记、注销和查询的服务。
+ * 节点提供服务创建、上线、下线和查询的服务。
  */
 service Service {
-  // 注册服务
-  rpc Register(RegisterServiceRequest) returns (RegisterServiceResponse) {}
+  // 服务创建
+  rpc Create(CreateServiceRequest) returns (CreateServiceResponse) {}
+
+  // 服务详情
+  rpc Detail(DetailServiceRequest) returns (DetailServiceResponse) {}
 
   // 搜索服务
   rpc Search(SearchServiceRequest) returns (SearchServiceResponse) {}
 
-  // 注销服务
-  rpc Unregister(UnregisterServiceRequest) returns (UnregisterServiceResponse) {}
-}
+  // 上线服务
+  rpc Online(OnlineServiceRequest) returns (OnlineServiceResponse) {}
 
-message RegisterServiceRequest {
+  // 下线服务
+  rpc Offline(OfflineServiceRequest) returns (OfflineServiceResponse) {}
+
+  // 删除服务
+  rpc Delete(DeleteServiceRequest) returns (DeleteServiceResponse) {}
+}
+// create
+message CreateServiceRequest {
   common.MessageHeader header = 1;
-  RegisterServiceRequestBody body = 2;
+  CreateServiceRequestBody body = 2;
 }
 
-message RegisterServiceRequestBody {
+message CreateServiceRequestBody {
+  /**
+  创建服务元信息入参
+   */
   common.ServiceMetadata service = 1;
 }
 
-message RegisterServiceResponse {
+message CreateServiceResponse {
   common.MessageHeader header = 1;
-  RegisterServiceResponseBody body = 2;
+  CreateServiceResponseBody body = 2;
 }
 
-message RegisterServiceResponseBody {
+message CreateServiceResponseBody {
   common.ResponseStatus status = 1;
   common.ServiceMetadata service = 2;
 }
+// detail
+message DetailServiceRequest {
+  common.MessageHeader header = 1;
+  DetailServiceRequestBody body = 2;
+}
 
+message DetailServiceRequestBody {
+  /**
+  服务身份 did
+   */
+  string did = 1;
+  /**
+  服务版本
+   */
+  uint32 version = 2;
+}
+
+message DetailServiceResponse {
+  common.MessageHeader header = 1;
+  DetailServiceResponseBody body = 2;
+}
+
+message DetailServiceResponseBody {
+  common.ResponseStatus status = 1;
+  common.ServiceMetadata service = 2;
+}
+// search
 message SearchServiceRequest {
   common.MessageHeader header = 1;
   SearchServiceRequestBody body = 2 ;
@@ -51,7 +89,14 @@ message SearchServiceRequestBody {
 
 message SearchServiceCondition {
   common.ServiceCodeEnum code = 1;
+  /**
+  服务所有者
+   */
   string owner = 2;
+  /**
+  服务名称
+   */
+  string name = 3;
 }
 
 message SearchServiceResponse {
@@ -64,23 +109,63 @@ message SearchServiceResponseBody {
   repeated common.ServiceMetadata services = 2;
   common.ResponsePage page = 3;
 }
-
-message UnregisterServiceRequest {
+// online
+message OnlineServiceRequest {
   common.MessageHeader header = 1;
-  UnregisterServiceRequestBody body = 2;
+  OnlineServiceRequestBody body = 2;
 }
 
-message UnregisterServiceRequestBody {
+message OnlineServiceRequestBody {
   string did = 1;
   uint32 version = 2;
 }
 
-message UnregisterServiceResponse {
+message OnlineServiceResponse {
   common.MessageHeader header = 1;
-  UnregisterServiceResponseBody body = 2;
+  OnlineServiceResponseBody body = 2;
 }
 
-message UnregisterServiceResponseBody {
+message OnlineServiceResponseBody {
+  common.ResponseStatus status = 1;
+  common.ServiceMetadata service = 2;
+}
+// offline
+message OfflineServiceRequest {
+  common.MessageHeader header = 1;
+  OfflineServiceRequestBody body = 2;
+}
+
+message OfflineServiceRequestBody {
+  string did = 1;
+  uint32 version = 2;
+}
+
+message OfflineServiceResponse {
+  common.MessageHeader header = 1;
+  OfflineServiceResponseBody body = 2;
+}
+
+message OfflineServiceResponseBody {
+  common.ResponseStatus status = 1;
+  common.ServiceMetadata service = 2;
+}
+
+// delete
+message DeleteServiceRequest {
+  common.MessageHeader header = 1;
+  DeleteServiceRequestBody body = 2;
+}
+
+message DeleteServiceRequestBody {
+  string did = 1;
+  uint32 version = 2;
+}
+
+message DeleteServiceResponse {
+  common.MessageHeader header = 1;
+  DeleteServiceResponseBody body = 2;
+}
+
+message DeleteServiceResponseBody {
   common.ResponseStatus status = 1;
 }
-

@@ -71,6 +71,8 @@ message ServiceMetadata {
   string updatedAt = 14;
   // 签名
   string signature = 15;
+  // 代码包下载路径
+  string codePackagePath = 16;
 }
 
 message StateMetadata {
@@ -86,4 +88,6 @@ message StateMetadata {
   string createdAt = 5;
   /* 服务修改时间点 */
   string updatedAt = 6;
+  /* 类型：应用/服务 */
+  common.AuditTypeEnum type = 7;
 }
