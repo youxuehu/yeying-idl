@@ -44,16 +44,26 @@ message SearchApplicationRequestBody {
 }
 
 message SearchCondition {
+  /**
+  应用类型【参数可选】
+   */
   common.ApplicationCodeEnum code = 1;
+  /**
+  应用状态【参数可选】
+   */
   common.ApplicationStatusEnum status = 2;
   /**
-  应用所有者
+  应用所有者【参数可选】
    */
   string owner = 3;
   /**
-  应用名称
+  应用名称【参数可选】
    */
   string name = 4;
+  /**
+  输入[应用所有者、应用名称]关键字搜索【参数可选】
+   */
+  string keyword = 5;
 }
 
 message SearchApplicationResponse {

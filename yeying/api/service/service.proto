@@ -88,15 +88,22 @@ message SearchServiceRequestBody {
 }
 
 message SearchServiceCondition {
+  /**
+  服务类型【参数可选】
+   */
   common.ServiceCodeEnum code = 1;
   /**
-  服务所有者
+  服务所有者【参数可选】
    */
   string owner = 2;
   /**
-  服务名称
+  服务名称【参数可选】
    */
   string name = 3;
+  /**
+  输入[服务所有者、服务名称]关键字搜索【参数可选】
+   */
+  string keyword = 4;
 }
 
 message SearchServiceResponse {
