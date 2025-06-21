@@ -39,11 +39,11 @@ message SearchApplicationRequest {
 }
 
 message SearchApplicationRequestBody {
-  SearchCondition condition = 1;
+  SearchApplicationCondition condition = 1;
   common.RequestPage page = 2;
 }
 
-message SearchCondition {
+message SearchApplicationCondition {
   /**
   应用类型【参数可选】
    */
