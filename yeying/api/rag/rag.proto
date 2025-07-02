@@ -1,0 +1,143 @@
+syntax = "proto3";
+option go_package = "yeying/api/rag/";
+package yeying.api.rag;
+
+import "yeying/api/common/message.proto";
+import "google/protobuf/wrappers.proto";
+
+/**
+记忆模块
+对应的 DB 表：rag.memory
+*/
+service RAG {
+  // 创建会话
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse) {}
+  // 添加消息
+  rpc AddMessage(AddMessageRequest) returns (AddMessageResponse) {}
+  // 删除消息
+  rpc DeleteMessage(DeleteMessageRequest) returns (DeleteMessageResponse) {}
+}
+
+// CreateSession
+message CreateSessionRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  CreateSessionRequestBody body = 2;  // 请求体
+}
+
+message CreateSessionRequestBody {
+  // 这里可以扩展更多创建会话需要的字段
+}
+
+message CreateSessionResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  CreateSessionResponseBody body = 2;  // 响应体
+}
+
+message CreateSessionResponseBody {
+  common.ResponseStatus status = 1;  // 响应状态
+  string memoryKey = 2;  // 生成的会话唯一标识符
+}
+
+// AddMessage
+message AddMessageRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  AddMessageRequestBody body = 2;  // 请求体
+}
+
+message AddMessageRequestBody {
+  string memoryKey = 1;   // 会话的唯一标识符
+  repeated string urls = 2;  // 对话文件 URL 列表
+  int64 timestamp = 3;  // 消息时间戳
+}
+
+message AddMessageResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  AddMessageResponseBody body = 2;  // 响应体
+}
+
+message AddMessageResponseBody {
+  common.ResponseStatus status = 1;  // 操作状态
+  string errorMessage = 2; // 如果失败，返回错误信息
+}
+
+// DeleteMessage
+message DeleteMessageRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  DeleteMessageRequestBody body = 2;  // 请求体
+}
+
+message DeleteMessageRequestBody {
+  string memoryKey = 1;  // 会话的唯一标识符
+  repeated string urls = 2;  // 对话文件 URL 列表
+}
+
+message DeleteMessageResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  DeleteMessageResponseBody body = 2;  // 响应体
+}
+
+message DeleteMessageResponseBody {
+  common.ResponseStatus status = 1;  // 操作状态
+  string errorMessage = 2; // 如果失败，返回错误信息
+}
+
+// 交互数据表 Meta 数据定义
+message InteractionMetadata {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 对话文件 URL 列表
+  repeated string urls = 2;
+  // 接收 URL 的时间戳
+  int64 urlTimestamp = 3;
+  // URL 处理状态
+  Status status = 4;
+}
+
+// 状态枚举类型
+enum Status {
+  PENDING = 0;  // 待处理
+  PROCESSED = 1;  // 已处理
+  FAILED = 2;  // 处理失败
+}
+
+// 主记忆数据表 Meta 数据定义
+message MainHistoryMetaData {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 消息唯一标识符
+  int32 messageId = 2;
+  // 消息内容
+  string messageContent = 3;
+  // 向量化后的消息内容
+  bytes vectorEmbedding = 4;
+  // 消息创建时间
+  int64 createdAt = 5;
+  // 最后更新时间
+  int64 updatedAt = 6;
+  // 是否已删除
+  bool isDeleted = 7;
+  // 是否为摘要消息
+  bool isSummary = 8;
+  // 消息来源
+  SenderType senderType = 9;
+}
+
+// 消息来源枚举类型
+enum SenderType {
+  USER = 0;  // 用户消息
+  SYSTEM = 1;  // 系统消息
+}
+
+// 辅助记忆数据表 Meta 数据定义
+message VectorIndex {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 消息唯一标识符
+  int32 messageId = 2;
+  // 消息向量表示
+  bytes vector = 3;
+  // 向量创建时间
+  int64 createdAt = 4;
+  // 向量最后更新时间
+  int64 updatedAt = 5;
+}
