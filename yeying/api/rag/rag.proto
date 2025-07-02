@@ -80,3 +80,64 @@ message DeleteMessageResponseBody {
   common.ResponseStatus status = 1;  // 操作状态
   string errorMessage = 2; // 如果失败，返回错误信息
 }
+
+// 交互数据表 Meta 数据定义
+message InteractionMetadata {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 对话文件 URL 列表
+  repeated string urls = 2;
+  // 接收 URL 的时间戳
+  int64 urlTimestamp = 3;
+  // URL 处理状态
+  Status status = 4;
+}
+
+// 状态枚举类型
+enum Status {
+  PENDING = 0;  // 待处理
+  PROCESSED = 1;  // 已处理
+  FAILED = 2;  // 处理失败
+}
+
+// 主记忆数据表 Meta 数据定义
+message MainHistoryMetaData {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 消息唯一标识符
+  int32 messageId = 2;
+  // 消息内容
+  string messageContent = 3;
+  // 向量化后的消息内容
+  bytes vectorEmbedding = 4;
+  // 消息创建时间
+  int64 createdAt = 5;
+  // 最后更新时间
+  int64 updatedAt = 6;
+  // 是否已删除
+  bool isDeleted = 7;
+  // 是否为摘要消息
+  bool isSummary = 8;
+  // 消息来源
+  SenderType senderType = 9;
+}
+
+// 消息来源枚举类型
+enum SenderType {
+  USER = 0;  // 用户消息
+  SYSTEM = 1;  // 系统消息
+}
+
+// 辅助记忆数据表 Meta 数据定义
+message VectorIndex {
+  // 会话唯一标识符
+  string memoryKey = 1;
+  // 消息唯一标识符
+  int32 messageId = 2;
+  // 消息向量表示
+  bytes vector = 3;
+  // 向量创建时间
+  int64 createdAt = 4;
+  // 向量最后更新时间
+  int64 updatedAt = 5;
+}
