@@ -1,0 +1,77 @@
+syntax = "proto3";
+option go_package = "yeying/api/rag/";
+package yeying.api.rag;
+
+import "yeying/api/common/message.proto";
+
+/**
+记忆体管理模块
+*/
+service Memory {
+  // 创建记忆体（为面试官调用）
+  rpc Create(CreateMemoryRequest) returns (CreateMemoryResponse) {}
+  // 添加内容到记忆体
+  rpc Add(AddMemoryRequest) returns (AddMemoryResponse) {}
+  // 删除记忆体中的内容
+  rpc Delete(DeleteMemoryRequest) returns (DeleteMemoryResponse) {}
+}
+
+// Create
+message CreateMemoryRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  CreateMemoryRequestBody body = 2;  // 请求体
+}
+
+message CreateMemoryRequestBody {
+  string domain = 1;  // 领域标识（如 "interviewer"）
+}
+
+message CreateMemoryResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  CreateMemoryResponseBody body = 2;  // 响应体
+}
+
+message CreateMemoryResponseBody {
+  common.ResponseStatus status = 1;  // 响应状态
+  string memory_id = 2;  // 生成的记忆体唯一标识符
+}
+
+// Add
+message AddMemoryRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  AddMemoryRequestBody body = 2;  // 请求体
+}
+
+message AddMemoryRequestBody {
+  string memory_id = 1;  // 记忆体唯一标识符
+  string url = 2;  // 要添加的内容URL
+}
+
+message AddMemoryResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  AddMemoryResponseBody body = 2;  // 响应体
+}
+
+message AddMemoryResponseBody {
+  common.ResponseStatus status = 1;  // 响应状态
+}
+
+// Delete
+message DeleteMemoryRequest {
+  common.MessageHeader header = 1;  // 请求的头部信息
+  DeleteMemoryRequestBody body = 2;  // 请求体
+}
+
+message DeleteMemoryRequestBody {
+  string memory_id = 1;  // 记忆体唯一标识符
+  string url = 2;  // 要删除的内容URL
+}
+
+message DeleteMemoryResponse {
+  common.MessageHeader header = 1;  // 响应的头部信息
+  DeleteMemoryResponseBody body = 2;  // 响应体
+}
+
+message DeleteMemoryResponseBody {
+  common.ResponseStatus status = 1;  // 响应状态
+}
