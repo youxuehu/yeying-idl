@@ -53,92 +53,92 @@ message RejectStatus {
  */
 service Audit {
   /* 发起申请 */
-  rpc Create(CreateRequest) returns (CreateResponse) {}
+  rpc Create(AuditCreateRequest) returns (AuditCreateResponse) {}
   /* 查看申请详情 */
-  rpc Detail(DetailRequest) returns (DetailResponse) {}
+  rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {}
   /* 撤销申请 */
-  rpc Cancel(CancelRequest) returns (CancelResponse) {}
+  rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {}
   /* 解绑应用-移除申请成功的应用，不需要访问了 */
-  rpc Unbind(UnbindRequest) returns (UnbindResponse) {}
+  rpc Unbind(AuditUnbindRequest) returns (AuditUnbindResponse) {}
   /* 审批-通过/拒绝 */
-  rpc Audit(AuditRequest) returns (AuditResponse) {}
+  rpc Audit(AuditAuditRequest) returns (AuditAuditResponse) {}
   /* 发起人申请列表 */
   rpc CreateList(CreateAuditListRequest) returns (CreateAuditListResponse) {}
   /* 审批人审批列表 */
   rpc AuditList(AuditListRequest) returns (AuditListResponse) {}
 }
-message CreateRequest {
+message AuditCreateRequest {
   common.MessageHeader header = 1;
-  CreateRequestBody body = 2;
+  AuditCreateRequestBody body = 2;
 }
-message CreateRequestBody {
+message AuditCreateRequestBody {
   AuditMetadata meta = 1;
 }
-message CreateResponse {
+message AuditCreateResponse {
   common.MessageHeader header = 1;
-  CreateResponseBody body = 2;
+  AuditCreateResponseBody body = 2;
 }
-message CreateResponseBody {
+message AuditCreateResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message DetailRequest {
+message AuditDetailRequest {
   common.MessageHeader header = 1;
-  DetailRequestBody body = 2;
+  AuditDetailRequestBody body = 2;
 }
-message DetailRequestBody {
+message AuditDetailRequestBody {
   string uid = 1;
 }
-message DetailResponse {
+message AuditDetailResponse {
   common.MessageHeader header = 1;
-  DetailResponseBody body = 2;
+  AuditDetailResponseBody body = 2;
 }
-message DetailResponseBody {
+message AuditDetailResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message CancelRequest {
+message AuditCancelRequest {
   common.MessageHeader header = 1;
-  CancelRequestBody body = 2;
+  AuditCancelRequestBody body = 2;
 }
-message CancelRequestBody {
+message AuditCancelRequestBody {
   string uid = 1;
 }
-message CancelResponse {
+message AuditCancelResponse {
   common.MessageHeader header = 1;
-  CancelResponseBody body = 2;
+  AuditCancelResponseBody body = 2;
 }
-message CancelResponseBody {
+message AuditCancelResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message UnbindRequest {
+message AuditUnbindRequest {
   common.MessageHeader header = 1;
-  UnbindRequestBody body = 2;
+  AuditUnbindRequestBody body = 2;
 }
-message UnbindRequestBody {
+message AuditUnbindRequestBody {
   string uid = 1;
 }
-message UnbindResponse {
+message AuditUnbindResponse {
   common.MessageHeader header = 1;
-  UnbindResponseBody body = 2;
+  AuditUnbindResponseBody body = 2;
 }
-message UnbindResponseBody {
+message AuditUnbindResponseBody {
   common.ResponseStatus status = 1;
 }
-message AuditRequest {
+message AuditAuditRequest {
   common.MessageHeader header = 1;
-  AuditRequestBody body = 2;
+  AuditAuditRequestBody body = 2;
 }
-message AuditRequestBody {
+message AuditAuditRequestBody {
   string uid = 1;
   AuditStatus status = 2;
 }
-message AuditResponse {
+message AuditAuditResponse {
   common.MessageHeader header = 1;
-  AuditResponseBody body = 2;
+  AuditAuditResponseBody body = 2;
 }
-message AuditResponseBody {
+message AuditAuditResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
