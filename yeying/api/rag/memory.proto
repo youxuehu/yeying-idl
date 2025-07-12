@@ -1,19 +1,97 @@
 syntax = "proto3";
-option go_package = "yeying/api/rag/";
+option go_package = "yeying/api/rag";
 package yeying.api.rag;
 
 import "yeying/api/common/message.proto";
 
 /**
-记忆管理模块
-*/
+ * 记忆管理模块
+ */
 service Memory {
-  // 创建记忆体
+  /* 创建记忆体 */
   rpc Create(CreateMemoryRequest) returns (CreateMemoryResponse) {}
-  // 添加内容到记忆体
+
+  /* 添加消息到记忆体 */
   rpc Add(AddMemoryRequest) returns (AddMemoryResponse) {}
-  // 删除记忆体中的内容
+
+  /* 删除记忆体中的URL */
   rpc Delete(DeleteMemoryRequest) returns (DeleteMemoryResponse) {}
+
+  /* 删除记忆体中URL的某条Message */
+  rpc DeleteMessage(DeleteMemoryMessageRequest) returns (DeleteMemoryMessageResponse) {}
+}
+
+
+/**
+ * 记忆体元数据 - 表示一个记忆体容器
+ */
+message MemoryMetadata {
+  /**
+   * 记忆体唯一标识符
+   */
+  string memoryId = 1;
+  /**
+   * 领域标识
+   */
+  string domain = 2;
+  /**
+   * 记忆体描述
+   */
+  string description = 3;
+  /**
+   * 记忆体所有者
+   */
+  string owner = 4;
+  /**
+   * 创建时间
+   */
+  string createdAt = 5;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 6;
+  /**
+   * 签名
+   */
+  string signature = 7;
+}
+
+/**
+ * 消息元数据 - 每个消息对应一个URL
+ */
+message MessageMetadata {
+  /**
+   * 所属记忆体ID
+   */
+  string memoryId = 1;
+  /**
+   * 消息内容URL
+   */
+  string url = 2;
+  /**
+   * URL哈希值
+   */
+  string hash = 3;
+  /**
+   * 消息描述
+   */
+  string description = 4;
+  /**
+   * 消息所有者
+   */
+  string owner = 5;
+  /**
+   * 创建时间
+   */
+  string createdAt = 6;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 7;
+  /**
+   * 签名
+   */
+  string signature = 8;
 }
 
 // Create
@@ -23,7 +101,7 @@ message CreateMemoryRequest {
 }
 
 message CreateMemoryRequestBody {
-  string domain = 1;  // 领域标识（如 "interviewer"）
+  MemoryMetadata memory = 1;
 }
 
 message CreateMemoryResponse {
@@ -33,7 +111,7 @@ message CreateMemoryResponse {
 
 message CreateMemoryResponseBody {
   common.ResponseStatus status = 1;
-  string memory_id = 2;  // 生成的记忆体唯一标识符
+  MemoryMetadata memory = 2;
 }
 
 // Add
@@ -43,8 +121,7 @@ message AddMemoryRequest {
 }
 
 message AddMemoryRequestBody {
-  string memory_id = 1;  // 记忆体唯一标识符
-  string url = 2;  // 要添加的内容URL
+  MessageMetadata message = 1;
 }
 
 message AddMemoryResponse {
@@ -54,6 +131,7 @@ message AddMemoryResponse {
 
 message AddMemoryResponseBody {
   common.ResponseStatus status = 1;
+  MessageMetadata message = 2;
 }
 
 // Delete
@@ -63,8 +141,9 @@ message DeleteMemoryRequest {
 }
 
 message DeleteMemoryRequestBody {
-  string memory_id = 1;  // 记忆体唯一标识符
-  string url = 2;  // 要删除的内容URL
+  string memoryId = 1;
+  string hash = 2;
+  string owner = 3;
 }
 
 message DeleteMemoryResponse {
@@ -73,5 +152,27 @@ message DeleteMemoryResponse {
 }
 
 message DeleteMemoryResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+// DeleteMessage
+message DeleteMemoryMessageRequest {
+  common.MessageHeader header = 1;
+  DeleteMemoryMessageRequestBody body = 2;
+}
+
+message DeleteMemoryMessageRequestBody {
+  string memoryId = 1;
+  string hash = 2;
+  string owner = 3;
+  uint32 index = 4;
+}
+
+message DeleteMemoryMessageResponse {
+  common.MessageHeader header = 1;
+  DeleteMemoryMessageResponseBody body = 2;
+}
+
+message DeleteMemoryMessageResponseBody {
   common.ResponseStatus status = 1;
 }
