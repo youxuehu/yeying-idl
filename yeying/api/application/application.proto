@@ -14,20 +14,11 @@ service Application {
   /* 搜索应用 */
   rpc Search(SearchApplicationRequest) returns (SearchApplicationResponse) {}
 
-  /* 应用审计 */
-  rpc Audit(AuditApplicationRequest) returns (AuditApplicationResponse) {}
-
   /* 创建应用 */
   rpc Create(CreateApplicationRequest) returns (CreateApplicationResponse) {}
 
   /* 应用详情 */
   rpc Detail(ApplicationDetailRequest) returns (ApplicationDetailResponse) {}
-
-  /* 下架应用 */
-  rpc Offline(OfflineApplicationRequest) returns (OfflineApplicationResponse) {}
-
-  /* 上架应用 */
-  rpc Online(OnlineApplicationRequest) returns (OnlineApplicationResponse) {}
 
   /* 删除应用 */
   rpc Delete(DeleteApplicationRequest) returns (DeleteApplicationResponse) {}
@@ -116,61 +107,6 @@ message ApplicationDetailResponseBody {
   common.ApplicationMetadata application = 2;
 }
 
-message OfflineApplicationRequest {
-  common.MessageHeader header = 1;
-  OfflineApplicationRequestBody body = 2;
-}
-
-message OfflineApplicationRequestBody {
-  string did = 1;
-  uint32 version = 2;
-}
-
-message OfflineApplicationResponse {
-  common.MessageHeader header = 1;
-  OfflineApplicationResponseBody body = 2;
-}
-
-message OfflineApplicationResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message OnlineApplicationRequest {
-  common.MessageHeader header = 1;
-  OnlineApplicationRequestBody body = 2;
-}
-
-message OnlineApplicationRequestBody {
-  string did = 1;
-  uint32 version = 2;
-}
-
-message OnlineApplicationResponse {
-  common.MessageHeader header = 1;
-  OnlineApplicationResponseBody body = 2;
-}
-
-message OnlineApplicationResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message ApplicationExtend {
-  /* 审批意见 */
-  repeated ApplicationComment comments = 1;
-}
-
-message ApplicationComment {
-  /* 审批人 */
-  string auditor = 1;
-  /* 审批意见 */
-  string comment = 2;
-  /* 是否通过 */
-  bool passed = 3;
-  /* 审批人签名 */
-  string signature = 4;
-}
-
-
 message DeleteApplicationRequest {
   common.MessageHeader header = 1;
   DeleteApplicationRequestBody body = 2;
@@ -187,24 +123,5 @@ message DeleteApplicationResponse {
 }
 
 message DeleteApplicationResponseBody {
-  common.ResponseStatus status = 1;
-}
-
-message AuditApplicationRequest {
-  common.MessageHeader header = 1;
-  AuditApplicationRequestBody body = 2;
-}
-
-message AuditApplicationRequestBody {
-  ApplicationComment comment = 1;
-  string did = 2;
-  uint32 version = 3;
-}
-
-message AuditApplicationResponse {
-  common.MessageHeader header = 1;
-  AuditApplicationResponseBody body = 2;
-}
-message AuditApplicationResponseBody {
   common.ResponseStatus status = 1;
 }

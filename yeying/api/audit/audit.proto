@@ -7,46 +7,6 @@ import "yeying/api/common/code.proto";
 import "yeying/api/common/model.proto";
 
 /**
-审核状态
- */
-message AuditStatus {
-  oneof status {
-    /**
-    申请中
-     */
-    PendingStatus pending = 1;
-    /**
-    已取消
-     */
-    CanceledStatus canceled = 2;
-    /**
-    申请通过
-     */
-    PassedStatus passed = 3;
-    /**
-    申请驳回
-     */
-    RejectStatus reject = 4;
-  }
-}
-
-message PendingStatus {
-  string text = 2;
-}
-
-message CanceledStatus {
-  string text = 2;
-}
-
-message PassedStatus {
-  string text = 2;
-}
-
-message RejectStatus {
-  string text = 2;
-}
-
-/**
 审批服务
 发起应用访问申请->
 查看审批详情->
@@ -58,14 +18,12 @@ service Audit {
   rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {}
   /* 撤销申请 */
   rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {}
-  /* 解绑应用-移除申请成功的应用，不需要访问了 */
-  rpc Unbind(AuditUnbindRequest) returns (AuditUnbindResponse) {}
-  /* 审批-通过/拒绝 */
-  rpc Audit(AuditAuditRequest) returns (AuditAuditResponse) {}
-  /* 发起人申请列表 */
-  rpc CreateList(CreateAuditListRequest) returns (CreateAuditListResponse) {}
-  /* 审批人审批列表 */
-  rpc AuditList(AuditListRequest) returns (AuditListResponse) {}
+  /* 通过 */
+  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {}
+  /* 拒绝 */
+  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {}
+  /* 列表 */
+  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {}
 }
 message AuditCreateRequest {
   common.MessageHeader header = 1;
@@ -95,7 +53,7 @@ message AuditDetailResponse {
 }
 message AuditDetailResponseBody {
   common.ResponseStatus status = 1;
-  AuditMetadata meta = 2;
+  AuditDetail detail = 2;
 }
 message AuditCancelRequest {
   common.MessageHeader header = 1;
@@ -112,100 +70,88 @@ message AuditCancelResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message AuditUnbindRequest {
+message AuditApproveRequest {
   common.MessageHeader header = 1;
-  AuditUnbindRequestBody body = 2;
+  AuditApproveRequestBody body = 2;
 }
-message AuditUnbindRequestBody {
-  string uid = 1;
+message AuditApproveRequestBody {
+  CommentMetadata metadata = 1;
 }
-message AuditUnbindResponse {
+message AuditApproveResponse {
   common.MessageHeader header = 1;
-  AuditUnbindResponseBody body = 2;
+  AuditApproveResponseBody body = 2;
 }
-message AuditUnbindResponseBody {
+message AuditApproveResponseBody {
   common.ResponseStatus status = 1;
+  CommentMetadata metadata = 2;
 }
-message AuditAuditRequest {
+
+message AuditRejectRequest {
   common.MessageHeader header = 1;
-  AuditAuditRequestBody body = 2;
+  AuditRejectRequestBody body = 2;
 }
-message AuditAuditRequestBody {
-  string uid = 1;
-  AuditStatus status = 2;
+message AuditRejectRequestBody {
+  CommentMetadata metadata = 1;
 }
-message AuditAuditResponse {
+message AuditRejectResponse {
   common.MessageHeader header = 1;
-  AuditAuditResponseBody body = 2;
+  AuditRejectResponseBody body = 2;
 }
-message AuditAuditResponseBody {
+message AuditRejectResponseBody {
   common.ResponseStatus status = 1;
-  AuditMetadata meta = 2;
+  CommentMetadata metadata = 2;
 }
-message CreateAuditListRequest {
+message AuditSearchRequest {
   common.MessageHeader header = 1;
-  CreateAuditListRequestBody body = 2;
+  AuditSearchRequestBody body = 2;
 }
-message CreateAuditListRequestBody {
+message AuditSearchRequestBody {
   AuditSearchCondition condition = 1;
   common.RequestPage page = 2;
 }
-message CreateAuditListResponse {
+message AuditSearchResponse {
   common.MessageHeader header = 1;
-  CreateAuditListResponseBody body = 2;
+  AuditSearchResponseBody body = 2;
 }
-message CreateAuditListResponseBody {
+message AuditSearchResponseBody {
   common.ResponseStatus status = 1;
-  repeated AuditMetadata audits = 2;
+  repeated AuditDetail detail = 2;
   common.ResponsePage page = 3;
 }
-message AuditListRequest {
-  common.MessageHeader header = 1;
-  AuditListRequestBody body = 2;
+
+message AuditDetail {
+  AuditMetadata meta = 1;
+  repeated CommentMetadata commentMeta = 2;
 }
-message AuditListRequestBody {
-  AuditSearchCondition condition = 1;
-  common.RequestPage page = 2;
-}
-message AuditListResponse {
-  common.MessageHeader header = 1;
-  AuditListResponseBody body = 2;
-}
-message AuditListResponseBody {
-  common.ResponseStatus status = 1;
-  repeated AuditMetadata audits = 2;
-  common.ResponsePage page = 3;
-}
-/**
-我的申请列表查询条件
-我的审批列表查询条件
- */
+
 message AuditSearchCondition {
   /**
-  申请人 did
+  审批人
    */
-  string sourceDid = 1;
+  string approver = 1;
   /**
   应用/服务名称
    */
   string name = 2;
+
   /**
-  申请时间-开始时间
-   */
-  string startTime = 3;
+  申请类型：应用/服务
+ */
+  string type = 3;
   /**
-  申请时间-结束时间
-   */
-  string endTime = 4;
+  申请人
+ */
+  string applicant = 4;
   /**
-  申请类型[应用/服务]
+  开始时间
    */
-  common.AuditTypeEnum type = 5;
+  string startTime = 5;
   /**
-  审批人 did
-   */
-  string targetDid = 6;
+  结束时间
+  */
+  string endTime = 6;
 }
+
 message AuditMetadata {
   /**
      * 主键uid
@@ -213,39 +159,28 @@ message AuditMetadata {
     string uid = 1;
 
   /**
-   * 应用名称
+   * 应用元数据 / 服务元数据序例化 json 字符串
+   *
    */
-    string appName = 2;
+    string appOrServiceMetadata = 2;
 
   /**
-   * 申请人用户身份 did
+   * 申请人身份，存字符串，使用 :: 拼接
+   * 拼接格式 did::name
    */
-    string sourceDid = 3;
+    string applicant = 3;
 
   /**
-   * 申请人用户名称
+   * 审批人身份：可能有多个人审批人，使用 list json
+   * 拼接格式 did::name
+   *
    */
-    string sourceName = 4;
-
-  /**
-   * 审批人用户身份 did
-   */
-    string targetDid = 5;
-
-  /**
-   * 审批人用户名称
-   */
-    string targetName = 6;
+    string approver = 5;
 
   /**
    * 申请原因
    */
     string reason = 7;
-
-  /**
-   * 申请状态（申请中，已取消，申请通过，申请驳回）
-   */
-    AuditStatus status = 8;
 
   /**
    * 创建时间
@@ -257,7 +192,36 @@ message AuditMetadata {
    */
     string updatedAt = 10;
   /**
-  申请类型[应用/服务]
-  */
-  common.AuditTypeEnum type = 11;
+   * 签名
+   */
+    string signature = 11;
+
 }
+
+/**
+审批意见表
+ */
+message CommentMetadata {
+  /** 主键 id */
+  string uid = 1;
+  /** 审计表 id */
+  string auditId = 2;
+  /** 审批备注文字 id */
+  string text = 3;
+  /** 审批状态 id */
+  CommentStatusEnum status = 4;
+  /** 创建时间 */
+  string createdAt = 5;
+  /** 修改时间 */
+  string updatedAt = 6;
+  /** 签名 */
+  string signature = 7;
+}
+
+enum CommentStatusEnum {
+  // 通过
+  COMMENT_STATUS_AGREE = 0;
+  // 拒绝
+  COMMENT_STATUS_REJECT = 1;
+}
+

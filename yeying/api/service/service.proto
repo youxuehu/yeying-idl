@@ -19,12 +19,6 @@ service Service {
   // 搜索服务
   rpc Search(SearchServiceRequest) returns (SearchServiceResponse) {}
 
-  // 上线服务
-  rpc Online(OnlineServiceRequest) returns (OnlineServiceResponse) {}
-
-  // 下线服务
-  rpc Offline(OfflineServiceRequest) returns (OfflineServiceResponse) {}
-
   // 删除服务
   rpc Delete(DeleteServiceRequest) returns (DeleteServiceResponse) {}
 }
@@ -115,46 +109,6 @@ message SearchServiceResponseBody {
   common.ResponseStatus status = 1;
   repeated common.ServiceMetadata services = 2;
   common.ResponsePage page = 3;
-}
-// online
-message OnlineServiceRequest {
-  common.MessageHeader header = 1;
-  OnlineServiceRequestBody body = 2;
-}
-
-message OnlineServiceRequestBody {
-  string did = 1;
-  uint32 version = 2;
-}
-
-message OnlineServiceResponse {
-  common.MessageHeader header = 1;
-  OnlineServiceResponseBody body = 2;
-}
-
-message OnlineServiceResponseBody {
-  common.ResponseStatus status = 1;
-  common.ServiceMetadata service = 2;
-}
-// offline
-message OfflineServiceRequest {
-  common.MessageHeader header = 1;
-  OfflineServiceRequestBody body = 2;
-}
-
-message OfflineServiceRequestBody {
-  string did = 1;
-  uint32 version = 2;
-}
-
-message OfflineServiceResponse {
-  common.MessageHeader header = 1;
-  OfflineServiceResponseBody body = 2;
-}
-
-message OfflineServiceResponseBody {
-  common.ResponseStatus status = 1;
-  common.ServiceMetadata service = 2;
 }
 
 // delete
