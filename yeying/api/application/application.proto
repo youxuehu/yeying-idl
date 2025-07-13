@@ -20,9 +20,6 @@ service Application {
   /* 应用详情 */
   rpc Detail(ApplicationDetailRequest) returns (ApplicationDetailResponse) {}
 
-  /* 下架应用 */
-  rpc Offline(OfflineApplicationRequest) returns (OfflineApplicationResponse) {}
-
   /* 删除应用 */
   rpc Delete(DeleteApplicationRequest) returns (DeleteApplicationResponse) {}
 }
@@ -108,25 +105,6 @@ message ApplicationDetailResponse {
 message ApplicationDetailResponseBody {
   common.ResponseStatus status = 1;
   common.ApplicationMetadata application = 2;
-}
-
-message OfflineApplicationRequest {
-  common.MessageHeader header = 1;
-  OfflineApplicationRequestBody body = 2;
-}
-
-message OfflineApplicationRequestBody {
-  string did = 1;
-  uint32 version = 2;
-}
-
-message OfflineApplicationResponse {
-  common.MessageHeader header = 1;
-  OfflineApplicationResponseBody body = 2;
-}
-
-message OfflineApplicationResponseBody {
-  common.ResponseStatus status = 1;
 }
 
 message DeleteApplicationRequest {

@@ -18,12 +18,12 @@ service Audit {
   rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {}
   /* 撤销申请 */
   rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {}
-  /* 解绑应用-移除申请成功的应用，不需要访问了 */
-  rpc Unbind(AuditUnbindRequest) returns (AuditUnbindResponse) {}
-  /* 我申请的 - 列表 */
-  rpc MyAppliedSearch(MyAppliedSearchRequest) returns (MyAppliedSearchResponse) {}
-  /* 我审批的 - 列表 */
-  rpc MyApprovedSearch(MyApprovedSearchRequest) returns (MyApprovedSearchResponse) {}
+  /* 通过 */
+  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {}
+  /* 拒绝 */
+  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {}
+  /* 列表 */
+  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {}
 }
 message AuditCreateRequest {
   common.MessageHeader header = 1;
@@ -53,7 +53,7 @@ message AuditDetailResponse {
 }
 message AuditDetailResponseBody {
   common.ResponseStatus status = 1;
-  AuditMetadata meta = 2;
+  AuditDetail detail = 2;
 }
 message AuditCancelRequest {
   common.MessageHeader header = 1;
@@ -70,72 +70,61 @@ message AuditCancelResponseBody {
   common.ResponseStatus status = 1;
   AuditMetadata meta = 2;
 }
-message AuditUnbindRequest {
+message AuditApproveRequest {
   common.MessageHeader header = 1;
-  AuditUnbindRequestBody body = 2;
+  AuditApproveRequestBody body = 2;
 }
-message AuditUnbindRequestBody {
-  string uid = 1;
+message AuditApproveRequestBody {
+  CommentMetadata metadata = 1;
 }
-message AuditUnbindResponse {
+message AuditApproveResponse {
   common.MessageHeader header = 1;
-  AuditUnbindResponseBody body = 2;
+  AuditApproveResponseBody body = 2;
 }
-message AuditUnbindResponseBody {
+message AuditApproveResponseBody {
   common.ResponseStatus status = 1;
+  CommentMetadata metadata = 2;
 }
-message MyAppliedSearchRequest {
-  common.MessageHeader header = 1;
-  MyAppliedSearchRequestBody body = 2;
-}
-message MyAppliedSearchRequestBody {
-  MyAppliedSearchCondition condition = 1;
-  common.RequestPage page = 2;
-}
-message MyAppliedSearchResponse {
-  common.MessageHeader header = 1;
-  MyAppliedSearchResponseBody body = 2;
-}
-message MyAppliedSearchResponseBody {
-  common.ResponseStatus status = 1;
-  repeated AuditMetadata audits = 2;
-  common.ResponsePage page = 3;
-}
-message MyApprovedSearchRequest {
-  common.MessageHeader header = 1;
-  MyApprovedSearchRequestBody body = 2;
-}
-message MyApprovedSearchRequestBody {
-  MyApprovedSearchCondition condition = 1;
-  common.RequestPage page = 2;
-}
-message MyApprovedSearchResponse {
-  common.MessageHeader header = 1;
-  MyApprovedSearchResponseBody body = 2;
-}
-message MyApprovedSearchResponseBody {
-  common.ResponseStatus status = 1;
-  repeated AuditMetadata audits = 2;
-  common.ResponsePage page = 3;
-}
-/**
-我申请的 - 列表数据过滤条件
- */
-message MyAppliedSearchCondition {
-  /**
-  申请人 did
-   */
-  string sourceDid = 1;
-  /**
-  应用/服务名称
-   */
-  string name = 2;
 
+message AuditRejectRequest {
+  common.MessageHeader header = 1;
+  AuditRejectRequestBody body = 2;
 }
-/**
-我审批的 - 列表数据过滤条件
- */
-message MyApprovedSearchCondition {
+message AuditRejectRequestBody {
+  CommentMetadata metadata = 1;
+}
+message AuditRejectResponse {
+  common.MessageHeader header = 1;
+  AuditRejectResponseBody body = 2;
+}
+message AuditRejectResponseBody {
+  common.ResponseStatus status = 1;
+  CommentMetadata metadata = 2;
+}
+message AuditSearchRequest {
+  common.MessageHeader header = 1;
+  AuditSearchRequestBody body = 2;
+}
+message AuditSearchRequestBody {
+  AuditSearchCondition condition = 1;
+  common.RequestPage page = 2;
+}
+message AuditSearchResponse {
+  common.MessageHeader header = 1;
+  AuditSearchResponseBody body = 2;
+}
+message AuditSearchResponseBody {
+  common.ResponseStatus status = 1;
+  repeated AuditDetail detail = 2;
+  common.ResponsePage page = 3;
+}
+
+message AuditDetail {
+  AuditMetadata meta = 1;
+  repeated CommentMetadata commentMeta = 2;
+}
+
+message AuditSearchCondition {
   /**
   审批人
    */
@@ -162,6 +151,7 @@ message MyApprovedSearchCondition {
   */
   string endTime = 6;
 }
+
 message AuditMetadata {
   /**
      * 主键uid
