@@ -1,0 +1,152 @@
+syntax = "proto3";
+option go_package = "yeying/api/rag";
+package yeying.api.rag;
+
+import "yeying/api/common/message.proto";
+
+/**
+ * 应用知识库管理模块
+ */
+service AppKB {
+  /* 创建知识库 */
+  rpc Create(CreateAppKBRequest) returns (CreateAppKBResponse) {}
+
+  /* 添加消息到知识库 */
+  rpc Add(AddAppKBRequest) returns (AddAppKBResponse) {}
+
+  /* 删除知识库中的URL */
+  rpc Delete(DeleteAppKBRequest) returns (DeleteAppKBResponse) {}
+}
+
+/**
+ * 应用知识库元数据 - 表示一个知识库容器
+ */
+message AppKBMetadata {
+  /**
+   * 知识库唯一标识符
+   */
+  string kbId = 1;
+  /**
+   * 应用标识
+   */
+  string app = 2;
+  /**
+   * 知识库所有者
+   */
+  string owner = 3;
+  /**
+   * 知识库描述
+   */
+  string description = 4;
+  /**
+   * 创建时间
+   */
+  string createdAt = 5;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 6;
+  /**
+   * 签名
+   */
+  string signature = 7;
+}
+
+/**
+ * 消息元数据 - 每个消息对应一个URL
+ */
+message AppMessageMetadata {
+  /**
+   * 所属知识库ID
+   */
+  string kbId = 1;
+  /**
+   * 消息内容URL
+   */
+  string url = 2;
+  /**
+   * URL哈希值
+   */
+  string hash = 3;
+  /**
+   * 消息所有者
+   */
+  string owner = 4;
+  /**
+   * 消息描述
+   */
+  string description = 5;
+  /**
+   * 创建时间
+   */
+  string createdAt = 6;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 7;
+  /**
+   * 签名
+   */
+  string signature = 8;
+}
+
+// Create
+message CreateAppKBRequest {
+  common.MessageHeader header = 1;
+  CreateAppKBRequestBody body = 2;
+}
+
+message CreateAppKBRequestBody {
+  AppKBMetadata kb = 1;
+}
+
+message CreateAppKBResponse {
+  common.MessageHeader header = 1;
+  CreateAppKBResponseBody body = 2;
+}
+
+message CreateAppKBResponseBody {
+  common.ResponseStatus status = 1;
+  AppKBMetadata kb = 2;
+}
+
+// Add
+message AddAppKBRequest {
+  common.MessageHeader header = 1;
+  AddAppKBRequestBody body = 2;
+}
+
+message AddAppKBRequestBody {
+  AppMessageMetadata message = 1;
+}
+
+message AddAppKBResponse {
+  common.MessageHeader header = 1;
+  AddAppKBResponseBody body = 2;
+}
+
+message AddAppKBResponseBody {
+  common.ResponseStatus status = 1;
+  AppMessageMetadata message = 2;
+}
+
+// Delete
+message DeleteAppKBRequest {
+  common.MessageHeader header = 1;
+  DeleteAppKBRequestBody body = 2;
+}
+
+message DeleteAppKBRequestBody {
+  string kbId = 1;
+  string hash = 2;
+  string owner = 3;
+}
+
+message DeleteAppKBResponse {
+  common.MessageHeader header = 1;
+  DeleteAppKBResponseBody body = 2;
+}
+
+message DeleteAppKBResponseBody {
+  common.ResponseStatus status = 1;
+}

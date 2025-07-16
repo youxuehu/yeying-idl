@@ -1,0 +1,177 @@
+syntax = "proto3";
+option go_package = "yeying/api/rag";
+package yeying.api.rag;
+
+import "yeying/api/common/message.proto";
+
+/**
+ * 上下文知识库管理模块
+ */
+service ContextKB {
+  /* 创建知识库 */
+  rpc Create(CreateContextKBRequest) returns (CreateContextKBResponse) {}
+
+  /* 添加消息到知识库 */
+  rpc Add(AddContextKBRequest) returns (AddContextKBResponse) {}
+
+  /* 删除知识库中的URL */
+  rpc Delete(DeleteContextKBRequest) returns (DeleteContextKBResponse) {}
+
+  /* 删除知识库中URL的某条Message */
+  rpc DeleteMessage(DeleteContextKBMessageRequest) returns (DeleteContextKBMessageResponse) {}
+}
+
+/**
+ * 上下文知识库元数据 - 表示一个知识库容器
+ */
+message ContextKBMetadata {
+  /**
+   * 知识库唯一标识符
+   */
+  string kbId = 1;
+  /**
+   * 应用标识
+   */
+  string app = 2;
+  /**
+   * 知识库所有者
+   */
+  string owner = 3;
+  /**
+   * 知识库描述
+   */
+  string description = 4;
+  /**
+   * 创建时间
+   */
+  string createdAt = 5;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 6;
+  /**
+   * 签名
+   */
+  string signature = 7;
+}
+
+/**
+ * 消息元数据 - 每个消息对应一个URL
+ */
+message ContextMessageMetadata {
+  /**
+   * 所属知识库ID
+   */
+  string kbId = 1;
+  /**
+   * 消息内容URL
+   */
+  string url = 2;
+  /**
+   * URL哈希值
+   */
+  string hash = 3;
+  /**
+   * 消息所有者
+   */
+  string owner = 4;
+  /**
+   * 消息描述
+   */
+  string description = 5;
+  /**
+   * 创建时间
+   */
+  string createdAt = 6;
+  /**
+   * 更新时间
+   */
+  string updatedAt = 7;
+  /**
+   * 签名
+   */
+  string signature = 8;
+}
+
+// Create
+message CreateContextKBRequest {
+  common.MessageHeader header = 1;
+  CreateContextKBRequestBody body = 2;
+}
+
+message CreateContextKBRequestBody {
+  ContextKBMetadata kb = 1;
+}
+
+message CreateContextKBResponse {
+  common.MessageHeader header = 1;
+  CreateContextKBResponseBody body = 2;
+}
+
+message CreateContextKBResponseBody {
+  common.ResponseStatus status = 1;
+  ContextKBMetadata kb = 2;
+}
+
+// Add
+message AddContextKBRequest {
+  common.MessageHeader header = 1;
+  AddContextKBRequestBody body = 2;
+}
+
+message AddContextKBRequestBody {
+  ContextMessageMetadata message = 1;
+}
+
+message AddContextKBResponse {
+  common.MessageHeader header = 1;
+  AddContextKBResponseBody body = 2;
+}
+
+message AddContextKBResponseBody {
+  common.ResponseStatus status = 1;
+  ContextMessageMetadata message = 2;
+}
+
+// Delete
+message DeleteContextKBRequest {
+  common.MessageHeader header = 1;
+  DeleteContextKBRequestBody body = 2;
+}
+
+message DeleteContextKBRequestBody {
+  string kbId = 1;
+  string hash = 2;
+  string owner = 3;
+}
+
+message DeleteContextKBResponse {
+  common.MessageHeader header = 1;
+  DeleteContextKBResponseBody body = 2;
+}
+
+message DeleteContextKBResponseBody {
+  common.ResponseStatus status = 1;
+}
+
+// DeleteMessage
+message DeleteContextKBMessageRequest {
+  common.MessageHeader header = 1;
+  DeleteContextKBMessageRequestBody body = 2;
+}
+
+message DeleteContextKBMessageRequestBody {
+  string kbId = 1;
+  string hash = 2;
+  string owner = 3;
+  uint32 index = 4;
+}
+
+message DeleteContextKBMessageResponse {
+  common.MessageHeader header = 1;
+  DeleteContextKBMessageResponseBody body = 2;
+}
+
+message DeleteContextKBMessageResponseBody {
+  common.ResponseStatus status = 1;
+}
