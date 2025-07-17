@@ -7,24 +7,24 @@ import "yeying/api/common/message.proto";
 /**
  * 上下文知识库管理模块
  */
-service ContextKB {
+service Context {
   /* 创建知识库 */
-  rpc Create(CreateContextKBRequest) returns (CreateContextKBResponse) {}
+  rpc Create(CreateContextRequest) returns (CreateContextResponse) {}
 
   /* 添加消息到知识库 */
-  rpc Add(AddContextKBRequest) returns (AddContextKBResponse) {}
+  rpc Add(AddContextRequest) returns (AddContextResponse) {}
 
   /* 删除知识库中的URL */
-  rpc Delete(DeleteContextKBRequest) returns (DeleteContextKBResponse) {}
+  rpc Delete(DeleteContextRequest) returns (DeleteContextResponse) {}
 
   /* 删除知识库中URL的某条Message */
-  rpc DeleteMessage(DeleteContextKBMessageRequest) returns (DeleteContextKBMessageResponse) {}
+  rpc DeleteMessage(DeleteContextMessageRequest) returns (DeleteContextMessageResponse) {}
 }
 
 /**
  * 上下文知识库元数据 - 表示一个知识库容器
  */
-message ContextKBMetadata {
+message ContextMetadata {
   /**
    * 知识库唯一标识符
    */
@@ -56,9 +56,9 @@ message ContextKBMetadata {
 }
 
 /**
- * 消息元数据 - 每个消息对应一个URL
+ * 上下文内容 - 每个消息对应一个URL
  */
-message ContextMessageMetadata {
+message ContextContent {
   /**
    * 所属知识库ID
    */
@@ -94,84 +94,84 @@ message ContextMessageMetadata {
 }
 
 // Create
-message CreateContextKBRequest {
+message CreateContextRequest {
   common.MessageHeader header = 1;
-  CreateContextKBRequestBody body = 2;
+  CreateContextRequestBody body = 2;
 }
 
-message CreateContextKBRequestBody {
-  ContextKBMetadata kb = 1;
+message CreateContextRequestBody {
+  ContextMetadata kb = 1;
 }
 
-message CreateContextKBResponse {
+message CreateContextResponse {
   common.MessageHeader header = 1;
-  CreateContextKBResponseBody body = 2;
+  CreateContextResponseBody body = 2;
 }
 
-message CreateContextKBResponseBody {
+message CreateContextResponseBody {
   common.ResponseStatus status = 1;
-  ContextKBMetadata kb = 2;
+  ContextMetadata kb = 2;
 }
 
 // Add
-message AddContextKBRequest {
+message AddContextRequest {
   common.MessageHeader header = 1;
-  AddContextKBRequestBody body = 2;
+  AddContextRequestBody body = 2;
 }
 
-message AddContextKBRequestBody {
-  ContextMessageMetadata message = 1;
+message AddContextRequestBody {
+  ContextContent message = 1;
 }
 
-message AddContextKBResponse {
+message AddContextResponse {
   common.MessageHeader header = 1;
-  AddContextKBResponseBody body = 2;
+  AddContextResponseBody body = 2;
 }
 
-message AddContextKBResponseBody {
+message AddContextResponseBody {
   common.ResponseStatus status = 1;
-  ContextMessageMetadata message = 2;
+  ContextContent message = 2;
 }
 
 // Delete
-message DeleteContextKBRequest {
+message DeleteContextRequest {
   common.MessageHeader header = 1;
-  DeleteContextKBRequestBody body = 2;
+  DeleteContextRequestBody body = 2;
 }
 
-message DeleteContextKBRequestBody {
+message DeleteContextRequestBody {
   string kbId = 1;
   string hash = 2;
   string owner = 3;
 }
 
-message DeleteContextKBResponse {
+message DeleteContextResponse {
   common.MessageHeader header = 1;
-  DeleteContextKBResponseBody body = 2;
+  DeleteContextResponseBody body = 2;
 }
 
-message DeleteContextKBResponseBody {
+message DeleteContextResponseBody {
   common.ResponseStatus status = 1;
 }
 
 // DeleteMessage
-message DeleteContextKBMessageRequest {
+message DeleteContextMessageRequest {
   common.MessageHeader header = 1;
-  DeleteContextKBMessageRequestBody body = 2;
+  DeleteContextMessageRequestBody body = 2;
 }
 
-message DeleteContextKBMessageRequestBody {
+message DeleteContextMessageRequestBody {
   string kbId = 1;
   string hash = 2;
   string owner = 3;
   uint32 index = 4;
 }
 
-message DeleteContextKBMessageResponse {
+message DeleteContextMessageResponse {
   common.MessageHeader header = 1;
-  DeleteContextKBMessageResponseBody body = 2;
+  DeleteContextMessageResponseBody body = 2;
 }
 
-message DeleteContextKBMessageResponseBody {
+message DeleteContextMessageResponseBody {
   common.ResponseStatus status = 1;
 }

@@ -7,21 +7,21 @@ import "yeying/api/common/message.proto";
 /**
  * 应用知识库管理模块
  */
-service AppKB {
+service Knowledge {
   /* 创建知识库 */
-  rpc Create(CreateAppKBRequest) returns (CreateAppKBResponse) {}
+  rpc Create(CreateKnowledgeRequest) returns (CreateKnowledgeResponse) {}
 
   /* 添加消息到知识库 */
-  rpc Add(AddAppKBRequest) returns (AddAppKBResponse) {}
+  rpc Add(AddKnowledgeRequest) returns (AddKnowledgeResponse) {}
 
   /* 删除知识库中的URL */
-  rpc Delete(DeleteAppKBRequest) returns (DeleteAppKBResponse) {}
+  rpc Delete(DeleteKnowledgeRequest) returns (DeleteKnowledgeResponse) {}
 }
 
 /**
  * 应用知识库元数据 - 表示一个知识库容器
  */
-message AppKBMetadata {
+message KnowledgeMetadata {
   /**
    * 知识库唯一标识符
    */
@@ -53,9 +53,9 @@ message AppKBMetadata {
 }
 
 /**
- * 消息元数据 - 每个消息对应一个URL
+ * 知识内容 - 每个消息对应一个URL
  */
-message AppMessageMetadata {
+message KnowledgeContent {
   /**
    * 所属知识库ID
    */
@@ -91,62 +91,62 @@ message AppMessageMetadata {
 }
 
 // Create
-message CreateAppKBRequest {
+message CreateKnowledgeRequest {
   common.MessageHeader header = 1;
-  CreateAppKBRequestBody body = 2;
+  CreateKnowledgeRequestBody body = 2;
 }
 
-message CreateAppKBRequestBody {
-  AppKBMetadata kb = 1;
+message CreateKnowledgeRequestBody {
+  KnowledgeMetadata kb = 1;
 }
 
-message CreateAppKBResponse {
+message CreateKnowledgeResponse {
   common.MessageHeader header = 1;
-  CreateAppKBResponseBody body = 2;
+  CreateKnowledgeResponseBody body = 2;
 }
 
-message CreateAppKBResponseBody {
+message CreateKnowledgeResponseBody {
   common.ResponseStatus status = 1;
-  AppKBMetadata kb = 2;
+  KnowledgeMetadata kb = 2;
 }
 
 // Add
-message AddAppKBRequest {
+message AddKnowledgeRequest {
   common.MessageHeader header = 1;
-  AddAppKBRequestBody body = 2;
+  AddKnowledgeRequestBody body = 2;
 }
 
-message AddAppKBRequestBody {
-  AppMessageMetadata message = 1;
+message AddKnowledgeRequestBody {
+  KnowledgeContent message = 1;
 }
 
-message AddAppKBResponse {
+message AddKnowledgeResponse {
   common.MessageHeader header = 1;
-  AddAppKBResponseBody body = 2;
+  AddKnowledgeResponseBody body = 2;
 }
 
-message AddAppKBResponseBody {
+message AddKnowledgeResponseBody {
   common.ResponseStatus status = 1;
-  AppMessageMetadata message = 2;
+  KnowledgeContent message = 2;
 }
 
 // Delete
-message DeleteAppKBRequest {
+message DeleteKnowledgeRequest {
   common.MessageHeader header = 1;
-  DeleteAppKBRequestBody body = 2;
+  DeleteKnowledgeRequestBody body = 2;
 }
 
-message DeleteAppKBRequestBody {
+message DeleteKnowledgeRequestBody {
   string kbId = 1;
   string hash = 2;
   string owner = 3;
 }
 
-message DeleteAppKBResponse {
+message DeleteKnowledgeResponse {
   common.MessageHeader header = 1;
-  DeleteAppKBResponseBody body = 2;
+  DeleteKnowledgeResponseBody body = 2;
 }
 
-message DeleteAppKBResponseBody {
+message DeleteKnowledgeResponseBody {
   common.ResponseStatus status = 1;
 }

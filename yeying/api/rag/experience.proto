@@ -7,21 +7,21 @@ import "yeying/api/common/message.proto";
 /**
  * 用户知识库管理模块
  */
-service UserKB {
+service Experience {
   /* 创建知识库 */
-  rpc Create(CreateUserKBRequest) returns (CreateUserKBResponse) {}
+  rpc Create(CreateExperienceRequest) returns (CreateExperienceResponse) {}
 
   /* 添加消息到知识库 */
-  rpc Add(AddUserKBRequest) returns (AddUserKBResponse) {}
+  rpc Add(AddExperienceRequest) returns (AddExperienceResponse) {}
 
   /* 删除知识库中的URL */
-  rpc Delete(DeleteUserKBRequest) returns (DeleteUserKBResponse) {}
+  rpc Delete(DeleteExperienceRequest) returns (DeleteExperienceResponse) {}
 }
 
 /**
  * 用户知识库元数据 - 表示一个知识库容器
  */
-message UserKBMetadata {
+message ExperienceMetadata {
   /**
    * 知识库唯一标识符
    */
@@ -53,9 +53,9 @@ message UserKBMetadata {
 }
 
 /**
- * 消息元数据 - 每个消息对应一个URL
+ * 经验内容 - 每个消息对应一个URL
  */
-message UserMessageMetadata {
+message ExperienceContent {
   /**
    * 所属知识库ID
    */
@@ -91,62 +91,62 @@ message UserMessageMetadata {
 }
 
 // Create
-message CreateUserKBRequest {
+message CreateExperienceRequest {
   common.MessageHeader header = 1;
-  CreateUserKBRequestBody body = 2;
+  CreateExperienceRequestBody body = 2;
 }
 
-message CreateUserKBRequestBody {
-  UserKBMetadata kb = 1;
+message CreateExperienceRequestBody {
+  ExperienceMetadata kb = 1;
 }
 
-message CreateUserKBResponse {
+message CreateExperienceResponse {
   common.MessageHeader header = 1;
-  CreateUserKBResponseBody body = 2;
+  CreateExperienceResponseBody body = 2;
 }
 
-message CreateUserKBResponseBody {
+message CreateExperienceResponseBody {
   common.ResponseStatus status = 1;
-  UserKBMetadata kb = 2;
+  ExperienceMetadata kb = 2;
 }
 
 // Add
-message AddUserKBRequest {
+message AddExperienceRequest {
   common.MessageHeader header = 1;
-  AddUserKBRequestBody body = 2;
+  AddExperienceRequestBody body = 2;
 }
 
-message AddUserKBRequestBody {
-  UserMessageMetadata message = 1;
+message AddExperienceRequestBody {
+  ExperienceContent message = 1;
 }
 
-message AddUserKBResponse {
+message AddExperienceResponse {
   common.MessageHeader header = 1;
-  AddUserKBResponseBody body = 2;
+  AddExperienceResponseBody body = 2;
 }
 
-message AddUserKBResponseBody {
+message AddExperienceResponseBody {
   common.ResponseStatus status = 1;
-  UserMessageMetadata message = 2;
+  ExperienceContent message = 2;
 }
 
 // Delete
-message DeleteUserKBRequest {
+message DeleteExperienceRequest {
   common.MessageHeader header = 1;
-  DeleteUserKBRequestBody body = 2;
+  DeleteExperienceRequestBody body = 2;
 }
 
-message DeleteUserKBRequestBody {
+message DeleteExperienceRequestBody {
   string kbId = 1;
   string hash = 2;
   string owner = 3;
 }
 
-message DeleteUserKBResponse {
+message DeleteExperienceResponse {
   common.MessageHeader header = 1;
-  DeleteUserKBResponseBody body = 2;
+  DeleteExperienceResponseBody body = 2;
 }
 
-message DeleteUserKBResponseBody {
+message DeleteExperienceResponseBody {
   common.ResponseStatus status = 1;
 }
