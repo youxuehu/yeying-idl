@@ -25,7 +25,7 @@ message KnowledgeMetadata {
   /**
    * 知识库唯一标识符
    */
-  string kbId = 1;
+  string knowledgeId = 1;
   /**
    * 应用标识
    */
@@ -59,7 +59,7 @@ message KnowledgeContent {
   /**
    * 所属知识库ID
    */
-  string kbId = 1;
+  string knowledgeId = 1;
   /**
    * 消息内容URL
    */
@@ -97,7 +97,7 @@ message CreateKnowledgeRequest {
 }
 
 message CreateKnowledgeRequestBody {
-  KnowledgeMetadata kb = 1;
+  KnowledgeMetadata knowledge = 1;
 }
 
 message CreateKnowledgeResponse {
@@ -107,7 +107,7 @@ message CreateKnowledgeResponse {
 
 message CreateKnowledgeResponseBody {
   common.ResponseStatus status = 1;
-  KnowledgeMetadata kb = 2;
+  KnowledgeMetadata knowledge = 2;
 }
 
 // Add
@@ -117,7 +117,7 @@ message AddKnowledgeRequest {
 }
 
 message AddKnowledgeRequestBody {
-  KnowledgeContent message = 1;
+  KnowledgeContent content = 1;
 }
 
 message AddKnowledgeResponse {
@@ -127,7 +127,7 @@ message AddKnowledgeResponse {
 
 message AddKnowledgeResponseBody {
   common.ResponseStatus status = 1;
-  KnowledgeContent message = 2;
+  KnowledgeContent content = 2;
 }
 
 // Delete
@@ -137,7 +137,7 @@ message DeleteKnowledgeRequest {
 }
 
 message DeleteKnowledgeRequestBody {
-  string kbId = 1;
+  string knowledgeId = 1;
   string hash = 2;
   string owner = 3;
 }

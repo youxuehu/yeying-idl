@@ -25,7 +25,7 @@ message ExperienceMetadata {
   /**
    * 知识库唯一标识符
    */
-  string kbId = 1;
+  string experienceId = 1;
   /**
    * 应用标识
    */
@@ -59,7 +59,7 @@ message ExperienceContent {
   /**
    * 所属知识库ID
    */
-  string kbId = 1;
+  string experienceId = 1;
   /**
    * 消息内容URL
    */
@@ -97,7 +97,7 @@ message CreateExperienceRequest {
 }
 
 message CreateExperienceRequestBody {
-  ExperienceMetadata kb = 1;
+  ExperienceMetadata experience = 1;
 }
 
 message CreateExperienceResponse {
@@ -107,7 +107,7 @@ message CreateExperienceResponse {
 
 message CreateExperienceResponseBody {
   common.ResponseStatus status = 1;
-  ExperienceMetadata kb = 2;
+  ExperienceMetadata experience = 2;
 }
 
 // Add
@@ -117,7 +117,7 @@ message AddExperienceRequest {
 }
 
 message AddExperienceRequestBody {
-  ExperienceContent message = 1;
+  ExperienceContent content = 1;
 }
 
 message AddExperienceResponse {
@@ -127,7 +127,7 @@ message AddExperienceResponse {
 
 message AddExperienceResponseBody {
   common.ResponseStatus status = 1;
-  ExperienceContent message = 2;
+  ExperienceContent content = 2;
 }
 
 // Delete
@@ -137,7 +137,7 @@ message DeleteExperienceRequest {
 }
 
 message DeleteExperienceRequestBody {
-  string kbId = 1;
+  string experienceId = 1;
   string hash = 2;
   string owner = 3;
 }

@@ -28,7 +28,7 @@ message ContextMetadata {
   /**
    * 知识库唯一标识符
    */
-  string kbId = 1;
+  string contextId = 1;
   /**
    * 应用标识
    */
@@ -62,7 +62,7 @@ message ContextContent {
   /**
    * 所属知识库ID
    */
-  string kbId = 1;
+  string contextId = 1;
   /**
    * 消息内容URL
    */
@@ -100,7 +100,7 @@ message CreateContextRequest {
 }
 
 message CreateContextRequestBody {
-  ContextMetadata kb = 1;
+  ContextMetadata context = 1;
 }
 
 message CreateContextResponse {
@@ -110,7 +110,7 @@ message CreateContextResponse {
 
 message CreateContextResponseBody {
   common.ResponseStatus status = 1;
-  ContextMetadata kb = 2;
+  ContextMetadata context = 2;
 }
 
 // Add
@@ -120,7 +120,7 @@ message AddContextRequest {
 }
 
 message AddContextRequestBody {
-  ContextContent message = 1;
+  ContextContent content = 1;
 }
 
 message AddContextResponse {
@@ -130,7 +130,7 @@ message AddContextResponse {
 
 message AddContextResponseBody {
   common.ResponseStatus status = 1;
-  ContextContent message = 2;
+  ContextContent content = 2;
 }
 
 // Delete
@@ -140,7 +140,7 @@ message DeleteContextRequest {
 }
 
 message DeleteContextRequestBody {
-  string kbId = 1;
+  string contextId = 1;
   string hash = 2;
   string owner = 3;
 }
@@ -161,7 +161,7 @@ message DeleteContextMessageRequest {
 }
 
 message DeleteContextMessageRequestBody {
-  string kbId = 1;
+  string contextId = 1;
   string hash = 2;
   string owner = 3;
   uint32 index = 4;
