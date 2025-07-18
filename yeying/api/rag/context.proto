@@ -28,7 +28,7 @@ message ContextMetadata {
   /**
    * 知识库唯一标识符
    */
-  string contextId = 1;
+  string uid = 1;
   /**
    * 应用标识
    */

@@ -25,7 +25,7 @@ message KnowledgeMetadata {
   /**
    * 知识库唯一标识符
    */
-  string knowledgeId = 1;
+  string uid = 1;
   /**
    * 应用标识
    */
