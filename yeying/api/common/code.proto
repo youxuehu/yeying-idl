@@ -197,6 +197,8 @@ enum ApiCodeEnum {
   API_CODE_INVITATION = 14;
   // 服务接口
   API_CODE_SERVICE = 15;
+  // RAG 接口
+  API_CODE_RAG = 16;
 }
 
 // 图片格式
