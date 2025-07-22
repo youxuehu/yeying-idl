@@ -161,6 +161,8 @@ enum ServiceCodeEnum {
   SERVICE_CODE_AGENT = 3;
   // 模型上下文供应商
   SERVICE_CODE_MCP = 4;
+  // RAG检索增强生成供应商
+  SERVICE_CODE_RAG = 5;
 }
 
 // API编码，针对服务做一些原子的、标准化的工作，方便第三方接入区块链网络，也方便服务使用者集成使用
