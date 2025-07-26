@@ -1,7 +1,7 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/correction";
-package yeying.api.apps.correction;
-import "yeying/api/apps/correction/imagecontent.proto";
+option go_package = "yeying/api/correction";
+package yeying.api.correction;
+import "yeying/api/correction/imagecontent.proto";
 
 
 message GroupMetaData {
