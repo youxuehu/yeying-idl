@@ -1,10 +1,10 @@
 syntax = "proto3";
-option go_package = "yeying/api/apps/correction";
-package yeying.api.apps.correction;
+option go_package = "yeying/api/correction";
+package yeying.api.correction;
 import "yeying/api/common/message.proto";
 import "google/protobuf/wrappers.proto";
-import "yeying/api/apps/correction/imagecontent.proto";
-import "yeying/api/apps/correction/meta.proto";
+import "yeying/api/correction/imagecontent.proto";
+import "yeying/api/correction/meta.proto";
 
 /**
 老师教学任务管理
