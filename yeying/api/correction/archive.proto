@@ -1,6 +1,6 @@
 syntax = "proto3";
 option go_package = "yeying/api/correction";
-package yeying.api.apps.correction;
+package yeying.api.correction;
 import "yeying/api/common/message.proto";
 import "google/protobuf/wrappers.proto";
 import "yeying/api/correction/meta.proto";
