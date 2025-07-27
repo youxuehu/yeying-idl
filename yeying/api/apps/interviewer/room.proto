@@ -1,6 +1,6 @@
 syntax = "proto3";
-option go_package = "yeying/api/interviewer";
-package yeying.api.interviewer;
+option go_package = "yeying/api/apps/interviewer";
+package yeying.api.apps.interviewer;
 
 import "yeying/api/common/message.proto";
 
