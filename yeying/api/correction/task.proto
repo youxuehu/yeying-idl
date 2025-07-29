@@ -70,25 +70,8 @@ message ListTaskRequest{
   ListTaskRequestBody body = 2;
 }
 message ListTaskRequestBody {
-  // 查询条件
-  // 登录用户did
-  string did = 1;
-  // 标签uid
-  string tagUid = 2;
-  // 任务名称，模糊查询
-  string taskName = 3;
-  // 任务描述，模糊查询
-  string description = 4;
-  // 当前页
-  google.protobuf.Int32Value pageIndex = 5;
-  // 每页大小
-  google.protobuf.Int32Value pageSize = 6;
-  // 任务状态
-  int32 status = 7;
-  // 开始时间
-  int64 startTime = 8;
-  // 结束时间
-  int64 endTime = 9;
+  TaskListCondition condition = 1;
+  common.RequestPage page = 2;
 }
 
 message ListTaskResponse{
@@ -99,8 +82,7 @@ message ListTaskResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated TaskMetadata list = 2;
-  // 总数
-  uint64 total = 3;
+  common.ResponsePage page = 3;
 }
 
 // tag 名下的任务数量
@@ -156,4 +138,17 @@ message DeleteTaskResponse {
 message DeleteTaskResponseBody {
   common.ResponseStatus status = 1;
   TaskMetadata meta = 2;
+}
+
+message TaskListCondition {
+  string did = 1;
+  string taskName = 2;
+  string tagUid = 3;
+  // 任务状态
+  int32 status = 4;
+  // 开始时间
+  int64 startTime = 5;
+  // 结束时间
+  int64 endTime = 6;
+  string description = 7;
 }

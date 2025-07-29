@@ -32,10 +32,7 @@ message ArchiveListRequestBody {
   string teacherDid = 1;
   // 档案名称：模糊查询
   string name = 2;
-  // 当前页
-  google.protobuf.Int32Value pageIndex = 3;
-  // 每页大小
-  google.protobuf.Int32Value pageSize = 4;
+  common.RequestPage page = 3;
 }
 message ArchiveListResponse {
   common.MessageHeader header = 1;
@@ -45,8 +42,7 @@ message ArchiveListResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated ArchiveMetadata list = 2;
-  // 总数
-  uint64 total = 3;
+  common.ResponsePage page = 3;
 }
 
 // 详情

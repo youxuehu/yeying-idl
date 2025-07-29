@@ -68,10 +68,7 @@ message ListGroupRequestBody {
   // 查询条件
   // 登录用户did
   string teacherDid = 1;
-  // 当前页
-  google.protobuf.Int32Value pageIndex = 2;
-  // 每页大小
-  google.protobuf.Int32Value pageSize = 3;
+  common.RequestPage page = 3;
 }
 
 message ListGroupResponse{
@@ -82,8 +79,7 @@ message ListGroupResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated correction.GroupMetaData list = 2;
-  // 总数
-  uint64 total = 3;
+  common.ResponsePage page = 3;
 }
 
 // Update
