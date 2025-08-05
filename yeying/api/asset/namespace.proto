@@ -3,23 +3,66 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 // 命名空间，用于隔离和资产治理的目的，确保用一个用户在使用不同的应用时产生的资产信息互补干扰。同时也方便用户管理资产。
 service Namespace {
   // 搜索命名空间
-  rpc Search(SearchNamespaceRequest) returns (SearchNamespaceResponse) {}
+  rpc Search(SearchNamespaceRequest) returns (SearchNamespaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/search"
+      body: "*"
+    };
+  }
 
   // 创建命名空间
-  rpc Create(CreateNamespaceRequest) returns (CreateNamespaceResponse) {}
+  rpc Create(CreateNamespaceRequest) returns (CreateNamespaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/create"
+      body: "*"
+    };
+  }
 
   // 命名空间详情
-  rpc Detail(NamespaceDetailRequest) returns (NamespaceDetailResponse) {}
+  rpc Detail(NamespaceDetailRequest) returns (NamespaceDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/detail"
+      body: "*"
+    };
+  }
 
   // 更新命名空间
-  rpc Update(UpdateNamespaceRequest) returns (UpdateNamespaceResponse) {}
+  rpc Update(UpdateNamespaceRequest) returns (UpdateNamespaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/update"
+      body: "*"
+    };
+  }
 
   // 删除命名空间
-  rpc Delete(DeleteNamespaceRequest) returns (DeleteNamespaceResponse) {}
+  rpc Delete(DeleteNamespaceRequest) returns (DeleteNamespaceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/namespace/delete"
+      body: "*"
+    };
+  }
 }
 
 message SearchNamespaceRequest {

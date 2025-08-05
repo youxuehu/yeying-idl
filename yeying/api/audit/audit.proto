@@ -5,6 +5,24 @@ package yeying.api.audit;
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 import "yeying/api/common/model.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 /**
 审批服务
@@ -13,17 +31,47 @@ import "yeying/api/common/model.proto";
  */
 service Audit {
   /* 发起申请 */
-  rpc Create(AuditCreateRequest) returns (AuditCreateResponse) {}
+  rpc Create(AuditCreateRequest) returns (AuditCreateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/create"
+      body: "*"
+    };
+  }
   /* 查看申请详情 */
-  rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {}
+  rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/detail"
+      body: "*"
+    };
+  }
   /* 撤销申请 */
-  rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {}
+  rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/cancel"
+      body: "*"
+    };
+  }
   /* 通过 */
-  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {}
+  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/approve"
+      body: "*"
+    };
+  }
   /* 拒绝 */
-  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {}
+  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/reject"
+      body: "*"
+    };
+  }
   /* 列表 */
-  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {}
+  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/search"
+      body: "*"
+    };
+  }
 }
 message AuditCreateRequest {
   common.MessageHeader header = 1;

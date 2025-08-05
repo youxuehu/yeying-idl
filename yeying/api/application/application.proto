@@ -5,6 +5,26 @@ package yeying.api.application;
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
 import "yeying/api/common/model.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
 
 /**
  * 节点自带的应用和后面发布的应用，夜莺社区提供一个节点和一组组网协议。当然其他的社团或者个人，也可以基于源代码，发布自己的节点和一组组网协议，当然
@@ -12,16 +32,36 @@ import "yeying/api/common/model.proto";
  */
 service Application {
   /* 搜索应用 */
-  rpc Search(SearchApplicationRequest) returns (SearchApplicationResponse) {}
+  rpc Search(SearchApplicationRequest) returns (SearchApplicationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/application/search"
+      body: "*"
+    };
+  }
 
   /* 创建应用 */
-  rpc Create(CreateApplicationRequest) returns (CreateApplicationResponse) {}
+  rpc Create(CreateApplicationRequest) returns (CreateApplicationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/application/create"
+      body: "*"
+    };
+  }
 
   /* 应用详情 */
-  rpc Detail(ApplicationDetailRequest) returns (ApplicationDetailResponse) {}
+  rpc Detail(ApplicationDetailRequest) returns (ApplicationDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/application/detail"
+      body: "*"
+    };
+  }
 
   /* 删除应用 */
-  rpc Delete(DeleteApplicationRequest) returns (DeleteApplicationResponse) {}
+  rpc Delete(DeleteApplicationRequest) returns (DeleteApplicationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/application/delete"
+      body: "*"
+    };
+  }
 }
 
 message SearchApplicationRequest {

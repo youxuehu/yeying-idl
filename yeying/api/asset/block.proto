@@ -3,6 +3,24 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 /**
 站在存储供应商的角度，数据和资产是有区别，数据有可能是有价值，也可能没有价值，但是存储供应商是没有感知，只有用户能够感知到。当用户和存储供应商之间签
@@ -15,27 +33,52 @@ service Block {
    * 每个资产id只会保存一个块，确保业务层面始终存储和获取最新的块，也就是会覆盖之前的资产块，如果需要形成版本，就需要及时和存储供应商之间完成签约
    * 形成版本。
    */
-  rpc Put(PutBlockRequest) returns (PutBlockResponse) {}
+  rpc Put(PutBlockRequest) returns (PutBlockResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/block/put"
+      body: "*"
+    };
+  }
 
   /**
    * 按块流式上传，1，发送chunk的简要信息；2，上传资产块的内容；3，确认资产块的完整信息；
    */
-  rpc StreamPut(stream StreamPutBlockRequest) returns (stream StreamPutBlockResponse) {}
+  rpc StreamPut(stream StreamPutBlockRequest) returns (stream StreamPutBlockResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/block/streamPut"
+      body: "*"
+    };
+  }
 
   /**
    * 检查该用户的资产块是否已经存在，如果存在则返回资产块元信息，如果不存在但是块哈希已存在则创建该用户的资产块
    */
-  rpc Confirm(ConfirmBlockRequest) returns (ConfirmBlockResponse) {}
+  rpc Confirm(ConfirmBlockRequest) returns (ConfirmBlockResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/block/confirm"
+      body: "*"
+    };
+  }
 
   /**
    * 前端浏览器不支持server stream，提供一个非流式的下载接口
    */
-  rpc Get(GetBlockRequest) returns (GetBlockResponse) {}
+  rpc Get(GetBlockRequest) returns (GetBlockResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/block/get"
+      body: "*"
+    };
+  }
 
   /**
    * 分块出库数字内容
    */
-  rpc StreamGet(stream StreamGetBlockRequest) returns (stream StreamGetBlockResponse) {}
+  rpc StreamGet(stream StreamGetBlockRequest) returns (stream StreamGetBlockResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/block/streamGet"
+      body: "*"
+    };
+  }
 }
 
 message ConfirmBlockRequest {

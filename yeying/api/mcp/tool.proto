@@ -7,5 +7,7 @@ package yeying.api.mcp;
 
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
 service Tool {}

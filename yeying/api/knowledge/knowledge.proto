@@ -4,6 +4,24 @@ package yeying.api.content;
 
 import "yeying/api/common/message.proto";
 import "yeying/api/common/code.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 /**
  * 数字内容的流动采用生产、存储、服务分离的技术，也就是采归采、存归存、取归取方式。以文本内容为例，爬取内容、创作内容、分发内容、以及阅读内容，独立

@@ -3,20 +3,68 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 service Link {
   // 创建资产分享链接
-  rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {}
+  rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/create"
+      body: "*"
+    };
+  }
   // 搜索资产分享链接
-  rpc Search(SearchLinkRequest) returns (SearchLinkResponse) {}
+  rpc Search(SearchLinkRequest) returns (SearchLinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/search"
+      body: "*"
+    };
+  }
   // 获得分享链接明细
-  rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {}
+  rpc Detail(LinkDetailRequest) returns (LinkDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/detail"
+      body: "*"
+    };
+  }
   // 分享链接的访问信息
-  rpc Visitor(LinkVisitorRequest) returns (LinkVisitorResponse) {}
+  rpc Visitor(LinkVisitorRequest) returns (LinkVisitorResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/visitor"
+      body: "*"
+    };
+  }
   // 取消分享
-  rpc Disable(DisableLinkRequest) returns (DisableLinkResponse) {}
+  rpc Disable(DisableLinkRequest) returns (DisableLinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/disable"
+      body: "*"
+    };
+  }
   // 更新资产分享链接，实现变更、取消等功能
-  rpc Update(UpdateLinkRequest) returns (UpdateLinkResponse) {}
+  rpc Update(UpdateLinkRequest) returns (UpdateLinkResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/link/update"
+      body: "*"
+    };
+  }
 }
 
 message CreateLinkRequest {
