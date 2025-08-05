@@ -15,7 +15,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     contact: {
       name: "yeying-community";
       url: "https://github.com/yeying-community/yeying-idl.git";
-      email: "youxuehu@hotmail.com";
+      email: "yeying.community@gmail.com";
     };
   };
   schemes: HTTP;
