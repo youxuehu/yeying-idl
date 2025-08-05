@@ -55,18 +55,33 @@ service Asset {
   /**
    * 检索数字内容，基于数字内容的元信息检索，比如哈希值、时间、类型、名称等, 如果什么条件都不传入，则按照默认的排序顺序，返回第一个10条记录。
    */
-  rpc Search(SearchAssetRequest) returns (SearchAssetResponse) {}
+  rpc Search(SearchAssetRequest) returns (SearchAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/asset/search"
+      body: "*"
+    };
+  }
 
   /**
    * 以事务的形式和存储供应商签订协议并入库，当所有资产块入库成功后，资产的信息发送到后端服务签字确认，涵盖了新的资产和新的版本入库；
    * 1、根据规则，自动生成新的版本，资产身份不变，但是资产内容的哈希值会变
    */
-  rpc Sign(SignAssetRequest) returns (SignAssetResponse) {}
+  rpc Sign(SignAssetRequest) returns (SignAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/asset/sign"
+      body: "*"
+    };
+  }
 
   /**
    * 更新资产元信息
    */
-  rpc Update(UpdateAssetRequest) returns (UpdateAssetResponse) {}
+  rpc Update(UpdateAssetRequest) returns (UpdateAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/asset/update"
+      body: "*"
+    };
+  }
 
   /**
    * 获得资产详细信息，提供该接口是为了更灵活处理资产信息，资产信息的复杂主要是几个方面：
@@ -74,12 +89,22 @@ service Asset {
    * 2、多版本，资产描述信息也会很大
    * 3、分散存储，如果资产过大，可能会被存储到不同的供应商
    */
-  rpc Detail(AssetDetailRequest) returns (AssetDetailResponse) {}
+  rpc Detail(AssetDetailRequest) returns (AssetDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/asset/detail"
+      body: "*"
+    };
+  }
 
   /**
    * 删除资产，不回立即删除，而是放入回收站；资产支持多版本，在删除的时候，采取头或者尾部删除，不能从中间删除，确保版本的链条能够正常工作；
    */
-  rpc Delete(DeleteAssetRequest) returns (DeleteAssetResponse) {}
+  rpc Delete(DeleteAssetRequest) returns (DeleteAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/asset/delete"
+      body: "*"
+    };
+  }
 }
 
 message SearchAssetRequest {

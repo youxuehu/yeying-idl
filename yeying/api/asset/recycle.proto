@@ -27,17 +27,32 @@ service Recycle {
   /**
    * 从回收站里搜索资产
    */
-  rpc Search(SearchDeletedAssetRequest) returns (SearchDeletedAssetResponse) {}
+  rpc Search(SearchDeletedAssetRequest) returns (SearchDeletedAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/recycle/search"
+      body: "*"
+    };
+  }
 
   /**
    * 从回收站里恢复资产
    */
-  rpc Recover(RecoverDeletedAssetRequest) returns (RecoverDeletedAssetResponse) {}
+  rpc Recover(RecoverDeletedAssetRequest) returns (RecoverDeletedAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/recycle/recover"
+      body: "*"
+    };
+  }
 
   /**
    * 从回收站里删除资产
    */
-  rpc Remove(RemoveDeletedAssetRequest) returns (RemoveDeletedAssetResponse) {}
+  rpc Remove(RemoveDeletedAssetRequest) returns (RemoveDeletedAssetResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/recycle/remove"
+      body: "*"
+    };
+  }
 }
 
 message SearchDeletedAssetRequest {

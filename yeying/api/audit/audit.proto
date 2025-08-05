@@ -31,17 +31,47 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Audit {
   /* 发起申请 */
-  rpc Create(AuditCreateRequest) returns (AuditCreateResponse) {}
+  rpc Create(AuditCreateRequest) returns (AuditCreateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/create"
+      body: "*"
+    };
+  }
   /* 查看申请详情 */
-  rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {}
+  rpc Detail(AuditDetailRequest) returns (AuditDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/detail"
+      body: "*"
+    };
+  }
   /* 撤销申请 */
-  rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {}
+  rpc Cancel(AuditCancelRequest) returns (AuditCancelResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/cancel"
+      body: "*"
+    };
+  }
   /* 通过 */
-  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {}
+  rpc Approve(AuditApproveRequest) returns (AuditApproveResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/approve"
+      body: "*"
+    };
+  }
   /* 拒绝 */
-  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {}
+  rpc Reject(AuditRejectRequest) returns (AuditRejectResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/reject"
+      body: "*"
+    };
+  }
   /* 列表 */
-  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {}
+  rpc Search(AuditSearchRequest) returns (AuditSearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/audit/search"
+      body: "*"
+    };
+  }
 }
 message AuditCreateRequest {
   common.MessageHeader header = 1;

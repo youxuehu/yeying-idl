@@ -24,7 +24,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Bulletin {
-  rpc List(BulletinListRequest) returns(BulletinListResponse) {}
+  rpc List(BulletinListRequest) returns(BulletinListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/bulletin/list"
+      body: "*"
+    };
+  }
 }
 
 enum BulletinCodeEnum {
