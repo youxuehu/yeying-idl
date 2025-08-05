@@ -3,19 +3,52 @@ option go_package = "yeying/api/rag";
 package yeying.api.rag;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "youxuehu@hotmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 /**
  * 应用知识库管理模块
  */
 service Knowledge {
   /* 创建知识库 */
-  rpc Create(CreateKnowledgeRequest) returns (CreateKnowledgeResponse) {}
+  rpc Create(CreateKnowledgeRequest) returns (CreateKnowledgeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/create"
+      body: "*"
+    };
+  }
 
   /* 添加消息到知识库 */
-  rpc Add(AddKnowledgeRequest) returns (AddKnowledgeResponse) {}
+  rpc Add(AddKnowledgeRequest) returns (AddKnowledgeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/add"
+      body: "*"
+    };
+  }
 
   /* 删除知识库中的URL */
-  rpc Delete(DeleteKnowledgeRequest) returns (DeleteKnowledgeResponse) {}
+  rpc Delete(DeleteKnowledgeRequest) returns (DeleteKnowledgeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/delete"
+      body: "*"
+    };
+  }
 }
 
 /**

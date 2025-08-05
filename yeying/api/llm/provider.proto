@@ -3,7 +3,24 @@ option go_package = "yeying/api/llm";
 package yeying.api.llm;
 
 import "yeying/api/common/message.proto";
-
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "youxuehu@hotmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 service Provider {
   // 供应商描述列表

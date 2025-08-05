@@ -3,6 +3,24 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "youxuehu@hotmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 /**
 站在存储供应商的角度，数据和资产是有区别，数据有可能是有价值，也可能没有价值，但是存储供应商是没有感知，只有用户能够感知到。当用户和存储供应商之间签

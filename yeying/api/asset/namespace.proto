@@ -3,6 +3,24 @@ option go_package = "yeying/api/asset";
 package yeying.api.asset;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "youxuehu@hotmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 // 命名空间，用于隔离和资产治理的目的，确保用一个用户在使用不同的应用时产生的资产信息互补干扰。同时也方便用户管理资产。
 service Namespace {

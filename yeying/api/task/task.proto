@@ -3,7 +3,25 @@ option go_package = "yeying/api/task";
 package yeying.api.task;
 
 import "yeying/api/common/message.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
 
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "youxuehu@hotmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 
 // 做任务，转灯油，任务创建者签名任务，做任务的人签名任务和任务结果，类似发起一笔交易，但是内容是有着本质不一样的；
 // 任务创建者、任务内容、任务行动者三者之间的关系：
