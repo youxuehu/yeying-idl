@@ -24,19 +24,44 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Session {
   // 创建会话
-  rpc Create(CreateSessionRequest) returns (CreateSessionResponse) {}
+  rpc Create(CreateSessionRequest) returns (CreateSessionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/session/create"
+      body: "*"
+    };
+  }
 
   // 删除会话
-  rpc Delete(DeleteSessionRequest) returns (DeleteSessionResponse) {}
+  rpc Delete(DeleteSessionRequest) returns (DeleteSessionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/session/delete"
+      body: "*"
+    };
+  }
 
   // 搜索会话
-  rpc Detail(SessionDetailRequest) returns (SessionDetailResponse) {}
+  rpc Detail(SessionDetailRequest) returns (SessionDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/session/detail"
+      body: "*"
+    };
+  }
 
   // 搜索会话
-  rpc Search(SearchSessionRequest) returns (SearchSessionResponse) {}
+  rpc Search(SearchSessionRequest) returns (SearchSessionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/session/search"
+      body: "*"
+    };
+  }
 
   // 更新会话
-  rpc Update(UpdateSessionRequest) returns (UpdateSessionResponse) {}
+  rpc Update(UpdateSessionRequest) returns (UpdateSessionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/session/update"
+      body: "*"
+    };
+  }
 }
 
 message CreateSessionRequest {

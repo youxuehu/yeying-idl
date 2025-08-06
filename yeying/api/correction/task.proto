@@ -30,17 +30,47 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Task {
   // 创建任务：由老师负创建教学任务
-  rpc Add(AddTaskRequest) returns (AddTaskResponse) {}
+  rpc Add(AddTaskRequest) returns (AddTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/add"
+      body: "*"
+    };
+  }
   // 任务详情
-  rpc Detail(DetailTaskRequest) returns (DetailTaskResponse) {}
+  rpc Detail(DetailTaskRequest) returns (DetailTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/detail"
+      body: "*"
+    };
+  }
   // 查询老师名下总的任务列表
-  rpc List(ListTaskRequest) returns (ListTaskResponse) {}
+  rpc List(ListTaskRequest) returns (ListTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/list"
+      body: "*"
+    };
+  }
   // 查询老师名下创建的 tag 名下对应的任务数量
-  rpc TagCount(TagCountTaskRequest) returns (TagCountTaskResponse) {}
+  rpc TagCount(TagCountTaskRequest) returns (TagCountTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/tagCount"
+      body: "*"
+    };
+  }
   // 更新任务
-  rpc Update(UpdateTaskRequest) returns (UpdateTaskResponse) {}
+  rpc Update(UpdateTaskRequest) returns (UpdateTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/update"
+      body: "*"
+    };
+  }
   // 删除任务
-  rpc Delete(DeleteTaskRequest) returns (DeleteTaskResponse) {}
+  rpc Delete(DeleteTaskRequest) returns (DeleteTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/delete"
+      body: "*"
+    };
+  }
 }
 
 // Add

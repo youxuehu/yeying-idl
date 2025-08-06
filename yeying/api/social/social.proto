@@ -23,8 +23,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Social {
-  rpc MakeFriends(MakeFriendsRequest) returns (MakeFriendsResponse){}
-  rpc GetFriends(GetFriendsRequest) returns (GetFriendResponse) {}
+  rpc MakeFriends(MakeFriendsRequest) returns (MakeFriendsResponse){
+    option (google.api.http) = {
+      post: "/api/v1/social/makeFriends"
+      body: "*"
+    };
+  }
+  rpc GetFriends(GetFriendsRequest) returns (GetFriendResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/social/getFriends"
+      body: "*"
+    };
+  }
 }
 
 message MakeFriendsRequest {}

@@ -33,19 +33,44 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // 5、至少要两把密钥，一把由身份所有者保管，一把是服务保管；
 service Identity {
   // 身份托管
-  rpc Deposit(DepositRequest) returns (DepositResponse) {}
+  rpc Deposit(DepositRequest) returns (DepositResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/identity/deposit"
+      body: "*"
+    };
+  }
 
   // 取回身份
-  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse) {}
+  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/identity/retrieve"
+      body: "*"
+    };
+  }
 
   // 查询身份名片
-  rpc Query(QueryRequest) returns (QueryResponse) {}
+  rpc Query(QueryRequest) returns (QueryResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/identity/query"
+      body: "*"
+    };
+  }
 
   // 分享身份名片
-  rpc Share(ShareRequest) returns (ShareResponse) {}
+  rpc Share(ShareRequest) returns (ShareResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/identity/share"
+      body: "*"
+    };
+  }
 
   // 取消托管
-  rpc Cancel(CancelRequest) returns (CancelResponse) {}
+  rpc Cancel(CancelRequest) returns (CancelResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/identity/cancel"
+      body: "*"
+    };
+  }
 }
 
 message DepositRequest {

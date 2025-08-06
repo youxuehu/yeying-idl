@@ -26,7 +26,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // 检查内容是否合规，为了保护数据隐私，要么是tee，要么是同态
 service Content {
   // 身份托管
-  rpc validate(ValidateRequest) returns (ValidateResponse) {}
+  rpc validate(ValidateRequest) returns (ValidateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/content/validate"
+      body: "*"
+    };
+  }
 }
 
 message ValidateRequest {

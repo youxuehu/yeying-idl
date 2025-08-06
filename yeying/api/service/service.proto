@@ -29,16 +29,36 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Service {
   // 服务创建
-  rpc Create(CreateServiceRequest) returns (CreateServiceResponse) {}
+  rpc Create(CreateServiceRequest) returns (CreateServiceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/service/create"
+      body: "*"
+    };
+  }
 
   // 服务详情
-  rpc Detail(DetailServiceRequest) returns (DetailServiceResponse) {}
+  rpc Detail(DetailServiceRequest) returns (DetailServiceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/service/detail"
+      body: "*"
+    };
+  }
 
   // 搜索服务
-  rpc Search(SearchServiceRequest) returns (SearchServiceResponse) {}
+  rpc Search(SearchServiceRequest) returns (SearchServiceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/service/search"
+      body: "*"
+    };
+  }
 
   // 删除服务
-  rpc Delete(DeleteServiceRequest) returns (DeleteServiceResponse) {}
+  rpc Delete(DeleteServiceRequest) returns (DeleteServiceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/service/delete"
+      body: "*"
+    };
+  }
 }
 // create
 message CreateServiceRequest {

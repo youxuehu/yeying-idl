@@ -23,7 +23,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Support {
-  rpc Collect(CollectSupportRequest) returns(CollectSupportResponse) {}
+  rpc Collect(CollectSupportRequest) returns(CollectSupportResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/support/collect"
+      body: "*"
+    };
+  }
 }
 
 enum SupportCodeEnum {

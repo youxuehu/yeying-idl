@@ -28,9 +28,19 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 */
 service Homework {
   // 列表
-  rpc List(HomeworkListRequest) returns (HomeworkListResponse) {}
+  rpc List(HomeworkListRequest) returns (HomeworkListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/homework/list"
+      body: "*"
+    };
+  }
   // 详情
-  rpc Detail(HomeworkDetailRequest) returns (HomeworkDetailResponse) {}
+  rpc Detail(HomeworkDetailRequest) returns (HomeworkDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/homework/detail"
+      body: "*"
+    };
+  }
 }
 // 列表
 message HomeworkListRequest {

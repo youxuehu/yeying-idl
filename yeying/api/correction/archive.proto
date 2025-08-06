@@ -28,17 +28,47 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Archive {
   // 列表
-  rpc List(ArchiveListRequest) returns (ArchiveListResponse) {}
+  rpc List(ArchiveListRequest) returns (ArchiveListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/list"
+      body: "*"
+    };
+  }
   // 详情：老师调用，根据 uid 主键查询
-  rpc Detail(ArchiveDetailRequest) returns (ArchiveDetailResponse) {}
+  rpc Detail(ArchiveDetailRequest) returns (ArchiveDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/detail"
+      body: "*"
+    };
+  }
   // 详情：学生调用，根据 studentDid 调用
-  rpc DetailByStudentDid(ArchiveDetailStudentRequest) returns (ArchiveDetailStudentResponse) {}
+  rpc DetailByStudentDid(ArchiveDetailStudentRequest) returns (ArchiveDetailStudentResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/detailByStudentDid"
+      body: "*"
+    };
+  }
   // 添加
-  rpc Add(ArchiveAddRequest) returns (ArchiveAddResponse) {}
+  rpc Add(ArchiveAddRequest) returns (ArchiveAddResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/add"
+      body: "*"
+    };
+  }
   // 删除
-  rpc Delete(ArchiveDeleteRequest) returns (ArchiveDeleteResponse) {}
+  rpc Delete(ArchiveDeleteRequest) returns (ArchiveDeleteResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/delete"
+      body: "*"
+    };
+  }
   // 修改
-  rpc Update(ArchiveUpdateRequest) returns (ArchiveUpdateResponse) {}
+  rpc Update(ArchiveUpdateRequest) returns (ArchiveUpdateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/update"
+      body: "*"
+    };
+  }
 }
 // 列表:老师调用
 message ArchiveListRequest {

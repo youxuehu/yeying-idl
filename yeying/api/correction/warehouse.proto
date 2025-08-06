@@ -33,15 +33,30 @@ service Warehouse {
    2: 上传空白试卷 + 对应的答案
    3: 上传已作答的试卷
    */
-  rpc Add(AddWarehouseRequest) returns (AddWarehouseResponse) {}
+  rpc Add(AddWarehouseRequest) returns (AddWarehouseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/warehouse/add"
+      body: "*"
+    };
+  }
   /**
   资产列表
    */
-  rpc List(ListWarehouseRequest) returns (ListWarehouseResponse) {}
+  rpc List(ListWarehouseRequest) returns (ListWarehouseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/warehouse/list"
+      body: "*"
+    };
+  }
   /**
   资产列表
   */
-  rpc Detail(DetailWarehouseRequest) returns (DetailWarehouseResponse) {}
+  rpc Detail(DetailWarehouseRequest) returns (DetailWarehouseResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/warehouse/detail"
+      body: "*"
+    };
+  }
 }
 /**
 详情

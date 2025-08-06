@@ -25,13 +25,28 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Topic {
   // 搜索订阅
-  rpc Search(SearchRequest) returns (SearchResponse) {}
+  rpc Search(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/topic/search"
+      body: "*"
+    };
+  }
 
   // 订阅
-  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse) {}
+  rpc Subscribe(SubscribeRequest) returns (SubscribeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/topic/subscribe"
+      body: "*"
+    };
+  }
 
   // 取消订阅
-  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {}
+  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/topic/unsubscribe"
+      body: "*"
+    };
+  }
 }
 
 message SearchRequest {

@@ -28,13 +28,33 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Message {
   // 列表
-  rpc List(MessageListRequest) returns (MessageListResponse) {}
+  rpc List(MessageListRequest) returns (MessageListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/message/list"
+      body: "*"
+    };
+  }
   // 查询消息数量
-  rpc Count(CountRequest) returns (CountResponse) {}
+  rpc Count(CountRequest) returns (CountResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/message/count"
+      body: "*"
+    };
+  }
   // 根据状态查询消息已读数量和未读数量
-  rpc ListBy(ListByRequest) returns (ListByResponse) {}
+  rpc ListBy(ListByRequest) returns (ListByResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/message/listBy"
+      body: "*"
+    };
+  }
   // 标记为已读
-  rpc MarkAsRead(MarkAsReadRequest) returns (MarkAsReadResponse) {}
+  rpc MarkAsRead(MarkAsReadRequest) returns (MarkAsReadResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/message/markAsRead"
+      body: "*"
+    };
+  }
 }
 // 列表
 message MessageListRequest {

@@ -24,10 +24,20 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Event {
   // 某个服务作为客户端生成了事件，通常node会实现服务端，然后同步给用户
-  rpc Produce(ProduceRequest) returns (ProduceResponse){}
+  rpc Produce(ProduceRequest) returns (ProduceResponse){
+    option (google.api.http) = {
+      post: "/api/v1/event/produce"
+      body: "*"
+    };
+  }
 
   // 用户直接向生成事件的服务消费并给出处理意见
-  rpc Consume(ConsumeRequest) returns (ConsumeResponse){}
+  rpc Consume(ConsumeRequest) returns (ConsumeResponse){
+    option (google.api.http) = {
+      post: "/api/v1/event/consume"
+      body: "*"
+    };
+  }
 }
 
 
