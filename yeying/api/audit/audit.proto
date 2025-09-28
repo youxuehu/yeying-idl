@@ -247,7 +247,7 @@ message AuditMetadata {
   /**
   申请类型：应用/服务
   */
-    string type = 12;
+    string auditType = 12;
 }
 
 /**

@@ -1,0 +1,56 @@
+syntax = "proto3";
+option go_package = "yeying/api/miniosdk";
+package yeying.api.miniosdk;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+import "yeying/api/common/model.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
+
+service Minio {
+
+  /**
+  使用 MinIO 的 presignedUrl 实现前端直传（绕过后端）
+  生成 presigned PUT URL
+   */
+  rpc PresignedUploadUrl(PresignedUploadUrlRequest) returns (PresignedUploadUrlResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/minio/presigned/upload/url"
+      body: "*"
+    };
+  }
+}
+message PresignedUploadUrlRequest {
+  common.MessageHeader header = 1;
+  PresignedUploadUrlRequestBody body = 2;
+}
+message PresignedUploadUrlRequestBody {
+  string filename = 1;
+}
+message PresignedUploadUrlResponse {
+  common.MessageHeader header = 1;
+  PresignedUploadUrlResponseBody body = 2;
+}
+message PresignedUploadUrlResponseBody {
+  common.ResponseStatus status = 1;
+  string url = 2;
+}
+
