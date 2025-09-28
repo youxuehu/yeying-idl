@@ -55,6 +55,8 @@ message ApplicationMetadata {
   string signature = 15;
   // 代码包下载路径
   string codePackagePath = 16;
+  /* 应用所有者 name */
+  string ownerName = 17;
 }
 
 message ServiceMetadata {
@@ -90,4 +92,6 @@ message ServiceMetadata {
   string signature = 15;
   // 代码包下载路径
   string codePackagePath = 16;
+  /* 应用所有者 name */
+  string ownerName = 17;
 }
