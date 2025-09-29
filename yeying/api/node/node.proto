@@ -27,8 +27,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  * 每一个服务都是一个节点，提供通用的接口
  */
 service Node {
-  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
-  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {}
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/node/healthCheck"
+      body: "*"
+    };
+  }
+  rpc Whoami(WhoamiRequest) returns (WhoamiResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/node/whoami"
+      body: "*"
+    };
+  }
 }
 
 message HealthCheckRequest {

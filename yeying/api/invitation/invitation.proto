@@ -24,11 +24,26 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Invitation {
   // 创建邀请码，通常是服务所有者才有权限创建
-  rpc Create(CreateInvitationRequest) returns(CreateInvitationResponse) {}
+  rpc Create(CreateInvitationRequest) returns(CreateInvitationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/invitation/create"
+      body: "*"
+    };
+  }
   // 搜索邀请码
-  rpc Search(SearchInvitationRequest) returns(SearchInvitationResponse) {}
+  rpc Search(SearchInvitationRequest) returns(SearchInvitationResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/invitation/search"
+      body: "*"
+    };
+  }
   // 查询邀请码详情
-  rpc Detail(InvitationDetailRequest) returns(InvitationDetailResponse) {}
+  rpc Detail(InvitationDetailRequest) returns(InvitationDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/invitation/detail"
+      body: "*"
+    };
+  }
 }
 
 message InvitationMetadata {

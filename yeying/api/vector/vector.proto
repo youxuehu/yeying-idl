@@ -23,7 +23,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Vector {
-  rpc Query(VectorRequest) returns(VectorResponse) {}
+  rpc Query(VectorRequest) returns(VectorResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/vector/query"
+      body: "*"
+    };
+  }
 }
 
 message VectorRequest {

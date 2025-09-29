@@ -29,15 +29,40 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Group {
   // 创建学生组
-  rpc Add(AddGroupRequest) returns (AddGroupResponse) {}
+  rpc Add(AddGroupRequest) returns (AddGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/group/add"
+      body: "*"
+    };
+  }
   // 学生组详情
-  rpc Detail(DetailGroupRequest) returns (DetailGroupResponse) {}
+  rpc Detail(DetailGroupRequest) returns (DetailGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/group/detail"
+      body: "*"
+    };
+  }
   // 学生组列表
-  rpc List(ListGroupRequest) returns (ListGroupResponse) {}
+  rpc List(ListGroupRequest) returns (ListGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/group/list"
+      body: "*"
+    };
+  }
   // 更新学生组
-  rpc Update(UpdateGroupRequest) returns (UpdateGroupResponse) {}
+  rpc Update(UpdateGroupRequest) returns (UpdateGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/group/update"
+      body: "*"
+    };
+  }
   // 删除学生组
-  rpc Delete(DeleteGroupRequest) returns (DeleteGroupResponse) {}
+  rpc Delete(DeleteGroupRequest) returns (DeleteGroupResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/group/delete"
+      body: "*"
+    };
+  }
 }
 // Add
 message AddGroupRequest{

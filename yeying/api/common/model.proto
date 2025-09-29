@@ -4,7 +4,24 @@ package yeying.api.common;
 option go_package = "yeying/api/common";
 
 import "yeying/api/common/code.proto";
-
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
 message ApplicationMetadata {
   /* 应用所有者 */
   string owner = 1;
@@ -38,6 +55,8 @@ message ApplicationMetadata {
   string signature = 15;
   // 代码包下载路径
   string codePackagePath = 16;
+  /* 应用所有者 name */
+  string ownerName = 17;
 }
 
 message ServiceMetadata {
@@ -73,4 +92,6 @@ message ServiceMetadata {
   string signature = 15;
   // 代码包下载路径
   string codePackagePath = 16;
+  /* 应用所有者 name */
+  string ownerName = 17;
 }

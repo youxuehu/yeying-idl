@@ -24,17 +24,47 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service User {
   // 添加用户
-  rpc Add(AddUserRequest) returns(AddUserResponse) {}
+  rpc Add(AddUserRequest) returns(AddUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/add"
+      body: "*"
+    };
+  }
   // 获取用户
-  rpc Detail(UserDetailRequest) returns(UserDetailResponse) {}
+  rpc Detail(UserDetailRequest) returns(UserDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/detail"
+      body: "*"
+    };
+  }
   // 用户列表
-  rpc List(UserListRequest) returns(UserListResponse) {}
+  rpc List(UserListRequest) returns(UserListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/list"
+      body: "*"
+    };
+  }
   // 删除用户
-  rpc Delete(DeleteUserRequest) returns(DeleteUserResponse) {}
+  rpc Delete(DeleteUserRequest) returns(DeleteUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/delete"
+      body: "*"
+    };
+  }
   // 修改用户信息
-  rpc Update(UpdateUserRequest) returns(UpdateUserResponse) {}
+  rpc Update(UpdateUserRequest) returns(UpdateUserResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/update"
+      body: "*"
+    };
+  }
   // 修改用户状态，冻结/解冻
-  rpc UpdateStatus(UpdateStatusRequest) returns(UpdateStatusResponse) {}
+  rpc UpdateStatus(UpdateStatusRequest) returns(UpdateStatusResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/user/updateStatus"
+      body: "*"
+    };
+  }
 }
 
 message UpdateStatusRequest {

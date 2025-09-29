@@ -40,9 +40,19 @@ service Warehouse {
   /**
    * 仓库和仓库之间同步数字资产，或者用户和仓库者之间
    */
-  rpc GetState(GetStateRequest) returns (GetStateResponse) {}
+  rpc GetState(GetStateRequest) returns (GetStateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/warehouse/getState"
+      body: "*"
+    };
+  }
 
-  rpc Transfer(TransferRequest) returns (GetStateResponse) {}
+  rpc Transfer(TransferRequest) returns (GetStateResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/warehouse/transfer"
+      body: "*"
+    };
+  }
 }
 
 message GetStateRequest {

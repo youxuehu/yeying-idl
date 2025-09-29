@@ -21,10 +21,30 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Wallet {
-  rpc createAddress (CreateAddressRequest) returns (CreateAddressResponse);
-  rpc transaction (TransactionRequest) returns (TransactionResponse);
-  rpc balance (BalanceRequest) returns (BalanceResponse);
-  rpc walletInfo (WalletInfoRequest) returns (WalletInfoResponse);
+  rpc createAddress (CreateAddressRequest) returns (CreateAddressResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/wallet/createAddress"
+      body: "*"
+    };
+  };
+  rpc transaction (TransactionRequest) returns (TransactionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/wallet/transaction"
+      body: "*"
+    };
+  };
+  rpc balance (BalanceRequest) returns (BalanceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/wallet/balance"
+      body: "*"
+    };
+  };
+  rpc walletInfo (WalletInfoRequest) returns (WalletInfoResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/wallet/walletInfo"
+      body: "*"
+    };
+  };
 }
 
 message CreateAddressRequest { }

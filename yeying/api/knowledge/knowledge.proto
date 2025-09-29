@@ -34,12 +34,22 @@ service Knowledge {
   /**
    * 内容通知
    */
-  rpc Search(SearchRequest) returns (SearchResponse) {}
+  rpc Search(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/search"
+      body: "*"
+    };
+  }
 
   /**
    * 内容保鲜
    */
-  rpc Append(AppendRequest) returns (AppendResponse) {}
+  rpc Append(AppendRequest) returns (AppendResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/append"
+      body: "*"
+    };
+  }
 }
 
 enum ContentType {

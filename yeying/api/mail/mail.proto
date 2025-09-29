@@ -25,8 +25,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 定义一个邮件服务
  */
 service Mail {
-  rpc Send(SendMailRequest) returns (SendMailResponse) {}
-  rpc Verify(VerifyMailRequest) returns (VerifyMailResponse) {}
+  rpc Send(SendMailRequest) returns (SendMailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mail/send"
+      body: "*"
+    };
+  }
+  rpc Verify(VerifyMailRequest) returns (VerifyMailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mail/verify"
+      body: "*"
+    };
+  }
 }
 
 /**

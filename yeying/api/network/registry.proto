@@ -23,9 +23,24 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Network {
-  rpc List(ListRequest) returns (ListResponse) {}
-  rpc Join(JoinRequest) returns (JoinResponse) {}
-  rpc Exit(ExitRequest) returns (ExitResponse) {}
+  rpc List(ListRequest) returns (ListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/network/list"
+      body: "*"
+    };
+  }
+  rpc Join(JoinRequest) returns (JoinResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/network/join"
+      body: "*"
+    };
+  }
+  rpc Exit(ExitRequest) returns (ExitResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/network/exit"
+      body: "*"
+    };
+  }
 }
 
 message ListRequest {

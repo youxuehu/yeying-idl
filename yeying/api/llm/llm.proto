@@ -25,19 +25,44 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Llm {
   // 不同语言的文字翻译工作
-  rpc Translate(TranslateRequest) returns (TranslateResponse){}
+  rpc Translate(TranslateRequest) returns (TranslateResponse){
+    option (google.api.http) = {
+      post: "/api/v1/llm/translate"
+      body: "*"
+    };
+  }
 
   // 内容补全
-  rpc Complete(CompleteRequest) returns (stream CompleteResponse){}
+  rpc Complete(CompleteRequest) returns (stream CompleteResponse){
+    option (google.api.http) = {
+      post: "/api/v1/llm/complete"
+      body: "*"
+    };
+  }
 
   // 编辑图片
-  rpc Edit(EditRequest) returns (stream EditResponse){}
+  rpc Edit(EditRequest) returns (stream EditResponse){
+    option (google.api.http) = {
+      post: "/api/v1/llm/edit"
+      body: "*"
+    };
+  }
 
   // 文本生成图片
-  rpc Generate(GenerateRequest) returns (stream GenerateResponse){}
+  rpc Generate(GenerateRequest) returns (stream GenerateResponse){
+    option (google.api.http) = {
+      post: "/api/v1/llm/generate"
+      body: "*"
+    };
+  }
 
   // 文本生语音
-  rpc Speech(SpeechRequest) returns (SpeechResponse){}
+  rpc Speech(SpeechRequest) returns (SpeechResponse){
+    option (google.api.http) = {
+      post: "/api/v1/llm/speech"
+      body: "*"
+    };
+  }
 }
 
 message CompleteRequest {

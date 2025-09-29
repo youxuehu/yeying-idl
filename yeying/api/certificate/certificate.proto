@@ -23,8 +23,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Certificate {
-  rpc Sign(SignRequest) returns (SignResponse){}
-  rpc Get(GetRequest) returns (GetResponse){}
+  rpc Sign(SignRequest) returns (SignResponse){
+    option (google.api.http) = {
+      post: "/api/v1/certificate/sign"
+      body: "*"
+    };
+  }
+  rpc Get(GetRequest) returns (GetResponse){
+    option (google.api.http) = {
+      post: "/api/v1/certificate/get"
+      body: "*"
+    };
+  }
 }
 
 message SignRequest {

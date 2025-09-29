@@ -23,8 +23,18 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 };
 
 service Config {
-  rpc Set(SetConfigRequest) returns (SetConfigResponse){}
-  rpc Get(GetConfigRequest) returns (GetConfigResponse){}
+  rpc Set(SetConfigRequest) returns (SetConfigResponse){
+    option (google.api.http) = {
+      post: "/api/v1/config/set"
+      body: "*"
+    };
+  }
+  rpc Get(GetConfigRequest) returns (GetConfigResponse){
+    option (google.api.http) = {
+      post: "/api/v1/config/get"
+      body: "*"
+    };
+  }
 }
 
 message GetConfigRequest {

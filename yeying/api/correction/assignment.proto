@@ -33,20 +33,45 @@ service Assignment {
   // correction.question_collection，题目
   // correction.answer_collection，答案
   // correction.warehouse，资产仓库
-  rpc Upload(AssignmentUploadRequest) returns (AssignmentUploadResponse) {}
+  rpc Upload(AssignmentUploadRequest) returns (AssignmentUploadResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/assignment/upload"
+      body: "*"
+    };
+  }
   // 大模型生成答案 (做题)，从题库中获取题目，调用解题的大模型生成对应题目的答案，并保存到 DB
   // 对应 DB 表：
   // correction.test_paper，试卷
   // correction.question_collection，题目
   // correction.answer_collection，答案
   // correction.warehouse，资产仓库
-  rpc BigModelGenerate(AssignmentBigModelRequest) returns (AssignmentBigModelResponse) {}
+  rpc BigModelGenerate(AssignmentBigModelRequest) returns (AssignmentBigModelResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/assignment/bigModelGenerate"
+      body: "*"
+    };
+  }
   // 人工生成答案，人工做题，拍照上传生成题库答案
-  rpc ArtificialGenerate(AssignmentArtificialRequest) returns (AssignmentArtificialResponse) {}
+  rpc ArtificialGenerate(AssignmentArtificialRequest) returns (AssignmentArtificialResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/assignment/artificialGenerate"
+      body: "*"
+    };
+  }
   // 学生加减，该任务对那些学生可见和不可见，老师可以自己来调整
-  rpc StudentAction(StudentActionRequest) returns (StudentActionResponse) {}
+  rpc StudentAction(StudentActionRequest) returns (StudentActionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/assignment/studentAction"
+      body: "*"
+    };
+  }
   // 作业批改，学生做完试卷后提交给老师，老师统一拍照上传批改处理
-  rpc Correction(AssignmentCorrectionRequest) returns (AssignmentCorrectionResponse) {}
+  rpc Correction(AssignmentCorrectionRequest) returns (AssignmentCorrectionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/assignment/correction"
+      body: "*"
+    };
+  }
 
 }
 

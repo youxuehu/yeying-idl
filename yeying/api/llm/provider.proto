@@ -24,22 +24,52 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Provider {
   // 供应商描述列表
-  rpc Descriptions(ProviderDescriptionsRequest) returns (ProviderDescriptionsResponse) {}
+  rpc Descriptions(ProviderDescriptionsRequest) returns (ProviderDescriptionsResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/descriptions"
+      body: "*"
+    };
+  }
 
   // 供应商模型
-  rpc Models(ProviderModelsRequest) returns (ProviderModelsResponse) {}
+  rpc Models(ProviderModelsRequest) returns (ProviderModelsResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/models"
+      body: "*"
+    };
+  }
 
   // 搜索添加的供应商
-  rpc Search(SearchProviderRequest) returns (SearchProviderResponse) {}
+  rpc Search(SearchProviderRequest) returns (SearchProviderResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/search"
+      body: "*"
+    };
+  }
 
   // 供应商状态
-  rpc Detail(ProviderDetailRequest) returns (ProviderDetailResponse) {}
+  rpc Detail(ProviderDetailRequest) returns (ProviderDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/detail"
+      body: "*"
+    };
+  }
 
   // 添加新供应商配置
-  rpc Add(AddProviderRequest) returns (AddProviderResponse) {}
+  rpc Add(AddProviderRequest) returns (AddProviderResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/add"
+      body: "*"
+    };
+  }
 
   // 删除供应商
-  rpc Delete(DeleteProviderRequest) returns (DeleteProviderResponse) {}
+  rpc Delete(DeleteProviderRequest) returns (DeleteProviderResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/provider/delete"
+      body: "*"
+    };
+  }
 }
 
 message ProviderDescriptionsRequest {

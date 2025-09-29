@@ -27,19 +27,54 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service Mistakes {
   // 添加错题
-  rpc Add(MistakesAddRequest) returns (MistakesAddResponse) {}
+  rpc Add(MistakesAddRequest) returns (MistakesAddResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/add"
+      body: "*"
+    };
+  }
   // 列表
-  rpc List(MistakesListRequest) returns (MistakesListResponse) {}
+  rpc List(MistakesListRequest) returns (MistakesListResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/list"
+      body: "*"
+    };
+  }
   // 详情
-  rpc Detail(MistakesDetailRequest) returns (MistakesDetailResponse) {}
+  rpc Detail(MistakesDetailRequest) returns (MistakesDetailResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/detail"
+      body: "*"
+    };
+  }
   // 错误分析
-  rpc Analysis(MistakesAnalysisRequest) returns (MistakesAnalysisResponse) {}
+  rpc Analysis(MistakesAnalysisRequest) returns (MistakesAnalysisResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/analysis"
+      body: "*"
+    };
+  }
   // 错误订正
-  rpc MakeCorrection(MakeCorrectionRequest) returns (MakeCorrectionResponse) {}
+  rpc MakeCorrection(MakeCorrectionRequest) returns (MakeCorrectionResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/makeCorrection"
+      body: "*"
+    };
+  }
   // 打印错题题目
-  rpc Print(MistakesPrintRequest) returns (MistakesPrintResponse) {}
+  rpc Print(MistakesPrintRequest) returns (MistakesPrintResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/print"
+      body: "*"
+    };
+  }
   // 提交订正的题目，重新生成图片，提交大模型批改
-  rpc Submit(MistakesSubmitRequest) returns (MistakesSubmitResponse) {}
+  rpc Submit(MistakesSubmitRequest) returns (MistakesSubmitResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/mistakes/submit"
+      body: "*"
+    };
+  }
 }
 // Add
 message MistakesAddRequest {

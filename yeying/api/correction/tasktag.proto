@@ -28,15 +28,40 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
  */
 service TaskTag {
   // 创建任务标签：由老师负创建教学任务标签
-  rpc Add(AddTaskTagRequest) returns (AddTaskTagResponse) {}
+  rpc Add(AddTaskTagRequest) returns (AddTaskTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasktag/add"
+      body: "*"
+    };
+  }
   // 任务标签详情
-  rpc Detail(DetailTaskTagRequest) returns (DetailTaskTagResponse) {}
+  rpc Detail(DetailTaskTagRequest) returns (DetailTaskTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasktag/detail"
+      body: "*"
+    };
+  }
   // 任务标签列表
-  rpc List(ListTaskTagRequest) returns (ListTaskTagResponse) {}
+  rpc List(ListTaskTagRequest) returns (ListTaskTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasktag/list"
+      body: "*"
+    };
+  }
   // 更新任务标签
-  rpc Update(UpdateTaskTagRequest) returns (UpdateTaskTagResponse) {}
+  rpc Update(UpdateTaskTagRequest) returns (UpdateTaskTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasktag/update"
+      body: "*"
+    };
+  }
   // 删除任务标签
-  rpc Delete(DeleteTaskTagRequest) returns (DeleteTaskTagResponse) {}
+  rpc Delete(DeleteTaskTagRequest) returns (DeleteTaskTagResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/tasktag/delete"
+      body: "*"
+    };
+  }
 }
 
 // Add

@@ -24,19 +24,44 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Spider {
   // 搜索
-  rpc Search(SearchRequest) returns (SearchResponse) {};
+  rpc Search(SearchRequest) returns (SearchResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/spider/search"
+      body: "*"
+    };
+  };
 
   // 安装
-  rpc Install(InstallRequest) returns (InstallResponse) {};
+  rpc Install(InstallRequest) returns (InstallResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/spider/install"
+      body: "*"
+    };
+  };
 
   // 升级
-  rpc Upgrade(InstallRequest) returns (InstallResponse) {};
+  rpc Upgrade(InstallRequest) returns (InstallResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/spider/upgrade"
+      body: "*"
+    };
+  };
 
   // 配置
-  rpc Config(InstallRequest) returns (InstallResponse) {};
+  rpc Config(InstallRequest) returns (InstallResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/spider/config"
+      body: "*"
+    };
+  };
 
   // 卸载
-  rpc Remove(UninstallRequest) returns (UninstallResponse) {};
+  rpc Remove(UninstallRequest) returns (UninstallResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/spider/remove"
+      body: "*"
+    };
+  };
 }
 
 // 为不同的应用开发的插件
