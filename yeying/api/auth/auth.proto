@@ -1,0 +1,84 @@
+syntax = "proto3";
+option go_package = "yeying/api/auth";
+package yeying.api.auth;
+
+import "yeying/api/common/message.proto";
+import "yeying/api/common/code.proto";
+import "yeying/api/common/model.proto";
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+// 添加 Swagger 文档元数据
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Yeying API";
+    version: "1.0";
+    contact: {
+      name: "yeying-community";
+      url: "https://github.com/yeying-community/yeying-idl.git";
+      email: "yeying.community@gmail.com";
+    };
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  consumes: "application/json";
+  produces: "application/json";
+};
+
+
+service Auth {
+  /* 获取挑战 */
+  rpc Search(ChallengeRequest) returns (ChallengeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/challenge"
+      body: "*"
+    };
+  }
+
+  /* 验证签名 */
+  rpc Create(VerifyRequest) returns (VerifyResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/verify"
+      body: "*"
+    };
+  }
+}
+
+message ChallengeRequest {
+  common.MessageHeader header = 1;
+  ChallengeRequestRequestBody body = 2;
+}
+
+message ChallengeRequestRequestBody {
+  string address = 1;
+}
+
+message ChallengeResponse {
+  common.MessageHeader header = 1;
+  ChallengeResponseBody body = 2;
+}
+
+message ChallengeResponseBody {
+  common.ResponseStatus status = 1;
+  string result = 2;
+}
+
+message VerifyRequest {
+  common.MessageHeader header = 1;
+  VerifyRequestBody body = 2;
+}
+
+message VerifyRequestBody {
+  string address = 1;
+  string signature = 2;
+}
+
+message VerifyResponse {
+  common.MessageHeader header = 1;
+  VerifyResponseBody body = 2;
+}
+
+message VerifyResponseBody {
+  common.ResponseStatus status = 1;
+  string token = 2;
+}
