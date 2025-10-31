@@ -28,7 +28,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 service Auth {
   /* 获取挑战 */
-  rpc Search(ChallengeRequest) returns (ChallengeResponse) {
+  rpc Challenge(ChallengeRequest) returns (ChallengeResponse) {
     option (google.api.http) = {
       post: "/api/v1/auth/challenge"
       body: "*"
@@ -36,7 +36,7 @@ service Auth {
   }
 
   /* 验证签名 */
-  rpc Create(VerifyRequest) returns (VerifyResponse) {
+  rpc Verify(VerifyRequest) returns (VerifyResponse) {
     option (google.api.http) = {
       post: "/api/v1/auth/verify"
       body: "*"
