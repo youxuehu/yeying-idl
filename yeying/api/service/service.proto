@@ -59,6 +59,14 @@ service Service {
       body: "*"
     };
   }
+
+  // 根据id查询记录
+  rpc QueryById(QueryByIdServiceRequest) returns (QueryByIdServiceResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/service/querybyid"
+      body: "*"
+    };
+  }
 }
 // create
 message CreateServiceRequest {
@@ -167,4 +175,24 @@ message DeleteServiceResponse {
 
 message DeleteServiceResponseBody {
   common.ResponseStatus status = 1;
+}
+
+// delete
+message QueryByIdServiceRequest {
+  common.MessageHeader header = 1;
+  QueryByIdServiceRequestBody body = 2;
+}
+
+message QueryByIdServiceRequestBody {
+  string id = 1;
+}
+
+message QueryByIdServiceResponse {
+  common.MessageHeader header = 1;
+  QueryByIdServiceResponseBody body = 2;
+}
+
+message QueryByIdServiceResponseBody {
+  common.ResponseStatus status = 1;
+  common.ServiceMetadata service = 2;
 }
