@@ -181,7 +181,7 @@ message QueryByIdApplicationRequest {
 }
 
 message QueryByIdApplicationRequestBody {
-  string id = 1;
+  string uid = 1;
 }
 
 message QueryByIdApplicationResponse {

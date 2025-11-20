@@ -149,7 +149,7 @@ message TagCountMeta {
   // tag 名称
   string tagName = 2;
   // tag 的任务数量
-  uint64 count = 3;
+  uint32 count = 3;
 }
 
 message TaskTagMetadata {

@@ -157,7 +157,6 @@ message SearchServiceResponseBody {
   common.ResponsePage page = 3;
 }
 
-// delete
 message DeleteServiceRequest {
   common.MessageHeader header = 1;
   DeleteServiceRequestBody body = 2;
@@ -177,14 +176,13 @@ message DeleteServiceResponseBody {
   common.ResponseStatus status = 1;
 }
 
-// delete
 message QueryByIdServiceRequest {
   common.MessageHeader header = 1;
   QueryByIdServiceRequestBody body = 2;
 }
 
 message QueryByIdServiceRequestBody {
-  string id = 1;
+  string uid = 1;
 }
 
 message QueryByIdServiceResponse {
