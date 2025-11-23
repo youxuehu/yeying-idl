@@ -63,10 +63,10 @@ service Application {
     };
   }
 
-  /* 根据id查询记录 */
-  rpc QueryById(QueryByIdApplicationRequest) returns (QueryByIdApplicationResponse) {
+  /* 根据uid查询记录 */
+  rpc QueryByUid(QueryByUidApplicationRequest) returns (QueryByUidApplicationResponse) {
     option (google.api.http) = {
-      post: "/api/v1/application/querybyid"
+      post: "/api/v1/application/querybyuid"
       body: "*"
     };
   }
@@ -175,21 +175,21 @@ message DeleteApplicationResponseBody {
 }
 
 
-message QueryByIdApplicationRequest {
+message QueryByUidApplicationRequest {
   common.MessageHeader header = 1;
-  QueryByIdApplicationRequestBody body = 2;
+  QueryByUidApplicationRequestBody body = 2;
 }
 
-message QueryByIdApplicationRequestBody {
-  string id = 1;
+message QueryByUidApplicationRequestBody {
+  string uid = 1;
 }
 
-message QueryByIdApplicationResponse {
+message QueryByUidApplicationResponse {
   common.MessageHeader header = 1;
-  QueryByIdApplicationResponseBody body = 2;
+  QueryByUidApplicationResponseBody body = 2;
 }
 
-message QueryByIdApplicationResponseBody {
+message QueryByUidApplicationResponseBody {
   common.ResponseStatus status = 1;
   common.ApplicationMetadata application = 2;
 }

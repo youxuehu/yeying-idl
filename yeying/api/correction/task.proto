@@ -90,7 +90,7 @@ message AddTaskResponse{
 
 message AddTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMetadata meta = 2;
+  TaskMetaDetail meta = 2;
 }
 // Detail
 message DetailTaskRequest{
@@ -107,9 +107,7 @@ message DetailTaskResponse{
 }
 message DetailTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMetadata meta = 2;
-  // 关联学生列表
-  repeated GroupMetaData studentList = 3;
+  TaskMetaDetail meta = 2;
 }
 
 // List
@@ -129,8 +127,13 @@ message ListTaskResponse{
 message ListTaskResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
-  repeated TaskMetadata list = 2;
+  repeated TaskMetaDetail list = 2;
   common.ResponsePage page = 3;
+}
+
+message TaskMetaDetail {
+  TaskMetadata meta = 1;
+  repeated correction.GroupMetaData groupMeta = 2;
 }
 
 // tag 名下的任务数量
@@ -166,7 +169,7 @@ message UpdateTaskResponse {
 
 message UpdateTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMetadata meta = 2;
+  TaskMetaDetail meta = 2;
 }
 
 // Delete
@@ -185,7 +188,7 @@ message DeleteTaskResponse {
 
 message DeleteTaskResponseBody {
   common.ResponseStatus status = 1;
-  TaskMetadata meta = 2;
+  TaskMetaDetail meta = 2;
 }
 
 message TaskListCondition {
@@ -193,7 +196,7 @@ message TaskListCondition {
   string taskName = 2;
   string tagUid = 3;
   // 任务状态
-  int32 status = 4;
+  string status = 4;
   // 开始时间
   int64 startTime = 5;
   // 结束时间
