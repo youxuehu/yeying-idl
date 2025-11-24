@@ -111,6 +111,7 @@ message ListGroupRequestBody {
   // 查询条件
   // 登录用户did
   string teacherDid = 1;
+  string groupName = 2;
   common.RequestPage page = 3;
 }
 
