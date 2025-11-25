@@ -63,9 +63,7 @@ message MessageListRequest {
 }
 message MessageListRequestBody {
   string did = 1;
-  string status = 2;
-  string type = 3;
-  common.RequestPage page = 4;
+  common.RequestPage page = 2;
 }
 message MessageListResponse {
   common.MessageHeader header = 1;
