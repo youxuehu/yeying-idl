@@ -104,6 +104,7 @@ message ListByRequest {
 message ListByRequestBody {
   string status = 1;
   string type = 2;
+  string did = 3;
 }
 message ListByResponse {
   common.MessageHeader header = 1;
