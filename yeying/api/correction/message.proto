@@ -62,7 +62,8 @@ message MessageListRequest {
   MessageListRequestBody body = 2;
 }
 message MessageListRequestBody {
-  common.RequestPage page = 3;
+  string did = 1;
+  common.RequestPage page = 2;
 }
 message MessageListResponse {
   common.MessageHeader header = 1;
@@ -81,6 +82,7 @@ message CountRequest {
   CountRequestBody body = 2;
 }
 message CountRequestBody {
+  string did = 1;
 }
 message CountResponse {
   common.MessageHeader header = 1;
@@ -91,7 +93,7 @@ message CountResponseBody {
   repeated CountMetadata meta = 2;
 }
 message CountMetadata {
-  int32 type = 1;
+  string type = 1;
   int32 count = 2;
 }
 // 根据状态查询数量列表
@@ -100,8 +102,9 @@ message ListByRequest {
   ListByRequestBody body = 2;
 }
 message ListByRequestBody {
-  int32 status = 1;
-  int32 type = 2;
+  string status = 1;
+  string type = 2;
+  string did = 3;
 }
 message ListByResponse {
   common.MessageHeader header = 1;
@@ -119,6 +122,7 @@ message MarkAsReadRequest {
 }
 message MarkAsReadRequestBody {
   string uid = 1;
+  string did = 2;
 }
 message MarkAsReadResponse {
   common.MessageHeader header = 1;
