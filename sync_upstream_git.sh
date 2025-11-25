@@ -1,6 +1,6 @@
 set -x
 # 添加上游（仅首次）
-git remote add upstream git@github.com:yeying-community/yeying-correction-openapi.git
+git remote add upstream git@github.com:yeying-community/yeying-idl.git
 
 # 获取上游更新
 git fetch upstream
