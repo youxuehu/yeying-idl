@@ -119,6 +119,7 @@ message ListTaskTagResponseBody {
   common.ResponseStatus status = 1;
   // repeated 表示 List
   repeated TaskTagMetadata list = 2;
+  common.ResponsePage page = 3;
 }
 
 // Update
