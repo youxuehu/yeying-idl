@@ -107,6 +107,8 @@ message ListTaskTagRequest{
 }
 message ListTaskTagRequestBody {
   string did = 1;
+  string name = 2;
+  common.RequestPage page = 3;
 }
 
 message ListTaskTagResponse{
