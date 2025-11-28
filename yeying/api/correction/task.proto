@@ -81,6 +81,11 @@ message AddTaskRequest{
 
 message AddTaskRequestBody {
   TaskMetadata meta = 1;
+  TestPaperMetaData paperMeta = 2;
+  /**
+  拍照图片 列表
+   */
+  repeated string objectNames = 3;
 }
 
 message AddTaskResponse{

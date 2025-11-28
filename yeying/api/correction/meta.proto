@@ -143,6 +143,11 @@ message TaskMetadata {
   correction.TaskStatusEnum status = 12;
 }
 
+message TestPaperMetaData {
+  // 试卷名称
+  string name = 1;
+}
+
 message TagCountMeta {
   // tag uid 主键
   string tagUid = 1;
