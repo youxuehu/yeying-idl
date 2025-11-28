@@ -143,9 +143,17 @@ message TaskMetadata {
   correction.TaskStatusEnum status = 12;
 }
 
-message TestPaperMetaData {
+message TestPaperMetadata {
   // 试卷名称
   string name = 1;
+}
+
+message WarehouseObjectMetadata {
+  // 拍照图片索引
+  int32 index = 1;
+  // 拍照图片文件key
+  string objectName = 2;
+
 }
 
 message TagCountMeta {
