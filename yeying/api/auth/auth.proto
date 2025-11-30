@@ -35,10 +35,18 @@ service Auth {
     };
   }
 
-  /* 验证签名 */
+  /* 验证签名并生成 token */
   rpc Verify(VerifyRequest) returns (VerifyResponse) {
     option (google.api.http) = {
       post: "/api/v1/auth/verify"
+      body: "*"
+    };
+  }
+
+  /* 刷新token，token 过期后无需重新登录钱包，直接重新生成一个有效的token */
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/auth/refreshToken"
       body: "*"
     };
   }
@@ -79,6 +87,25 @@ message VerifyResponse {
 }
 
 message VerifyResponseBody {
+  common.ResponseStatus status = 1;
+  string token = 2;
+}
+
+message RefreshTokenRequest {
+  common.MessageHeader header = 1;
+  RefreshTokenRequestBody body = 2;
+}
+
+message RefreshTokenRequestBody {
+  string address = 1;
+}
+
+message RefreshTokenResponse {
+  common.MessageHeader header = 1;
+  RefreshTokenResponseBody body = 2;
+}
+
+message RefreshTokenResponseBody {
   common.ResponseStatus status = 1;
   string token = 2;
 }

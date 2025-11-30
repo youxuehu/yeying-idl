@@ -37,7 +37,7 @@ message GroupMetaData {
   // 老师did
   string teacherDid = 7;
   // 学生姓名
-  string studentName = 8;
+  string studentNameList = 8;
 }
 
 message ArchiveMetadata {
@@ -141,6 +141,19 @@ message TaskMetadata {
   bool isDeleted = 11;
   // 任务状态
   correction.TaskStatusEnum status = 12;
+}
+
+message TestPaperMetadata {
+  // 试卷名称
+  string name = 1;
+}
+
+message WarehouseObjectMetadata {
+  // 拍照图片索引
+  int32 index = 1;
+  // 拍照图片文件key
+  string objectName = 2;
+
 }
 
 message TagCountMeta {

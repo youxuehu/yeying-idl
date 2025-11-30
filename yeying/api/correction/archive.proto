@@ -69,6 +69,13 @@ service Archive {
       body: "*"
     };
   }
+  // 冻结
+  rpc Freeze(ArchiveFreezeRequest) returns (ArchiveFreezeResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/archive/freeze"
+      body: "*"
+    };
+  }
 }
 // 列表:老师调用
 message ArchiveListRequest {
@@ -172,4 +179,19 @@ message ArchiveUpdateResponse {
 message ArchiveUpdateResponseBody {
   common.ResponseStatus status = 1;
   ArchiveMetadata meta = 2;
+}
+
+message ArchiveFreezeRequest {
+  common.MessageHeader header = 1;
+  ArchiveFreezeRequestBody body = 2;
+}
+message ArchiveFreezeRequestBody {
+  string uid = 1;
+}
+message ArchiveFreezeResponse {
+  common.MessageHeader header = 1;
+  ArchiveFreezeResponseBody body = 2;
+}
+message ArchiveFreezeResponseBody {
+  common.ResponseStatus status = 1;
 }
