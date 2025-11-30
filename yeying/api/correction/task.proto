@@ -71,6 +71,14 @@ service Task {
       body: "*"
     };
   }
+
+  // 老师点击去批改，往任务中心提交一个调度任务
+  rpc ToCorrect(ToCorrectTaskRequest) returns (ToCorrectTaskResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/task/toCorrect"
+      body: "*"
+    };
+  }
 }
 
 // Add
@@ -207,4 +215,23 @@ message TaskListCondition {
   // 结束时间
   int64 endTime = 6;
   string description = 7;
+}
+
+message ToCorrectTaskRequest{
+  common.MessageHeader header = 1;
+  ToCorrectTaskRequestBody body = 2;
+}
+message ToCorrectTaskRequestBody {
+  // 登录的账户地址
+  string did = 1;
+  // 任务uid
+  string taskUid = 2;
+}
+
+message ToCorrectTaskResponse{
+  common.MessageHeader header = 1;
+  ToCorrectTaskResponseBody body = 2;
+}
+message ToCorrectTaskResponseBody {
+  common.ResponseStatus status = 1;
 }
