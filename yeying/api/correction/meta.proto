@@ -37,7 +37,7 @@ message GroupMetaData {
   // 老师did
   string teacherDid = 7;
   // 学生姓名
-  string studentName = 8;
+  string studentNameList = 8;
 }
 
 message ArchiveMetadata {
