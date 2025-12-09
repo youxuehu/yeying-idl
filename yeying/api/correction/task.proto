@@ -146,7 +146,17 @@ message ListTaskResponseBody {
 
 message TaskMetaDetail {
   TaskMetadata meta = 1;
-  repeated correction.GroupMetaData groupMeta = 2;
+  repeated StudentMetadata stuMetaList = 2;
+  repeated PictureMetadata picMetaList = 3;
+}
+message StudentMetadata {
+  string groupName = 1;
+  string studentName = 2;
+}
+
+message PictureMetadata {
+  int32 index = 1;
+  string url = 2;
 }
 
 // tag 名下的任务数量
