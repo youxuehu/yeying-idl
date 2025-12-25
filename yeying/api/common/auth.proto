@@ -25,12 +25,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   produces: "application/json";
 };
 
-
+/* 身份验证 */
 service Auth {
   /* 获取挑战 */
   rpc Challenge(ChallengeRequest) returns (ChallengeResponse) {
     option (google.api.http) = {
-      post: "/api/v1/auth/challenge"
+      post: "/api/v1/public/common/auth/challenge"
       body: "*"
     };
   }
@@ -38,7 +38,7 @@ service Auth {
   /* 验证签名并生成 token */
   rpc Verify(VerifyRequest) returns (VerifyResponse) {
     option (google.api.http) = {
-      post: "/api/v1/auth/verify"
+      post: "/api/v1/public/common/auth/verify"
       body: "*"
     };
   }
@@ -46,7 +46,7 @@ service Auth {
   /* 刷新token，token 过期后无需重新登录钱包，直接重新生成一个有效的token */
   rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
     option (google.api.http) = {
-      post: "/api/v1/auth/refreshToken"
+      post: "/api/v1/public/common/auth/refreshToken"
       body: "*"
     };
   }

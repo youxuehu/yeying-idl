@@ -1,0 +1,23 @@
+syntax = "proto3";
+option go_package = "yeying/api/webdav";
+package yeying.api.webdav;
+
+/* 存储额度 */
+service Quota {
+  /* 获取用户的存储额度 */
+  rpc GetQuota(GetQuotaRequest) returns (GetQuotaResponse) {
+    option (google.api.http) = {
+      get : "/api/v1/public/webdav/quota"
+      body: "*"
+    };
+  }
+}
+
+message GetQuotaRequest {
+}
+
+message GetQuotaResponse {
+  int64 quota     = 1;
+  int64 used      = 2;
+  int64 available = 3;
+}

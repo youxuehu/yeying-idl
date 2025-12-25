@@ -1,0 +1,24 @@
+syntax = "proto3";
+option go_package = "yeying/api/health";
+package yeying.api.health;
+
+import "yeying/api/common/message.proto";
+
+/* 健康检查 */
+service Health {
+  /* 心跳 */
+  rpc Heartbeat(HeartbeatRequest) returns (HeartbeatResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/public/health/heartbeat"
+      body: "*"
+    };
+  }
+}
+
+message HeartbeatRequest {
+
+}
+
+message HeartbeatResponse {
+  common.ResponseStatus status = 1;
+}
